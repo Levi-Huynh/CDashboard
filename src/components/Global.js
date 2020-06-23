@@ -5,7 +5,11 @@ import Navigation from "./Navigation/index";
 import SearchBar from "./SearchForm";
 import axios from "axios";
 import Worldmap from "./World"
-
+import TopConfirmed from "./TopConfirmed"
+import NewConfirmed from "./NewConfirmed"
+import TopDeaths from "./TopDeaths"
+import TopRecovered from "./TopRecovered"
+import BarNewConfirmed from "./BarNewConfirmed"
 
 
 // const Global = props => {
@@ -68,28 +72,78 @@ class Global extends React.Component {
 
                     <GlobalStats>
                         {/* pinkcolorcontainer in here */}
-                        <h1>DAILY GLOBAL SUMMARY <span>{this.state.Date}</span></h1>
+                        {/* <h1>DAILY GLOBAL SUMMARY <span>{this.state.Date}</span></h1> */}
 
                         <GlobalSum>
 
-                            <h2>New Confirmed: <span>{this.state.GlobalRes.NewConfirmed}</span></h2>
-                            <h2>New Deaths: <span>{this.state.GlobalRes.NewDeaths}</span></h2>
-                            <h2>New Recovered: <span>{this.state.GlobalRes.NewRecovered}</span></h2>
-                            <h2>Total Confirmed: <span>{this.state.GlobalRes.TotalConfirmed}</span></h2>
-                            <h2>Total Deaths: <span>{this.state.GlobalRes.TotalDeaths}</span></h2>
-                            <h2>Total Recovered: <span>{this.state.GlobalRes.TotalRecovered}</span></h2>
-
+                            <h2>NEW CONFIRMED</h2>
+                            <h4><span>{this.state.GlobalRes.NewConfirmed}</span></h4>
                         </GlobalSum>
+
+                        <GlobalSum>
+                            <h2>NEW DEATHS</h2>
+                            <h4><span>{this.state.GlobalRes.NewDeaths}</span></h4>
+                        </GlobalSum>
+
+                        <GlobalSum>
+                            <h2>NEW RECOVERED</h2>
+                            <h4><span>{this.state.GlobalRes.NewRecovered}</span></h4>
+                        </GlobalSum>
+
+                        <GlobalSum>
+                            <h2>TOTAL CONFIRMED</h2>
+                            <h4><span>{this.state.GlobalRes.TotalConfirmed}</span></h4>
+                        </GlobalSum>
+
+                        <GlobalSum>
+                            <h2>TOTAL DEATHS</h2>
+                            <h4><span>{this.state.GlobalRes.TotalDeaths}</span></h4>
+                        </GlobalSum>
+
+                        <GlobalSum>
+                            <h2>TOTAL RECOVERED</h2>
+                            <h4> <span>{this.state.GlobalRes.TotalRecovered}</span></h4>
+                        </GlobalSum>
+
+
 
                         {/* pinkcolorcontainer in here */}
                     </GlobalStats>
 
+
+                    <GlobalStats>
+
+                        <TopFive>
+                            <h6>Highest Confirmed Cases </h6>
+                            <TopConfirmed />
+                        </TopFive>
+
+                        <TopFive>
+                            <h6>Highest Recovered Cases</h6>
+                            <TopRecovered />
+                        </TopFive>
+
+                        <TopFive>
+                            <h6>Highest Death Cases</h6>
+                            <TopDeaths />
+                        </TopFive>
+
+                        <TopFive>
+                            <h6>Highest New Cases</h6>
+                            <NewConfirmed />
+                        </TopFive>
+
+                    </GlobalStats>
+                    <BarNewConfirmed />
+
                     {/* <SearchBar /> */}
                     {/* <LargestRecovered /> */}
-                    <Worldmap />
+                    {/* <Worldmap /> */}
+
 
 
                 </GlobalWrapper>
+
             </>
         )
 
@@ -120,16 +174,18 @@ justify-content: space-between;
 `;
 
 const GlobalStats = styled.div`
-background: #F8E5E9;
+ 
 
 width: 80%;
 display: flex;
-flex-direction:column; 
+flex-direction:row; 
+justify-content: space-around;
 text-align: center;
 margin-top: 30px;
 margin: 30px 1.5rem 0 8.5rem;
 border-radius: 15px;
     color: #FE687D;
+// border: 1px solid red;
 h1{
 
     font-weight: bold;
@@ -139,16 +195,28 @@ h1{
 `;
 
 const GlobalSum = styled.div`
-margin-top: 15px; 
+margin: 1rem .8rem 0 .8rem; 
+width: 16%;
 display: flex;
-flex-direction: column;
+//column for stats in box 
+flex-direction: column; 
+align-items: center;
+align-content: center;
+justify-content: center;
+text-align:center;
 font-family: "Roboto";
 padding: .8rem;
 color:  #4D4CAC; 
+border-radius: 15px;
+background: white;
+// border: 1px solid  #636363;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+ 
 
 h2{
  
 font-weight: normal;
+font-size: 1rem;
 
 span{
     color: #FE687D;
@@ -156,9 +224,15 @@ span{
 }
 }
 
-
-
 `;
 
+const TopFive = styled(GlobalSum)`
+width: 25%;
+font-size: .5rem;
+
+h6{
+    font-size: 1rem;
+}
+`;
 //LARGEST TOTALS PIE
 
