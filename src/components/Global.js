@@ -62,6 +62,7 @@ class Global extends React.Component {
             })
     }
 
+
     render() {
 
 
@@ -111,8 +112,14 @@ class Global extends React.Component {
 
 
 
+
                         {/* pinkcolorcontainer in here */}
                     </GlobalStats>
+
+                    <MapDiv>
+                        <h6>Choose Country to View Cases Summary</h6>
+                        <Worldmap />
+                    </MapDiv>
 
                     <GlobalStats>
 
@@ -167,7 +174,7 @@ class Global extends React.Component {
 
                     {/* <SearchBar /> */}
                     {/* <LargestRecovered /> */}
-                    {/* <Worldmap /> */}
+
 
 
 
@@ -281,3 +288,21 @@ h6{
     font-size: 1rem;
 }
 `;
+
+const MapDiv = styled.div`
+width: 100%
+font-family: "Roboto";
+// padding: .8rem;
+color:  #4D4CAC; 
+border-radius: 15px;
+background: white;
+// border: 1px solid  #636363;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+margin: 1rem .8rem 0 .8rem; 
+text-align:center;
+h6{
+    font-size: 1.7rem;
+    font-weight: normal;
+}
+`;
+
