@@ -42,7 +42,7 @@ class BarNewConfirmed extends React.Component {
             },
 
             series: [{
-                data: [400, 430, 448, 470, 540, 580, 690, 1100, 1200, 1380]
+                data: []
             }],
         };
     }
@@ -61,8 +61,8 @@ class BarNewConfirmed extends React.Component {
                 function top5(data) {
                     let dObj = {}
                     let d1 = data.map(d => {
-                        if (d.NewConfirmed !== null) {
-                            dObj[d.NewConfirmed] = d.Country
+                        if (d.TotalRecovered !== null) {
+                            dObj[d.TotalRecovered] = d.Country
                         }
                     }
                     )

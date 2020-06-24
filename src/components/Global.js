@@ -9,7 +9,11 @@ import TopConfirmed from "./TopConfirmed"
 import NewConfirmed from "./NewConfirmed"
 import TopDeaths from "./TopDeaths"
 import TopRecovered from "./TopRecovered"
+
 import BarNewConfirmed from "./BarNewConfirmed"
+import BarDeaths from "./BarDeaths"
+import BarRecovered from "./BarRecovered"
+import BarTotalConfirmed from "./BarTotalConfirmed"
 
 
 // const Global = props => {
@@ -110,7 +114,32 @@ class Global extends React.Component {
                         {/* pinkcolorcontainer in here */}
                     </GlobalStats>
 
+                    <GlobalStats>
 
+                        <FiveBar>
+                            <h6>Highest Confirmed Cases </h6>
+                            <BarTotalConfirmed />
+                        </FiveBar>
+
+                        <FiveBar>
+                            <h6>Highest Recovered Cases </h6>
+                            <BarRecovered />
+                        </FiveBar>
+                    </GlobalStats>
+
+                    <GlobalStats>
+                        <FiveBar>
+                            <h6>Highest New Cases </h6>
+                            <BarNewConfirmed />
+                        </FiveBar>
+
+                        <FiveBar>
+                            <h6>Highest Death Cases </h6>
+                            <BarDeaths />
+                        </FiveBar>
+                    </GlobalStats>
+
+                    {/* 
                     <GlobalStats>
 
                         <TopFive>
@@ -133,8 +162,8 @@ class Global extends React.Component {
                             <NewConfirmed />
                         </TopFive>
 
-                    </GlobalStats>
-                    <BarNewConfirmed />
+                    </GlobalStats> */}
+
 
                     {/* <SearchBar /> */}
                     {/* <LargestRecovered /> */}
@@ -155,7 +184,7 @@ export default withRouter(Global);
 // TOP
 const GlobalWrapper = styled.div`
 width: 85%;
-height: 100vh;
+height: 100%;
 padding: 1rem;
 background:#F6F4FC;
 font-family: Roboto;
@@ -195,6 +224,7 @@ h1{
 `;
 
 const GlobalSum = styled.div`
+//6 SQUARES ACROSS
 margin: 1rem .8rem 0 .8rem; 
 width: 16%;
 display: flex;
@@ -227,6 +257,7 @@ span{
 `;
 
 const TopFive = styled(GlobalSum)`
+//4 ACROSS 
 width: 25%;
 font-size: .5rem;
 
@@ -236,3 +267,17 @@ h6{
 `;
 //LARGEST TOTALS PIE
 
+const FiveBar = styled.div`
+width: 45%
+font-family: "Roboto";
+// padding: .8rem;
+color:  #4D4CAC; 
+border-radius: 15px;
+background: white;
+// border: 1px solid  #636363;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+margin: 1rem .8rem 0 .8rem; 
+h6{
+    font-size: 1rem;
+}
+`;
