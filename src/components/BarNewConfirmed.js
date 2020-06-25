@@ -55,7 +55,7 @@ class BarNewConfirmed extends React.Component {
             .get('https://api.covid19api.com/summary')
             .then(res => {
                 const RES = res.data.Countries;
-                console.log(RES)
+                ////console.log(RES)
 
                 //arr of objects
                 function top5(data) {
@@ -68,23 +68,23 @@ class BarNewConfirmed extends React.Component {
                     )
 
 
-                    console.log("d1", dObj)
+                    //console.log("d1", dObj)
 
                     let ordered = {}
                     let ob = Object.keys(dObj).sort().forEach((k) =>
                         ordered[k] = dObj[k]
                     );
 
-                    console.log("ob", ordered)
+                    //console.log("ob", ordered)
                     let ans = Object.entries(ordered).slice(-4)
-                    console.log("ans", ans)
+                    //console.log("ans", ans)
 
                     let revObj = []
                     let creatObj = ans.map((d, i) => {
                         revObj[i] = { "name": ans[i][1], "value": ans[i][0] }
 
                     })
-                    console.log("answer1", revObj)
+                    //console.log("answer1", revObj)
                     return revObj
 
 
@@ -92,7 +92,7 @@ class BarNewConfirmed extends React.Component {
 
                 //arry of objects
                 let calcTop5 = top5(RES)
-                console.log("c", calcTop5)
+                //console.log("c", calcTop5)
                 let newFiveValues = []
                 let newFiveNames = []
                 calcTop5.forEach((ele) => {
@@ -119,7 +119,7 @@ class BarNewConfirmed extends React.Component {
                     series: [{ ...this.state.series, data: newFiveValues }]
 
                 })
-                console.log("top", this.state.FiveValues, this.state.FiveNames, this.state.options.labels)
+                //console.log("top", this.state.FiveValues, this.state.FiveNames, this.state.options.labels)
 
 
             })
@@ -138,7 +138,7 @@ class BarNewConfirmed extends React.Component {
     }
 
     render() {
-        console.log("top2", this.state.FiveValues, this.state.FiveNames, this.state.series)
+        //console.log("top2", this.state.FiveValues, this.state.FiveNames, this.state.series)
         return (<>
             <div className="chart">
                 <Chart options={this.state.options} series={this.state.series} type="bar" width={600} height={300} />
