@@ -21,7 +21,7 @@ import World from 'fusioncharts/fusioncharts.maps'
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 
 //summary components
-import CountrySummary from './CountrySummary'
+import CountrySummary from './ThirtyDayGraph'
 
 // Adding the chart and theme as dependency to the core fusionchart
 ReactFC.fcRoot(FusionCharts, FusionMaps, World, FusionTheme);
@@ -307,7 +307,7 @@ class Worldmap extends React.Component {
         
             <ReactFC {...chartConfigs} {...this.state} onClick={this.dataplotclick}/>
       
-            <CountrySummary totals={this.CountryTotals} />
+         
         
             {/* <PreviousDays prevTrends={this.state.ThirtyDays}/>
             <MLPredict newPredict={this.state.Prediction}/> */}
