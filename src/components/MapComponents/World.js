@@ -3,7 +3,7 @@
 // Include react
 import React from 'react';
 import ReactDOM from 'react-dom';
-
+import styled from "styled-components";
 //axios
 import axios from 'axios';
 
@@ -19,6 +19,9 @@ import World from 'fusioncharts/fusioncharts.maps'
 
 // Include the theme as fusion
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+
+//summary components
+import CountrySummary from './CountrySummary'
 
 // Adding the chart and theme as dependency to the core fusionchart
 ReactFC.fcRoot(FusionCharts, FusionMaps, World, FusionTheme);
@@ -100,10 +103,65 @@ const chartConfigs = {
         // Source data as JSON --> id represents countries of the world.
         "data": dataset
     },
-    events:{
-        "entityClick": function(e, data){
-            console.log("label", data.label, data.value)
-            let countryName= data.label
+
+ 
+}
+
+
+
+
+
+
+
+// STEP 3 - Creating the DOM element to pass the react-fusioncharts component
+class Worldmap extends React.Component {
+    constructor(props) {
+        super(props);
+    
+    this.state={
+       
+        errorMsg: " ",
+        StateAbbrev:"",
+        CountryTotals: {
+            Cases: null,
+            newCasePercent: null,
+            Recovered: null,
+            newRecoveredPercent: null,
+            Deaths: null, 
+            newDeathsPercent: null 
+
+        }, 
+        ThirtyDays:{
+            //what does fusionchart/apex line graph need?
+            //Seperate arr for cases, deaths, recovered for line grph data
+            //grab arr of objects of dates w/ case types
+            // CREATE new arr for cases, deaths, recovered, xaxiscats 
+
+            cases:[],
+            deaths:[],
+            recovered:[], 
+            xaxisCats: [], //get the dates & modify to 06-25 last_update.slice(5,10)
+            last2weeksCases: [] //use as 
+        },   
+
+        Prediction:{
+            next2weeks:[],
+            xaxisDates:[]
+        },
+
+    }
+
+    
+    this.entityClick = this.entityClick.bind(this)
+    }
+
+  
+
+    entityClick(eventObj, dataObj) {
+
+        
+            console.log("label", dataObj.label, dataObj.value)
+            let countryName= dataObj.label
 
             //country total & percentage from last update
             //get country prefix
@@ -112,7 +170,7 @@ const chartConfigs = {
             .get(`https://covid19-api.org/api/countries`)
             .then(res=>{
             
-            console.log("RES.DATA", res.data, "RES.DATA.COUNTRIES", res.data.Countries)
+            console.log("RES.DATA", res.data)
             let allNames= res.data;
            
             console.log("countrName from label:", countryName)
@@ -203,7 +261,7 @@ const chartConfigs = {
 
                 predictCases.push(predict[i].cases)
             
-                predictDates.push(predict[i].last_update.slice(5,10))
+                predictDates.push(predict[i].date.slice(5,10))
                 
               }
 
@@ -213,64 +271,72 @@ const chartConfigs = {
                 // StateAbbrev: ""
             })
 
+            return axios
+            .get(`https://covid19-api.org/api/diff/${this.state.StateAbbrev}`)
+            //returns obj 
+
+        })
+        .then(res=>{
+            console.log("PERCENTS", res.data)
+            let percents = res.data
+
+                //update percent uptakes for main country summs 
+            this.setState({
+                CountryTotals:{
+                    ...this.state.CountryTotals, newCasePercent: percents.new_cases_percentage, 
+                    newRecoveredPercent: percents.new_recovered_percentage, newDeathsPercent: percents.new_deaths_percentage
+                }
+            })
+
         })
         
         .catch(err=>{
             console.log("err", err)
         })
-
-            
-
-     
-
-
-        }
-
-    }
-}
-
-
-
-
-// STEP 3 - Creating the DOM element to pass the react-fusioncharts component
-class Worldmap extends React.Component {
-    state={
-        errorMsg: " ",
-        StateAbbrev:"",
-        CountryTotals: {
-            Cases: null,
-            Recovered: null,
-            Deaths: null 
-
-        }, 
-        ThirtyDays:{
-            //what does fusionchart/apex line graph need?
-            //Seperate arr for cases, deaths, recovered for line grph data
-            //grab arr of objects of dates w/ case types
-            // CREATE new arr for cases, deaths, recovered, xaxiscats 
-
-            cases:[],
-            deaths:[],
-            recovered:[], 
-            xaxisCats: [], //get the dates & modify to 06-25 last_update.slice(5,10)
-            last2weeksCases: [] //use as 
-        },   
-
-        Prediction:{
-            next2weeks:[],
-            xaxisDates:[]
-        }
     }
 
+ componentDidUpdate(){
+        FusionCharts.addEventListener('entityClick', this.entityClick);
+    }
 
+        
+       
     render() {
-        return (<
-            ReactFC {
-            ...chartConfigs
-            }
-        />
+        return (
+            <>
+        
+            <ReactFC {...chartConfigs} {...this.state} onClick={this.dataplotclick}/>
+      
+            <CountrySummary totals={this.CountryTotals} />
+        
+            {/* <PreviousDays prevTrends={this.state.ThirtyDays}/>
+            <MLPredict newPredict={this.state.Prediction}/> */}
+
+</>
         );
     }
 }
 
 export default Worldmap;
+
+
+const GlobalStats = styled.div`
+ 
+
+width: 80%;
+display: flex;
+flex-direction:row; 
+justify-content: space-around;
+text-align: center;
+margin-top: 30px;
+margin: 30px 1.5rem 0 8.5rem;
+border-radius: 15px;
+    color: #FE687D;
+// border: 1px solid red;
+h1{
+
+    font-weight: bold;
+    font-family: "Roboto";
+
+}
+`;

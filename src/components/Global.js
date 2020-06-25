@@ -4,7 +4,7 @@ import { withRouter, Link } from "react-router-dom";
 import Navigation from "./Navigation/index";
 import SearchBar from "./SearchForm";
 import axios from "axios";
-import Worldmap from "./World"
+import Worldmap from "./MapComponents/World"
 import TopConfirmed from "./TopConfirmed"
 import NewConfirmed from "./NewConfirmed"
 import TopDeaths from "./TopDeaths"
@@ -123,53 +123,10 @@ class Global extends React.Component {
 
                     <GlobalStats>
 
-                        <FiveBar>
-                            <h6>Highest Confirmed Cases </h6>
-                            <BarTotalConfirmed />
-                        </FiveBar>
-
-                        <FiveBar>
-                            <h6>Highest Recovered Cases </h6>
-                            <BarRecovered />
-                        </FiveBar>
                     </GlobalStats>
 
-                    <GlobalStats>
-                        <FiveBar>
-                            <h6>Highest New Cases </h6>
-                            <BarNewConfirmed />
-                        </FiveBar>
+                    
 
-                        <FiveBar>
-                            <h6>Highest Death Cases </h6>
-                            <BarDeaths />
-                        </FiveBar>
-                    </GlobalStats>
-
-                    {/* 
-                    <GlobalStats>
-
-                        <TopFive>
-                            <h6>Highest Confirmed Cases </h6>
-                            <TopConfirmed />
-                        </TopFive>
-
-                        <TopFive>
-                            <h6>Highest Recovered Cases</h6>
-                            <TopRecovered />
-                        </TopFive>
-
-                        <TopFive>
-                            <h6>Highest Death Cases</h6>
-                            <TopDeaths />
-                        </TopFive>
-
-                        <TopFive>
-                            <h6>Highest New Cases</h6>
-                            <NewConfirmed />
-                        </TopFive>
-
-                    </GlobalStats> */}
 
 
                     {/* <SearchBar /> */}
@@ -274,8 +231,14 @@ h6{
 `;
 //LARGEST TOTALS PIE
 
-const FiveBar = styled.div`
-width: 45%
+const CountryTotal = styled.div`
+//3 big buttons across under map
+
+width: 31%
+display:flex;
+flex-direction: column;
+align-items:center;
+text-align: center;
 font-family: "Roboto";
 // padding: .8rem;
 color:  #4D4CAC; 
@@ -286,6 +249,9 @@ box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16);
 margin: 1rem .8rem 0 .8rem; 
 h6{
     font-size: 1rem;
+}
+h5{
+    font-size: .7rem;
 }
 `;
 
