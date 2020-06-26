@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { withRouter, Link } from "react-router-dom";
 import Navigation from "./Navigation/index";
 import update from 'immutability-helper';
+import PredictGraph from './MapComponents/PredictGraph'
 
 import axios from "axios";
 
@@ -89,7 +90,6 @@ const chartConfigs = {
 class Global extends React.Component {
     constructor(props) {
         super(props);
-    
 
     this.state={
         GlobalRes: {},
@@ -103,29 +103,8 @@ class Global extends React.Component {
             Recovered: null,
             newRecoveredPercent: null,
             Deaths: null, 
-            newDeathsPercent: null 
-
-        }, 
-        ThirtyDays:{
-            //what does fusionchart/apex line graph need?
-            //Seperate arr for cases, deaths, recovered for line grph data
-            //grab arr of objects of dates w/ case types
-            // CREATE new arr for cases, deaths, recovered, xaxiscats 
-
-            cases:[],
-            deaths:[],
-            recovered:[], 
-            xaxisCats: [], //get the dates & modify to 06-25 last_update.slice(5,10)
-            last2weeksCases: [] //use as 
-        },   
-
-        Prediction:{
-            next2weeks:[],
-            xaxisDates:[]
-        },
-
-        //30 DAY GRAPH
-          
+            newDeathsPercent: null }, 
+  
         series30: [{
             name: "Cases",
             data: []
@@ -139,6 +118,7 @@ class Global extends React.Component {
             data: []
           }
         ],
+
         options30: {
           chart: {
             height: 350,
@@ -208,12 +188,17 @@ class Global extends React.Component {
             borderColor: '#f1f1f1',
           }
         },
-      
-    }
-
-
-
     
+
+  
+        Prediction:{
+            next2weeks:[],
+            xaxisDates:[], 
+            prev2weeks:[],
+        },
+
+    }
+        
     this.entityClick = this.entityClick.bind(this)
     }
 
@@ -339,11 +324,21 @@ class Global extends React.Component {
             
           }
 
-        this.setState({
-            Prediction:{...this.state.Prediction, next2weeks:predictCases, xaxisDates:predictDates },
+          predictDates=predictDates.reverse()
+
+          let prev2weeks1= this.state.series30[0].data
+
+          prev2weeks1 = prev2weeks1.slice(0,14)
+
+          this.setState({
+            Prediction:{...this.state.Prediction, next2weeks:predictCases, xaxisDates:predictDates, prev2weeks:prev2weeks1 },
             //clear abbrev for next click?
             // StateAbbrev: ""
         })
+
+
+      
+
 
         return axios
         .get(`https://covid19-api.org/api/diff/${this.state.StateAbbrev}`)
@@ -607,6 +602,27 @@ class Global extends React.Component {
 
                     </ThirtyDayWrapper>
 
+                    <ThirtyDayWrapper>
+                        
+<ThirtyDaySty>
+<ThirtyDayElements>
+<h6>{this.state.CountryFullName} 14 DAY PREDICTION</h6>
+</ThirtyDayElements>   
+
+<ThirtyDayElements>
+<h6>PREDICTION TREND</h6>
+
+</ThirtyDayElements>
+</ThirtyDaySty>
+
+
+<ThirtyDaySty>
+{/* <Chart  options={this.state.optionsPredict} series={this.state.seriesPredict} type="area" height={350} width={700} /> */}
+<PredictGraph predict={this.state.Prediction}/>
+</ThirtyDaySty>
+
+                    </ThirtyDayWrapper>
+
                 </GlobalWrapper>
 
             </>
@@ -833,3 +849,4 @@ h6{
 }
 
 `; 
+
