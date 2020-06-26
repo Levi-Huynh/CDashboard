@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { withRouter, Link } from "react-router-dom";
 import Navigation from "./Navigation/index";
+import update from 'immutability-helper';
 
 import axios from "axios";
 
@@ -20,7 +21,8 @@ import World from 'fusioncharts/fusioncharts.maps'
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 
 //import graphs country summary
-import ThirtyDayGraph from './MapComponents/ThirtyDayGraph'
+import Chart from 'react-apexcharts'
+import { updateLocale } from "moment";
 
 // Adding the chart and theme as dependency to the core fusionchart
 ReactFC.fcRoot(FusionCharts, FusionMaps, World, FusionTheme);
@@ -122,7 +124,94 @@ class Global extends React.Component {
             xaxisDates:[]
         },
 
+        //30 DAY GRAPH
+          
+        series30: [{
+            name: "Cases",
+            data: []
+          },
+          {
+            name: "Recovered",
+            data:  []
+          },
+          {
+            name: 'Deaths',
+            data: []
+          }
+        ],
+        options30: {
+          chart: {
+            height: 350,
+            type: 'line',
+            zoom: {
+              enabled: false
+            },
+          },
+          dataLabels: {
+            enabled: false
+          },
+          stroke: {
+            width: [2, 2, 2],
+            curve: 'smooth',
+            // dashArray: [0, 5, 5]
+          },
+          title: {
+            // text: `PREVIOUS 30 DAYS`,
+            // style:{
+            //     fontFamily: 'Roboto',
+            //     color:'#4D4CAC',
+            //     fontSize: '1rem',
+            //     floating: true
+            // },
+            // align: 'left'
+          },
+          legend: {
+            tooltipHoverFormatter: function(val, opts) {
+              return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+            }
+          },
+          markers: {
+            size: 0,
+            hover: {
+              sizeOffset: 6
+            }
+          },
+          xaxis: {
+            categories:[]
+          },
+          tooltip: {
+            y: [
+              {
+                title: {
+                  formatter: function (val) {
+                    return val ; 
+                  }
+                }
+              },
+              {
+                title: {
+                  formatter: function (val) {
+                    return val ;
+                  }
+                }
+              },
+              {
+                title: {
+                  formatter: function (val) {
+                    return val;
+                  }
+                }
+              }
+            ]
+          },
+          grid: {
+            borderColor: '#f1f1f1',
+          }
+        },
+      
     }
+
+
 
     
     this.entityClick = this.entityClick.bind(this)
@@ -200,22 +289,34 @@ class Global extends React.Component {
         let cases1 =[]
     let deaths1=[]
     let recovered1=[]
-    let xaxis=[]
+    let xaxis1=[]
         //can make this 30 dynamic if user wnats to see farther back. set it on state.
     for(let i=0; i<=30; i++) {
 
         cases1.push(time[i].cases)
         deaths1.push(time[i].deaths)
         recovered1.push(time[i].recovered)
-        xaxis.push(time[i].last_update.slice(5,10))
+        xaxis1.push(time[i].last_update.slice(5,10))
         
       }
 
+      xaxis1 = xaxis1.reverse()
       this.setState({
-          ThirtyDays: {...this.state.ThirtyDays, cases:cases1, deaths:deaths1, recovered: recovered1, xaxisCats: xaxis,
-        last2weeksCases:cases1.slice(0, 15)}
+          series30: update(this.state.series30, {0:{data:{$set: cases1}}}),
+        options30: {...this.state.options30, xaxis: {...this.state.options30.xaxis, categories:xaxis1} },
+  
       })
 
+
+      this.setState({
+        series30: update(this.state.series30, {1:{data:{$set: recovered1}}})
+      })
+      this.setState({
+        series30: update(this.state.series30, {2:{data:{$set: deaths1}}})
+      })
+
+    
+      console.log("30 STATS:", this.state.series30[0],this.state.series30[1], this.state.series30[2] )
         //ML 2 week prediction 
             return axios
             .get(`https://covid19-api.org/api/prediction/${this.state.StateAbbrev}`) //area spline chart compare last 2 & next 2 weeks trends
@@ -437,11 +538,74 @@ class Global extends React.Component {
 
                     </CountryStats>
 
-                    <ThirtyDaySty>
-                        <ThirtyDayGraph country={this.CountryFullName} thirtyDays={this.state.ThirtyDays} />
+                        <ThirtyDayWrapper>
 
+
+                    <ThirtyDaySty>
+                        {/* row container*/}
+                    <ThirtyDayElements>
+                    <h6>{this.state.CountryFullName} PREVIOUS 30 DAYS</h6>
+                     </ThirtyDayElements>   
+                    
+                    <ThirtyDayElements>
+                    <h6> CHANGE IN TOTALS</h6>
+                    </ThirtyDayElements>   
+                           {/* row container end*/}
                     </ThirtyDaySty>
 
+                    <ThirtyDaySty>
+                         {/* row container*/}
+                    <Chart options={this.state.options30} series={this.state.series30} type="line" height={350} width={700} />
+                    
+                    {/* container with column for each change total */}
+                    <ThirtyDayPercents>
+                    
+ 
+                    {Math.sign(this.state.CountryTotals.newCasePercent) === -1? (
+                                      
+                        <h6>
+                        <i class="fas fa-sort-down fa-3x"
+                        style={{ color: "red" , margin: "10px 10px  2px 2px", }} 
+                        ></i> ({this.state.CountryTotals.newCasePercent}%) Decrease in Cases</h6>
+                     
+                    ):(
+                        <ThirtyDayElementsInner>
+                            <i class="fas fa-sort-up fa-3x"
+                        style={{ color: "red",  margin: "10px 0 10px 0", border: "1px solid black" , padding:"5px,0"}} 
+                        ></i>
+                    <h6>
+                         ({this.state.CountryTotals.newCasePercent}%) Increase in Cases</h6>
+                    
+                    </ThirtyDayElementsInner>)}
+
+                {Math.sign(this.state.CountryTotals.newRecoveredPercent) === -1? (
+                        <h6>
+                        <i class="fas fa-sort-down fa-3x"
+                        style={{ color: "red" , margin: "10px 10px 2px 2px",}} 
+                        ></i> ({this.state.CountryTotals.newRecoveredPercent}%) Decrease in Recovered</h6>
+                     
+                    ):(<h6>
+                        <i class="fas fa-sort-up fa-3x mt-10"
+                        style={{ color: "red", margin: "10px 10px  2px 2px", }} 
+                        ></i> ({this.state.CountryTotals.newRecoveredPercent}%) Increase in Recovered</h6>)}
+
+{Math.sign(this.state.CountryTotals.newDeathsPercent) === -1? (
+                        <h6>
+                        <i class="fas fa-sort-down fa-3x"
+                        style={{ color: "red" , margin: "10px 10px  2px 2px",}} 
+                        ></i> ({this.state.CountryTotals.newDeathsPercent}%) Decrease in Deaths</h6>
+                     
+                    ):(<h6>
+                        <i class="fas fa-sort-up mt-10 fa-3x"
+                        style={{ color: "red" , margin: "10px 10px 2px 2px",}} 
+                        ></i> ({this.state.CountryTotals.newDeathsPercent}%) Increase in Deaths</h6>)}
+
+                    </ThirtyDayPercents>
+                    
+                    {/* row container end*/}
+                    </ThirtyDaySty>
+
+                    </ThirtyDayWrapper>
 
                 </GlobalWrapper>
 
@@ -592,13 +756,80 @@ h6{
 }
 `;
 
+const ThirtyDayWrapper = styled.div`
+width: 100%;
+display: flex;
+flex-direction: column; 
+justify-content: center;
+align-items: center;
+margin-top: 30px;
+width: 100%
+font-family: "Roboto";
+// padding: .8rem;
+color:  #4D4CAC; 
+border-radius: 15px;
+background: white;
+
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+margin: 30px .8rem 0 .8rem; 
+text-align:center;
+h6{
+    font-size: 1.7rem;
+    font-weight: normal;
+}
+`;
 
 
 const ThirtyDaySty = styled.div`
-width: 80%;
+width: 100%;
 display: flex;
-flex-direction:row; 
-justify-content: center;
-margin-top: 30px;
+flex-direction: row; 
+justify-content: space-between;
+// margin-top: 30px;
+ 
+font-family: "Roboto";
+// padding: .8rem;
+color:  #4D4CAC; 
+// border-radius: 15px;
+background: white;
+
+// box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+// margin: 30px .8rem 0 .8rem; 
+text-align:center;
+h6{
+    font-size: 1.5rem;
+    font-weight: normal;
+}
 `;
 
+
+const ThirtyDayElements = styled.div`
+//title 2 total
+
+width: 46%;
+padding: 1rem;
+`; 
+
+const ThirtyDayElementsInner = styled.div`
+//title 2 total
+
+width: 46%;
+display: flex;
+flex-direction: row;
+justify-content: space-around;
+
+`; 
+
+
+const ThirtyDayPercents = styled.div`
+width: 46%;
+display: flex;
+flex-direction: column;
+align-items: center;
+
+h6{
+    font-size: 1rem;
+
+}
+
+`; 
