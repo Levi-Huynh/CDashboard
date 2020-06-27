@@ -195,6 +195,7 @@ class Global extends React.Component {
             next2weeks:[],
             xaxisDates:[], 
             prev2weeks:[],
+            trendPercent: null
         },
 
     }
@@ -285,20 +286,19 @@ class Global extends React.Component {
         
       }
 
+      cases1= cases1.reverse()
+      deaths1=deaths1.reverse()
+      recovered1=recovered1.reverse()
       xaxis1 = xaxis1.reverse()
+
       this.setState({
-          series30: update(this.state.series30, {0:{data:{$set: cases1}}}),
+          series30: update(this.state.series30, {0:{data:{$set: cases1}}, 1:{data:{$set: recovered1}},  2:{data:{$set: deaths1}} }),
         options30: {...this.state.options30, xaxis: {...this.state.options30.xaxis, categories:xaxis1} },
   
       })
 
 
-      this.setState({
-        series30: update(this.state.series30, {1:{data:{$set: recovered1}}})
-      })
-      this.setState({
-        series30: update(this.state.series30, {2:{data:{$set: deaths1}}})
-      })
+
 
     
       console.log("30 STATS:", this.state.series30[0],this.state.series30[1], this.state.series30[2] )
@@ -319,19 +319,30 @@ class Global extends React.Component {
         for(let i=0; i<predict.length; i++) {
 
             predictCases.push(predict[i].cases)
-        
             predictDates.push(predict[i].date.slice(5,10))
             
           }
 
           predictDates=predictDates.reverse()
-
+          predictCases=predictCases.reverse()
           let prev2weeks1= this.state.series30[0].data
-
           prev2weeks1 = prev2weeks1.slice(0,14)
 
+          let currDayTotal= this.state.series30[0].data[this.state.series30[0].data.length-1]
+          console.log("Curr Day", currDayTotal)
+          console.log("all predict cases", predictCases)
+          let predictLastDay=predictCases[0]
+          console.log("LAST-PREDICT-DAY", predictLastDay)
+
+          let predictPercent= predictLastDay- currDayTotal
+          predictPercent=  (predictPercent / currDayTotal).toFixed(2); 
+
+
+          console.log("LAST-PREDICT-DAY", predictLastDay, "Curr Day", currDayTotal, "final percent", predictPercent)
+          
+
           this.setState({
-            Prediction:{...this.state.Prediction, next2weeks:predictCases, xaxisDates:predictDates, prev2weeks:prev2weeks1 },
+            Prediction:{...this.state.Prediction, next2weeks:predictCases, xaxisDates:predictDates, prev2weeks:prev2weeks1, trendPercent:predictPercent },
             //clear abbrev for next click?
             // StateAbbrev: ""
         })
@@ -403,6 +414,9 @@ class Global extends React.Component {
                 console.log("RES AFTER GET PERCENTS FOR US", res)
                 let percents = res.data
                 console.log("PERCENTS", percents)
+
+
+
         
                     //update percent uptakes for main country summs 
                 this.setState({
@@ -411,6 +425,8 @@ class Global extends React.Component {
                         newRecoveredPercent: percents.new_recovered_percentage, newDeathsPercent: percents.new_deaths_percentage
                     }
                 })
+
+
         
             })
 
@@ -553,18 +569,21 @@ class Global extends React.Component {
                     <Chart options={this.state.options30} series={this.state.series30} type="line" height={350} width={700} />
                     
                     {/* container with column for each change total */}
+                    
+                    
+                    
+                    
                     <ThirtyDayPercents>
                     
- 
-                    {Math.sign(this.state.CountryTotals.newCasePercent) === -1? (
-                                      
+ {Math.sign(this.state.CountryTotals.newCasePercent) === -1? (
+                                  <ThirtyDayElementsInner>        
                         <h6>
                         <i class="fas fa-sort-down fa-3x"
                         style={{ color: "red" , margin: "10px 10px  2px 2px", }} 
                         ></i> ({this.state.CountryTotals.newCasePercent}%) Decrease in Cases</h6>
-                     
-                    ):(
-                        <ThirtyDayElementsInner>
+                     </ThirtyDayElementsInner>
+                    ):  (
+                        <ThirtyDayElementsInner>      
                             <i class="fas fa-sort-up fa-3x"
                         style={{ color: "red",  margin: "10px 0 10px 0", border: "1px solid black" , padding:"5px,0"}} 
                         ></i>
@@ -574,26 +593,37 @@ class Global extends React.Component {
                     </ThirtyDayElementsInner>)}
 
                 {Math.sign(this.state.CountryTotals.newRecoveredPercent) === -1? (
+
+<ThirtyDayElementsInner>     
                         <h6>
                         <i class="fas fa-sort-down fa-3x"
                         style={{ color: "red" , margin: "10px 10px 2px 2px",}} 
                         ></i> ({this.state.CountryTotals.newRecoveredPercent}%) Decrease in Recovered</h6>
-                     
-                    ):(<h6>
+                        </ThirtyDayElementsInner>
+                    ):(
+                        <ThirtyDayElementsInner>     
+                    <h6>
                         <i class="fas fa-sort-up fa-3x mt-10"
                         style={{ color: "red", margin: "10px 10px  2px 2px", }} 
-                        ></i> ({this.state.CountryTotals.newRecoveredPercent}%) Increase in Recovered</h6>)}
+                        ></i> ({this.state.CountryTotals.newRecoveredPercent}%) Increase in Recovered</h6>
+                            </ThirtyDayElementsInner>
+                        )}
 
 {Math.sign(this.state.CountryTotals.newDeathsPercent) === -1? (
+    <ThirtyDayElementsInner>     
                         <h6>
                         <i class="fas fa-sort-down fa-3x"
                         style={{ color: "red" , margin: "10px 10px  2px 2px",}} 
                         ></i> ({this.state.CountryTotals.newDeathsPercent}%) Decrease in Deaths</h6>
-                     
-                    ):(<h6>
+                      </ThirtyDayElementsInner>
+                    ):(
+                        <ThirtyDayElementsInner>     
+                    <h6>
                         <i class="fas fa-sort-up mt-10 fa-3x"
                         style={{ color: "red" , margin: "10px 10px 2px 2px",}} 
-                        ></i> ({this.state.CountryTotals.newDeathsPercent}%) Increase in Deaths</h6>)}
+                        ></i> ({this.state.CountryTotals.newDeathsPercent}%) Increase in Deaths</h6>
+                         </ThirtyDayElementsInner>
+                        )}
 
                     </ThirtyDayPercents>
                     
@@ -602,7 +632,11 @@ class Global extends React.Component {
 
                     </ThirtyDayWrapper>
 
-                    <ThirtyDayWrapper>
+{/* PREDICTION */}
+
+<ThirtyDayWrapper>
+
+
                         
 <ThirtyDaySty>
 <ThirtyDayElements>
@@ -611,7 +645,6 @@ class Global extends React.Component {
 
 <ThirtyDayElements>
 <h6>PREDICTION TREND</h6>
-
 </ThirtyDayElements>
 </ThirtyDaySty>
 
@@ -619,9 +652,35 @@ class Global extends React.Component {
 <ThirtyDaySty>
 {/* <Chart  options={this.state.optionsPredict} series={this.state.seriesPredict} type="area" height={350} width={700} /> */}
 <PredictGraph predict={this.state.Prediction}/>
-</ThirtyDaySty>
 
-                    </ThirtyDayWrapper>
+
+{/* 
+PREDICTION PERCENTAGE */}
+
+  <ThirtyDayPercents>
+                    
+                    {Math.sign(this.state.Prediction.trendPercent) === -1? (
+                                                     <ThirtyDayElementsInner>        
+                                           <h6>
+                                           <i class="fas fa-sort-down fa-3x"
+                                           style={{ color: "red" , margin: "10px 10px  2px 2px", }} 
+                                           ></i> ({this.state.Prediction.trendPercent}%) Decrease in Cases</h6>
+                                        </ThirtyDayElementsInner>
+                                       ):  (
+                                           <ThirtyDayElementsInner>      
+                                               <i class="fas fa-sort-up fa-3x"
+                                           style={{ color: "red",  margin: "10px 0 10px 0", border: "1px solid black" , padding:"5px,0"}} 
+                                           ></i>
+                                       <h6>
+                                            ({this.state.Prediction.trendPercent}%) Increase in Cases</h6>
+                                       
+                                       </ThirtyDayElementsInner>)}
+
+
+     </ThirtyDayPercents>
+     </ThirtyDaySty>
+  
+ </ThirtyDayWrapper>
 
                 </GlobalWrapper>
 
