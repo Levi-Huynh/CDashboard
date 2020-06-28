@@ -349,7 +349,7 @@ class Global extends React.Component {
 
 
       
-
+        //ADDING MORE
 
         return axios
         .get(`https://covid19-api.org/api/diff/${this.state.StateAbbrev}`)
