@@ -369,6 +369,22 @@ class Global extends React.Component {
         })
 
     })
+    .then(res=>{
+        axios({
+            method:"GET",
+            url:"https://who-covid-19-data.p.rapidapi.com/api/data",
+            headers:{
+            "content-type":"application/octet-stream",
+            "x-rapidapi-host":"who-covid-19-data.p.rapidapi.com",
+            "x-rapidapi-key":"df660fcfb2msh8068165b821fa6ap1b7145jsn0967348c7cfc",
+            "useQueryString":true
+            },
+            params:{ //these all need to be set on state to be recieved from form  
+            "region":"European Region",
+            "cases":"35000",  
+            "reportDate":"2020-03-25",
+            }})
+})
     
     .catch(err=>{
         console.log("err", err)

@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import styled from "styled-components";
 import * as routes from "./routes/routes";
+
+//@ components
+import WorldStats from "./components/WorldStats"
+
 //@ views
 import Landing from "./views/Landing";
 import Dashboard from "./views/Dashboard";
 import { LANDING, DASHBOARD } from "./routes/routes";
+
 
 // import Home from "./views/Home";
 // import AccountPage from "./views/Account";
@@ -33,6 +38,7 @@ function App() {
           path={routes.LANDING}
           render={props => <Landing />} />
         <Route exact path={routes.DASHBOARD} render={props => <Dashboard />} />
+        <Route exact path={routes.GLOBALSTATS} render={props=><WorldStats/>} />
       </Theme>
     </Router>
   );
