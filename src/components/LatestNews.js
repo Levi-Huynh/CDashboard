@@ -111,7 +111,7 @@ function ButtonAlert(e){
 
             <DashHeader>
                         <h2>Dashboard</h2>
-                        <h2>{this.state.Date}</h2>
+                      
                     </DashHeader>
                     <GlobalStats>
      <h1>LATEST NEWS</h1>

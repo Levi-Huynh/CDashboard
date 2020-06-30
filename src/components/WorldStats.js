@@ -1,13 +1,17 @@
+//import libraries
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { withRouter, Link } from "react-router-dom";
+import axios from "axios";
+import Chart from "react-apexcharts"
+import TestC from "./MapComponents/GraphTest"
+
+
+//import components
+import DashNav from "./DashNav";
 import Navigation from "./Navigation/index";
 
-//import DashNav 
-import DashNav from "./DashNav";
 
-
-import axios from "axios";
 
 const WorldStats = props=>{
  
@@ -21,21 +25,28 @@ const WorldStats = props=>{
 //   const [cases, setCases] = useState("");
 //   const [name, setName] = useState("");
 //   const [reportDate, setReportDate] = useState("");
-
+const Initial_State={
+    death:null,
+    newCases: null,
+    newDeaths: null,
+    transmissionType: null,
+    region: null,
+    cases: null,
+    reportDate: null
+}
 
     const [formInputs, setFormData] = useState({
-       death:"",
-       
-        territory: "",
-        newCases: "",
-        newDeaths: "",
-        transmissionType: "",
-        region: "",
-        cases: "",
-        name: "",
-        reportDate: ""
+       death:null,
+        newCases: null,
+        newDeaths: null,
+        transmissionType: null,
+        region: null,
+        cases: null,
+        reportDate: null
 
     });
+
+    const [resStatus, setStatus] = useState("")
 
     function handleChange(e){
         const val= e.target.value;
@@ -45,6 +56,78 @@ const WorldStats = props=>{
        })
     }
 
+    const [series1, setSeries] = useState(
+     [{
+            name: 'Cases',
+            data: [ 1,2,3]
+          }, {
+            name: 'Deaths',
+            data: [1,2,3 ]
+          }, {
+            name: 'New Cases',
+            data: [1,2,3 ]
+          },
+          {
+            name: 'Last Case Date',
+            data: [1,2,3 ]
+          }]
+    )
+
+    console.log("SERIES STATE", series1)
+    const [options1, setOptions] = useState({
+      
+            chart: {
+              type: 'bar',
+              height: 350,
+              stacked: true,
+            },
+            plotOptions: {
+              bar: {
+                horizontal: true,
+              },
+            },
+            stroke: {
+              width: 1,
+              colors: ['#fff']
+            },
+            title: {
+              text: 'Fiction Books Sales'
+            },
+            xaxis: {
+              categories: [1,2,3],
+              labels: {
+                formatter: function (val) {
+                  return val 
+                }
+              }
+            },
+            yaxis: {
+              title: {
+                text: undefined
+              },
+            },
+            tooltip: {
+              y: {
+                formatter: function (val) {
+                  return val 
+                }
+              }
+            },
+            fill: {
+              opacity: 1
+            },
+            legend: {
+              position: 'top',
+              horizontalAlign: 'left',
+              offsetX: 40
+        
+          }
+        
+        
+    
+    })
+
+    console.log("OPTION STATE", options1)
 
   //GRAPH STATES FOR TOP 20 
     //cases
@@ -61,23 +144,103 @@ const WorldStats = props=>{
     //update props by the new states
 
 
-  const onSubmit1 = e=>{
-      //handle request w/ correct parameters from state
+  const onSubmit1 = (e)=>{
+      console.log("FORMIPNUTS", formInputs)
+      //reset status for new submit
+      setStatus("")
+      e.preventDefault()
+      //handle request w/ correct URL parameters from state
 
-      //setState 
-      //handle graph states 
+    let formState= {...formInputs}
+    let url1 = "https://who-covid-19-data.p.rapidapi.com/api/data?&"
+    for (const formInputs in formState){
+        if (formState[formInputs]!==null && formInputs[formInputs]!==""){
+            url1+=`${formInputs}=${formState[formInputs]}&`
+        }
 
-    //   setDatas( series & options
-    //     datas.map(item => 
-    //         item.id === index 
-    //         ? {...item, someProp : "changed"} 
-    //         : item 
-    // ))
+       
+    }
+    console.log("URL", `! ${url1} !`)
 
-    //SORT DATA RES BY TOP 10
-    //PUSH ALL TO ARRAY FIRST
-    //SORT ARRAY BY CASES 
+    return axios({
+        method: "GET",
+        url: url1, 
+        headers:{
+            "content-type":"application/octet-stream",
+            "x-rapidapi-host":"who-covid-19-data.p.rapidapi.com",
+            "x-rapidapi-key":"df660fcfb2msh8068165b821fa6ap1b7145jsn0967348c7cfc",
+            "useQueryString":"true",
+            "content-type": "application/octet-stream"
+        } 
+    })
+    .then(res=>{
+        console.log("then RES", res)
+        let Data= res.data; //arr of objects
+
+        //sort results data by cases number
+
+        
+
+        Data.sort((function(a, b){return b.cases - a.cases}));
+
+        //slice first 12 becomes arr of 12 objects
+
+        Data= Data.slice(0,13)
+
+
+        let casesArr=[]
+        let deathArr=[]
+        let newCasesArr=[]
+        let xaxisNames=[]
+        let lastCaseDate=[]
+
+        for(const data1 of Data){
+            xaxisNames.push(data1.name)
+            casesArr.push(data1.cases)
+            deathArr.push(data1.deaths)
+            newCasesArr.push(data1.newCases)
+            lastCaseDate.push(data1.daysSinceLastCase)
+          
+        }
+
+        setSeries( //update arr of obj
+            series1.map((item, index) =>{
+                return index === 0? {...item, data:casesArr }: index === 1? {...item, data:deathArr}: index===2? {...item, data:newCasesArr}:index===3? {...item, data:lastCaseDate} : {...item}
+            })
+          
+        )
+
+        console.log("SETSERIES FOR SERIES:", series1)
+
+        setOptions( prevState =>({ //updating nested obj
+
+            ...prevState,
+            xaxis:{...prevState.xaxis, categories: xaxisNames}
+        })
+           
+        )
+
+        console.log("SETOPTIONS FOR OPTIONS:", options1)
+
+        setFormData({...Initial_State})
+    })
+    .catch(err=>{
+        setStatus("Requested Data Not Available. Change Search Limit")
+        console.log("err", err)
+        setFormData({...Initial_State})
+    })
+
+
+
+
+    //SORT DATA RES BY TOP 10:
+
+    //PUSH CASES/DEATHS/NEWCASES/NEWDEATHS TO ARRAY FIRST
+
+    //SORT ARRAY
     //SLICE TOP 10
+
+
     // var maxSpeed = {
     //     car: 300, 
     //     bike: 60, 
@@ -106,70 +269,101 @@ function ButtonAlert(e){
 
   
         return(
+           
             <>
             <CustomWrapper>
 
             <DashHeader>
                         <h2>Dashboard</h2>
-                        <h2>{this.state.Date}</h2>
+                        <h6>Optional Customizations</h6>
+                      
                     </DashHeader>
-                    <GlobalStats>
-            <h6>Optional Customizations</h6>
-            <form onSubmit={e => onSubmit1(e)}>
+            
+     
+        <h2>{resStatus}</h2>
+        <h2>{formInputs.transmissionType !== null ? `Virus Transmission Type: ${formInputs.transmissionType}`: ""} </h2>
+        <h2>{formInputs.region !== null ? `Region Chosen: ${formInputs.region}`: ""} </h2>
+           
+         <GlobalStats>
+        <GraphDiv>
 
+                 {/* <Chart options={options1} serires={series1} type="bar" height={350} width={700}/> */}
+                 <TestC/>
+                 </GraphDiv>
+
+         <CustomForm onSubmit={(e) => onSubmit1(e)}>
+ 
             <label>
             Limit Search to N Number of Confirmed Deaths (Number):
+        
+            <input type="text" name="death" value={formInputs.death} onChange={handleChange} />
             </label>
-            <input type="text" value={formInputs.deaths} onChange={handleChange} />
 
             <label>
             Limit Search to N Number of New Cases (Number):
+          
+            <input type="text" name="newCases" value={formInputs.newCases} onChange={handleChange} />
             </label>
-            <input type="text" value={formInputs.newCases} onChange={handleChange} />
-            
+
             <label>
             Limit Search to N Number of New Deaths (Number):
+        
+            <input type="text" name = "newDeaths" value={formInputs.newDeaths} onChange={handleChange} />
             </label>
-            <input type="text" value={formInputs.newCases} onChange={handleChange} />
-            
 
             <label>
             Display on a specific method of virus transmission. (Number):
-          
-            </label>
-            <input type="test" list="TransmissionType" value={formInputs.transmissionType} onChange={handleChange} />
-            <datalist>
-            <option value="Community transmission"/>
-    <option value="Local transmission"/>
-    <option value="Imported cases only"/>
-    <option value="Under investigation"/>
-    <option value="Interrupted transmission"/>
-    <option value="Sporadic cases"/>
-    <option value="Cluster of cases"/>
-    <option value="No cases"/>
-            </datalist>
-            <button onClick={e => ButtonAlert(e)}></button>
+           <select name="transmissionType" value={formInputs.transmissionType} onChange={handleChange} >
+           <option name="transmissionType" value=""></option>
+           <option name="transmissionType" value="0">0</option>
+          <option name="transmissionType" value="1">1</option>
+    <option name= "transmissionType" value="2" >2</option>
+    <option  name= "transmissionType"  value="3" >3</option>
+    <option name= "transmissionType"  value="4" >4</option>
+    <option name= "transmissionType"value="5" >5</option>
+    <option name= "transmissionType" value="6"  >6</option>
+    <option name= "transmissionType"  value="7" >7</option>
 
+            </select>
+            <button onClick={e => ButtonAlert(e)}></button>
+          
             
-            <label>
-           Enter a valid region (Text):
             </label>
-            <input type="text" value={formInputs.region} onChange={handleChange} />
+
+            <label>
+            Enter a valid region:
+           <select name="region" value={formInputs.region} onChange={handleChange} >
+           <option name="region" value=""></option>
+          <option  name="region" value="Western Pacific Region">Western Pacific Region</option>
+    <option  name="region" value="European Region">European Region</option>
+    <option name="region" value="SouthEast Asia Region" >SouthEast Asia Region</option>
+    <option  name="region" value="Eastern Mediterranean Region" >Eastern Mediterranean Region</option>
+    <option  name="region" value="Region of the Americas" >Region of the Americas</option>
+    <option  name="region" value="African Region" >African Region</option>
+   
+            </select>
+            </label>
 
             <label>
            Limit search to n number of total confirmed cases:
-            </label>
-            <input type="text" value={formInputs.cases} onChange={handleChange} />
+          
+            <input type="text" name="cases" value={formInputs.cases} onChange={handleChange} /> 
+             </label>
 
             <label>
            Get data for a specific day (YYYY-MM-DD):
-            </label>
-            <input type="text" value={formInputs.reportDate} onChange={handleChange} />
+        
+            <input type="text" name="reportDate" value={formInputs.reportDate} onChange={handleChange} />
             
-
+            </label>
 
         <input type="submit" value="Submit" />
-            </form>
+       
+            </CustomForm>
+
+
+            
+
             </GlobalStats>
             </CustomWrapper>
             </>
@@ -192,6 +386,7 @@ flex-direction: column;
 align-items: center;
 justify-content: center;
 align-content: center;
+border: 1px solid purple;
 
 `;
 
@@ -199,21 +394,22 @@ const DashHeader = styled.div`
 display:flex;
 flex-direction: row;
 justify-content: space-between;
+border: 1px solid red;
 `;
 
 const GlobalStats = styled.div`
  
 
-width: 80%;
+width: 100%;
 display: flex;
-flex-direction:row; 
-justify-content: space-between;
+flex-direction: row; 
+justify-content: space-around;
 text-align: center;
 margin-top: 30px;
-margin: 30px 1.5rem 0 8.5rem;
+// margin: 30px 1.5rem 0 8.5rem;
 border-radius: 15px;
     color: #FE687D;
-// border: 1px solid red;
+border: 1.5px solid green;
 h1{
 
     font-weight: bold;
@@ -223,29 +419,50 @@ h1{
 `;
 
 //----divide map & form into 2 elements
-const customGraphForm = styled.div`
-width: 45%;
+const CustomForm = styled.form`
+max-width: 40%;
 display: flex;
-flex-direction: row;
-justify-content: space-between;
-
-margin-top: 30px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+align-content: center;
+border: 1px solid blue;
+background: blue;
+ 
 font-family: "Roboto";
 padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
 background: white;
 // border: 1px solid  #636363;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+
  
 
+`;
+
+const GraphDiv = styled.div`
+max-width: 40%;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+align-content: center;
+border: 1px solid blue;
+background: blue;
+ 
+font-family: "Roboto";
+padding: .8rem;
+color:  #4D4CAC; 
+border-radius: 15px;
+background: white;
+// border: 1px solid  #636363;
 `;
 
 //-------------------------
 
 const GlobalSum = styled.div`
 //6 SQUARES ACROSS
-margin: 1rem .8rem 0 .8rem; 
+// margin: 1rem .8rem 0 .8rem; 
 width: 16%;
 display: flex;
 //column for stats in box 

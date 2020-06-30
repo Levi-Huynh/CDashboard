@@ -8,10 +8,11 @@ import * as routes from "../routes/routes";
 import { Box, Button, Heading } from "grommet";
 import Global from "../components/Global"
 import WorldStats from "../components/WorldStats"
+import LatestNews from "../components/LatestNews"
 
 const Dashboard = props => {
 
-  [dashOption, setDash] = useState([
+ const [dashOption, setDash] = useState([
 
     {name: "CountryStat", active: true},
     {name: "CustomizedStat", active:false},
@@ -20,17 +21,18 @@ const Dashboard = props => {
 
   function handleDash(name){
 
-    let dashState= dashOption
+    let dashState= [...dashOption]
 
     dashState.map((el, i) =>{
        
    el.name===name ? el.active = true: el.active = false 
     })
 
-
+    console.log("handle:", dashState)
     setDash(dashState)
 
   }
+
 
     return (
         <>
@@ -82,17 +84,9 @@ const Dashboard = props => {
 
 
                     {/* GLobal Stats */}
-            
-            {dashOption.map(el =>{
-              if(el.name === "CountryStat" && el.active === true){ 
-              <Global/> } else if(el.name ==="CustomizedState" && el.active ===true){
-                <WorldStats/>
-              } else{
-                <LatestNews/>
-              }
+        {dashOption[0].active === true? <Global/> : dashOption[1].active ===true? <WorldStats/>: <LatestNews/>}
+    
 
-              
-            })}
 
                 </DashContent>
 
@@ -102,7 +96,6 @@ const Dashboard = props => {
         </>
     )
 }
-
 
 export default withRouter(Dashboard);
 
