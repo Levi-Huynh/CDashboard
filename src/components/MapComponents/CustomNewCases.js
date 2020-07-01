@@ -3,34 +3,28 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import styled from "styled-components";
 import Chart from 'react-apexcharts';
+import update from 'immutability-helper';
 
-      class TestC extends React.Component {
+      class CustomNewCases extends React.Component {
         constructor(props) {
           super(props);
 
           this.state = {
+            region:"",
+            transmission:"",
+            reportDate:"",
           
-            series: [{
-              name: 'Marine Sprite',
-              data: [44, 55, 41, 37, 22, 43, 21]
-            }, {
-              name: 'Striking Calf',
-              data: [53, 32, 33, 52, 13, 43, 32]
-            }, {
-              name: 'Tank Picture',
-              data: [12, 17, 11, 9, 15, 11, 20]
-            }, {
-              name: 'Bucket Slope',
-              data: [9, 7, 5, 8, 6, 9, 4]
-            }, {
-              name: 'Reborn Kid',
-              data: [25, 12, 19, 32, 25, 24, 10]
-            }],
+            series:  [ {
+              name: 'New Cases',
+              data: [1,2,3 ]
+            },
+          ],
             options: {
               chart: {
                 type: 'bar',
                 height: 350,
                 stacked: true,
+                
               },
               plotOptions: {
                 bar: {
@@ -42,13 +36,13 @@ import Chart from 'react-apexcharts';
                 colors: ['#fff']
               },
               title: {
-                text: 'Fiction Books Sales'
+                text: ''
               },
               xaxis: {
-                categories: [2008, 2009, 2010, 2011, 2012, 2013, 2014],
+                categories: ["a", "b", "c"],
                 labels: {
                   formatter: function (val) {
-                    return val + "K"
+                    return val 
                   }
                 }
               },
@@ -60,7 +54,7 @@ import Chart from 'react-apexcharts';
               tooltip: {
                 y: {
                   formatter: function (val) {
-                    return val + "K"
+                    return val 
                   }
                 }
               },
@@ -78,18 +72,42 @@ import Chart from 'react-apexcharts';
           };
         }
 
+        componentDidUpdate(prevProps){
+          if(this.props.graphInfo !== prevProps.graphInfo){
+            this.setState({
+              
+                options: {...this.state.options, xaxis: {...this.state.xaxis, categories: this.props.graphInfo.xaxis}},
+                region: this.props.graphInfo.region,
+                transmission: this.props.graphInfo.transmissionType, 
+                reportDate: this.props.graphInfo.reportDate
+                
+            })
+
+            this.setState({
+              series: update(this.state.series, { 0:{data:{$set: this.props.graphInfo.newCases}}  })
+            })
+
+        }
+      
+     
+
+      }
       
 
         render() {
+          console.log('GRAPHTEST CHART PROPS', this.props.graphInfo)
           return (
             
 
       <div id="chart">
-  <Chart options={this.state.options} series={this.state.series} type="bar" height={350} />
+        <h1>NEW CASES</h1>
+     
+  
+  <Chart options={this.state.options} series={this.state.series} type="bar" height={700} width={1000} />
 </div>
     
           )
         }}
     
     
-        export default TestC;
+        export default CustomNewCases;

@@ -396,7 +396,7 @@ class Global extends React.Component {
         FusionCharts.addEventListener('entityClick', this.entityClick);
       
         return axios
-            .get('https://api.covid19api.com/summary')
+            .get('https://api.covid19api.com/summary', {signal: this.abortController.signal})
             .then(res => {
                 console.log("res", res)
                 const GRES = res.data.Global
@@ -451,6 +451,9 @@ class Global extends React.Component {
             })
     }
 
+    componentWillUnmount = () => this.abortController.abort();
+
+  abortController = new window.AbortController();
 
     render() {
 
