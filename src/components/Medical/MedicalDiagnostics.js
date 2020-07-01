@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { withRouter, Link } from "react-router-dom";
-import Navigation from "./Navigation/index";
-
+import Navigation from "../Navigation/index";
+import SymptomOutput from "./SymptomsOutput"
+import Test  from "./TestOuput"
 //import DashNav 
-import DashNav from "./DashNav";
+import DashNav from "../DashNav";
 
-
+//import libraries
 import axios from "axios";
+import { ModalProvider } from 'styled-react-modal'
+import Modal from 'styled-react-modal'
 
-const WorldStats = props=>{
+const MedicalDiagnostics1 = props=>{
  
     //handle form inputs 
     //   const [reportNumber, setReportNum] = useState("");
@@ -21,21 +24,21 @@ const WorldStats = props=>{
 //   const [cases, setCases] = useState("");
 //   const [name, setName] = useState("");
 //   const [reportDate, setReportDate] = useState("");
+console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
-
-    const [formInputs, setFormData] = useState({
-       death:"",
-       
-        territory: "",
-        newCases: "",
-        newDeaths: "",
-        transmissionType: "",
-        region: "",
-        cases: "",
-        name: "",
-        reportDate: ""
-
+    const [formInputs, setFormData] = useState(()=>{
+        return mapDataKeys(Test)
     });
+
+    const [modalIsOpen, setIsOpen] = useState(false)
+
+    function mapDataKeys(dataArr){
+        let copyData= {}
+        dataArr.map(data=>{
+            copyData[data.name] =""
+        })
+
+    }
 
     function handleChange(e){
         const val= e.target.value;
@@ -103,10 +106,15 @@ function ButtonAlert(e){
   e.preventDefault()
 }
  
-
+ 
+function toggleModal(e){
+    setIsOpen(!modalIsOpen)
+}
   
+
         return(
             <>
+            <ModalProvider>
             <CustomWrapper>
 
             <DashHeader>
@@ -114,17 +122,58 @@ function ButtonAlert(e){
                       
                     </DashHeader>
                     <GlobalStats>
-     <h1>LATEST NEWS</h1>
-            
+     <h1>Medical Diagnostics</h1>
+     <button onClick={toggleModal}>ADD SYMPTOMS</button>
+
+     <StyledModal>
+     <CustomForm onSubmit={(e) => onSubmit1(e)}>
+ 
+ {Test.map(data=>{
+
+     if(!data.min && !data.max){
+         //create select dropdown
+        return <label>
+             {data.text}
+            <select name={data.name} value={`${formInputs}.${data.name}`} onChange={handleChange}>
+            {data.choices.map(choice=>{
+              return   <option name={data.name} value={choice.value}>{choice.text}</option>
+            })}
+
+            </select>
+         </label>
+     }
+ })}
+
+
+
+ </CustomForm>
+
+ </StyledModal>
+
             </GlobalStats>
             </CustomWrapper>
+            </ModalProvider>
             </>
         )
 
         };
 
-const WorldStatsBase= withRouter(WorldStats);
-export default WorldStatsBase;
+const MedicalDiagnostics= withRouter(MedicalDiagnostics1);
+export default MedicalDiagnostics;
+
+
+
+const StyledModal = Modal.styled`
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  opacity: ${props => props.opacity};
+  transition: opacity ease 500ms;
+`;
 
 
 const CustomWrapper = styled.div`
@@ -138,6 +187,7 @@ flex-direction: column;
 align-items: center;
 justify-content: center;
 align-content: center;
+border: 1px solid purple;
 
 `;
 
@@ -145,21 +195,22 @@ const DashHeader = styled.div`
 display:flex;
 flex-direction: row;
 justify-content: space-between;
+border: 1px solid red;
 `;
 
 const GlobalStats = styled.div`
  
 
-width: 80%;
+width: 100%;
 display: flex;
-flex-direction:row; 
-justify-content: space-between;
+flex-direction: column; 
+justify-content: center;
 text-align: center;
 margin-top: 30px;
-margin: 30px 1.5rem 0 8.5rem;
+// margin: 30px 1.5rem 0 8.5rem;
 border-radius: 15px;
     color: #FE687D;
-// border: 1px solid red;
+border: 1.5px solid green;
 h1{
 
     font-weight: bold;
@@ -169,13 +220,16 @@ h1{
 `;
 
 //----divide map & form into 2 elements
-const customGraphForm = styled.div`
-width: 45%;
+const CustomForm = styled.form`
+max-width: 100%;
 display: flex;
-flex-direction: row;
-justify-content: space-between;
-
-margin-top: 30px;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+align-content: center;
+border: 1px solid blue;
+background: blue;
+ 
 font-family: "Roboto";
 padding: .8rem;
 color:  #4D4CAC; 
@@ -187,11 +241,29 @@ box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16);
 
 `;
 
+const GraphDiv = styled.div`
+max-width: 100%;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+align-content: center;
+ 
+background: white;
+ 
+font-family: "Roboto";
+padding: .8rem;
+color:  #4D4CAC; 
+border-radius: 15px;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+// border: 1px solid  #636363;
+`;
+
 //-------------------------
 
 const GlobalSum = styled.div`
 //6 SQUARES ACROSS
-margin: 1rem .8rem 0 .8rem; 
+// margin: 1rem .8rem 0 .8rem; 
 width: 16%;
 display: flex;
 //column for stats in box 

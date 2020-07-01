@@ -8,7 +8,7 @@ import * as routes from "../routes/routes";
 import { Box, Button, Heading } from "grommet";
 import Global from "../components/Global"
 import WorldStats from "../components/WorldStats"
-import LatestNews from "../components/LatestNews"
+import MedicalDiagnostics from "../components/Medical/MedicalDiagnostics"
 
 const Dashboard = props => {
 
@@ -16,7 +16,7 @@ const Dashboard = props => {
 
     {name: "CountryStat", active: true},
     {name: "CustomizedStat", active:false},
-    {name: "LatestNews", active: false }
+    {name: "MedicalDiagnostics", active: false }
   ])
 
   function handleDash(name){
@@ -65,15 +65,16 @@ const Dashboard = props => {
           </Heading>
         </Box>
       </LogoContainer>
+      <NavTitle key={3}  onClick={()=>handleDash("MedicalDiagnostics")}>
+     AI Powered Pre-Diagnostics 
+</NavTitle>
       <NavTitle key={1} onClick={()=>handleDash("CountryStat")}>
         Statistics By Country
 </NavTitle  >
       <NavTitle key={2} onClick={()=>handleDash("CustomizedStat")}>
         Customized Statistics Search 
 </NavTitle >
-      <NavTitle key={3}  onClick={()=>handleDash("LatestNews")}>
-      Covid19 Latest News 
-</NavTitle>
+     
     
 
     </DashWrapper>
@@ -84,7 +85,7 @@ const Dashboard = props => {
 
 
                     {/* GLobal Stats */}
-        {dashOption[0].active === true? <Global/> : dashOption[1].active ===true? <WorldStats/>: <LatestNews/>}
+        {dashOption[0].active === true? <Global/> : dashOption[1].active ===true? <WorldStats/>: <MedicalDiagnostics/>}
     
 
 
