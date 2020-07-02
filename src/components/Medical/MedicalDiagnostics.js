@@ -29,9 +29,11 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
         return mapDataKeys(Test)
     });
 
+    console.log("AXIOSPARAMS", axiosParam)
+
     const [modalIsOpen, setIsOpen] = useState(false)
 
-    const [symptomChoosen, setSymptom] =useState(" ")
+    const [symptomChoosen, setSymptom] =useState(null)
 
      
 
@@ -39,16 +41,18 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
 
     function onSubmit1(e){
+    
         setSymptom(e.target.name)
+
     }
     
     const symptomMap= {}
 
     Test.map((data, index)=>{
-        symptomMap[data.name] = index 
+        symptomMap[data.text] = index 
     })
 
-    console.log( "TEST", "choices" in Test[symptomMap["WeightLoss"]], Test[symptomMap["WeightLoss"]].choices)
+    console.log("SYMP MAP", symptomMap)
 
     function mapDataKeys(dataArr){
         let copyData= {}
@@ -60,10 +64,15 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
     function handleChange(e){
         const val= e.target.value;
+        console.log("IN HANDLECHANGE", e.target.name)
+        console.log("IN HANDLECHANGE2", e.target.value)
+        setSymptom(val)
       setAxiosParam({
         ...axiosParam,
         [e.target.name]:val 
        })
+
+       console.log("CHECK SYMPTOM STATE ONhandle:", symptomChoosen )
     }
 
  
@@ -107,9 +116,12 @@ function toggleModal(e){
  
 
      <input
-    
+     onChange={handleChange}
     placeholder="select symptom"
-     list="symptlist"/>
+     list="symptlist"
+     
+     
+     />
      <datalist id="symptlist">
        {Test.map((data, key)=>{
            return <option key={key} value={data.text} name={data.name}  />
@@ -121,7 +133,7 @@ function toggleModal(e){
 {console.log("CHECK SYMPTOM STATE:", symptomChoosen)}
 
 <h1>SYMPTOM OPTIONS FORM</h1>
-     {symptomChoosen ===null ? <h1>Symptom Choosen still loading...</h1>
+     {!Test[symptomMap[symptomChoosen]] ? <h1>Symptom Choosen still loading...</h1>
      
      : ("choices" in Test[symptomMap[symptomChoosen]]? <> <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2> <input onChange={handleChange} name={Test[symptomMap[symptomChoosen]].name} list="options"/> <datalist id="options">{Test[symptomMap[symptomChoosen]].choices.map(data=>{
          return <option value={data.text} name={data.value} />
@@ -130,7 +142,6 @@ function toggleModal(e){
 </SymptomOptionsForm> )
 
     }
-
     
      
  
