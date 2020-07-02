@@ -9,102 +9,64 @@ import DashNav from "../DashNav";
 
 //import libraries
 import axios from "axios";
-import { ModalProvider } from 'styled-react-modal'
-import Modal from 'styled-react-modal'
+import Modal, { ModalProvider } from 'styled-react-modal'
+
 
 const MedicalDiagnostics1 = props=>{
  
-    //handle form inputs 
-    //   const [reportNumber, setReportNum] = useState("");
-//   const [territory, setTerritory] = useState("");
-//   const [newCases, setNewCases] = useState("");
-//   const [newDeaths, setNewDeaths] = useState("");
-//   const [transmissionType, setTransmissionType] = useState("");
-//   const [region, setRegion] = useState("");
-//   const [cases, setCases] = useState("");
-//   const [name, setName] = useState("");
-//   const [reportDate, setReportDate] = useState("");
+
 console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
-    const [formInputs, setFormData] = useState(()=>{
+ 
+
+    const [axiosParam, setAxiosParam] = useState(()=>{
+        //SETS ALL SYMPTOM NAMES TO INTIAL = 0 
         return mapDataKeys(Test)
     });
 
     const [modalIsOpen, setIsOpen] = useState(false)
+
+    const [symptomChoosen, setSymptom] =useState(null)
+
+     
+
+    //form state should hold symptom name & value
+
+
+    function onSubmit1(e){
+        setSymptom(e.target.name)
+    }
+    
+    const symptomMap= {}
+
+    Test.map((data, index)=>{
+        symptomMap[data.name] = index 
+    })
+
+    console.log("SYMPTMAP", symptomMap)
 
     function mapDataKeys(dataArr){
         let copyData= {}
         dataArr.map(data=>{
             copyData[data.name] =""
         })
-
+        return copyData 
     }
 
     function handleChange(e){
         const val= e.target.value;
-      setFormData({
-        ...formInputs,
+      setAxiosParam({
+        ...axiosParam,
         [e.target.name]:val 
        })
     }
 
-
-  //GRAPH STATES FOR TOP 20 
-    //cases
-    //deaths
-    //newCases
-    //newDeaths
-    // region
-    //report id
-    //transmissiontype
-    //reportDate
-    //country name 
-
-    //pass props to StackedBar chart
-    //update props by the new states
+ 
 
 
-  const onSubmit1 = e=>{
-      //handle request w/ correct parameters from state
 
-      //setState 
-      //handle graph states 
-
-    //   setDatas( series & options
-    //     datas.map(item => 
-    //         item.id === index 
-    //         ? {...item, someProp : "changed"} 
-    //         : item 
-    // ))
-
-    //SORT DATA RES BY TOP 10
-    //PUSH ALL TO ARRAY FIRST
-    //SORT ARRAY BY CASES 
-    //SLICE TOP 10
-    // var maxSpeed = {
-    //     car: 300, 
-    //     bike: 60, 
-    //     motorbike: 200, 
-    //     airplane: 1000,
-    //     helicopter: 400, 
-    //     rocket: 8 * 60 * 60
-    // };
-    // var sortable = [];
-    // for (var vehicle in maxSpeed) {
-    //     sortable.push([vehicle, maxSpeed[vehicle]]);
-    // }
-    
-    // sortable.sort(function(a, b) {
-    //     return a[1] - b[1];
-    // });
-
-  }
-  
-function ButtonAlert(e){
-
-  alert("CHOOSE THE FOLLOWING NUMBERS TO FILTER GRAPH BY TRANSMISSION TYPE: 1: Local Transmision, 2: Imported Cases Only, 3: Under Investigation, 4: Interrupted Transmission 5: Sporadic Cases, 6: Clusters of Cases, 7: No Cases")
-  e.preventDefault()
-}
+ 
+ 
  
  
 function toggleModal(e){
@@ -114,7 +76,7 @@ function toggleModal(e){
 
         return(
             <>
-            <ModalProvider>
+            
             <CustomWrapper>
 
             <DashHeader>
@@ -125,8 +87,37 @@ function toggleModal(e){
      <h1>Medical Diagnostics</h1>
      <button onClick={toggleModal}>ADD SYMPTOMS</button>
 
-     <StyledModal>
-     <CustomForm onSubmit={(e) => onSubmit1(e)}>
+     <StyledModal
+      isOpen={modalIsOpen}
+     >
+     
+     <h2>ADD SYMPTOMS</h2>
+     <button onClick={toggleModal}>Close</button>
+
+     {symptomChoosen === null?
+
+<SymptomForm onSubmit={(e) => onSubmit1(e)} > 
+{/* submit here should rerender options for symptom */}
+
+     <input
+    
+    placeholder="select symptom"
+     list="symptlist"
+
+   
+     
+     />
+     <datalist id="symptlist">
+       {Test.map((data, key)=>{
+           return <option key={key} value={data.text} name={data.name}  />
+       })}
+
+     </datalist>
+     </SymptomForm>: <h2>options</h2>
+}
+     {/* //addsympotom clears symptom state && adds symptom to AXIOS PARAMETER OBJECT W/KEY VALUES,. X ABOVE enter symptom x's out of sympt clearns symptom state, exits modal*/}
+{/*      
+    <CustomForm onSubmit={(e) => onSubmit1(e)}>
  
  {Test.map(data=>{
 
@@ -142,17 +133,18 @@ function toggleModal(e){
             </select>
          </label>
      }
- })}
+ })} 
 
 
 
- </CustomForm>
+ </CustomForm>  */}
+   
 
  </StyledModal>
 
             </GlobalStats>
             </CustomWrapper>
-            </ModalProvider>
+         
             </>
         )
 
@@ -161,15 +153,20 @@ function toggleModal(e){
 const MedicalDiagnostics= withRouter(MedicalDiagnostics1);
 export default MedicalDiagnostics;
 
-
+const SymptomForm = styled.form`
+width: 100%;
+height: 100%;
+display: flex;
+flex-direction: column;
+align-items: center; 
+`;
 
 const StyledModal = Modal.styled`
-  width: 80%;
+  width: 40%;
   height: 80%;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  margin-left: 50%;
   background-color: white;
   opacity: ${props => props.opacity};
   transition: opacity ease 500ms;
@@ -204,8 +201,8 @@ const GlobalStats = styled.div`
 width: 100%;
 display: flex;
 flex-direction: column; 
-justify-content: center;
-text-align: center;
+// justify-content: center;
+// text-align: center;
 margin-top: 30px;
 // margin: 30px 1.5rem 0 8.5rem;
 border-radius: 15px;

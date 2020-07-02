@@ -18,7 +18,7 @@ import { LANDING, DASHBOARD } from "./routes/routes";
 
 //@ utils
 //import * as ROUTES from "./Routes/routes";
-
+import { ModalProvider } from 'styled-react-modal'
 
 const Theme = styled.div`
 
@@ -33,12 +33,14 @@ function App() {
   return (
     <Router>
       <Theme>
+        <ModalProvider>
         <Route
           exact
           path={routes.LANDING}
           render={props => <Landing />} />
         <Route exact path={routes.DASHBOARD} render={props => <Dashboard />} />
         <Route exact path={routes.GLOBALSTATS} render={props=><WorldStats/>} />
+        </ModalProvider>
       </Theme>
     </Router>
   );
