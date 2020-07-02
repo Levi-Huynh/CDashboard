@@ -4,6 +4,11 @@ import { withRouter, Link } from "react-router-dom";
 import Navigation from "../Navigation/index";
 import SymptomOutput from "./SymptomsOutput"
 import Test  from "./TestOuput"
+
+//input components
+import InputRange from "./InputRange"
+
+
 //import DashNav 
 import DashNav from "../DashNav";
 
@@ -26,7 +31,7 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
     const [modalIsOpen, setIsOpen] = useState(false)
 
-    const [symptomChoosen, setSymptom] =useState(null)
+    const [symptomChoosen, setSymptom] =useState(" ")
 
      
 
@@ -43,7 +48,7 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
         symptomMap[data.name] = index 
     })
 
-    console.log("SYMPTMAP", symptomMap)
+    console.log( "TEST", "choices" in Test[symptomMap["WeightLoss"]], Test[symptomMap["WeightLoss"]].choices)
 
     function mapDataKeys(dataArr){
         let copyData= {}
@@ -96,49 +101,39 @@ function toggleModal(e){
 
      {symptomChoosen === null?
 
-<SymptomForm onSubmit={(e) => onSubmit1(e)} > 
-{/* submit here should rerender options for symptom */}
+(<SymptomForm onSubmit={(e) => onSubmit1(e)} > 
+ 
+
+ 
 
      <input
     
     placeholder="select symptom"
-     list="symptlist"
-
-   
-     
-     />
+     list="symptlist"/>
      <datalist id="symptlist">
        {Test.map((data, key)=>{
            return <option key={key} value={data.text} name={data.name}  />
        })}
 
      </datalist>
-     </SymptomForm>: <h2>options</h2>
-}
-     {/* //addsympotom clears symptom state && adds symptom to AXIOS PARAMETER OBJECT W/KEY VALUES,. X ABOVE enter symptom x's out of sympt clearns symptom state, exits modal*/}
-{/*      
-    <CustomForm onSubmit={(e) => onSubmit1(e)}>
+     </SymptomForm>): 
+     (<SymptomOptionsForm>
+{console.log("CHECK SYMPTOM STATE:", symptomChoosen)}
+
+<h1>SYMPTOM OPTIONS FORM</h1>
+     {symptomChoosen ===null ? <h1>Symptom Choosen still loading...</h1>
+     
+     : ("choices" in Test[symptomMap[symptomChoosen]]? <> <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2> <input onChange={handleChange} name={Test[symptomMap[symptomChoosen]].name} list="options"/> <datalist id="options">{Test[symptomMap[symptomChoosen]].choices.map(data=>{
+         return <option value={data.text} name={data.value} />
+     })} </datalist> </>: <input onChange={handleChange}  type="range" name={Test[symptomMap[symptomChoosen]].name} min={Test[symptomMap[symptomChoosen]].min} max={Test[symptomMap[symptomChoosen]].max}/>) }
+
+</SymptomOptionsForm> )
+
+    }
+
+    
+     
  
- {Test.map(data=>{
-
-     if(!data.min && !data.max){
-         //create select dropdown
-        return <label>
-             {data.text}
-            <select name={data.name} value={`${formInputs}.${data.name}`} onChange={handleChange}>
-            {data.choices.map(choice=>{
-              return   <option name={data.name} value={choice.value}>{choice.text}</option>
-            })}
-
-            </select>
-         </label>
-     }
- })} 
-
-
-
- </CustomForm>  */}
-   
 
  </StyledModal>
 
@@ -154,6 +149,14 @@ const MedicalDiagnostics= withRouter(MedicalDiagnostics1);
 export default MedicalDiagnostics;
 
 const SymptomForm = styled.form`
+width: 100%;
+height: 100%;
+display: flex;
+flex-direction: column;
+align-items: center; 
+`;
+
+const SymptomOptionsForm = styled(SymptomForm)`
 width: 100%;
 height: 100%;
 display: flex;
