@@ -37,7 +37,6 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
      
 
-    //form state should hold symptom name & value
 
 
     function onSubmit1(e){
@@ -54,6 +53,53 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
     console.log("SYMP MAP", symptomMap)
 
+    //USER PASES TEXT INPUT
+    //CONVERT TEXT TO VALUE BEFORE 
+    //USING VALUE TO UPDATE AXIOS PARAM STATE
+
+    //STORE NAME AS KEY IN OPTION OBJECT
+    // EACH KEY HAS ARRAY OF OPTION OBJECTS W/TEXT
+    // EACH OBJECT HAS THE CORRECT TEXT & CORRESP VALUE
+
+     const OptionsMap={}
+
+    Test.map((data, index)=>{
+        
+        if(data.choices) {OptionsMap[data.name] = data.choices }
+    })
+
+    console.log("OPTIONS MAP", OptionsMap)
+  
+
+
+    function handleChangeOption(e){
+        const val= e.target.value;
+        const name=e.target.name;
+
+        let convertVal=null
+
+        if(name in OptionsMap){
+            OptionsMap[name].map(data=>{
+                if(data.text ===val){
+                    convertVal=data.value
+                    return convertVal
+                }
+            })
+        }
+
+    console.log("CONVERTVAL", convertVal)
+
+        setAxiosParam({
+            ...axiosParam,
+            [e.target.name]:convertVal
+           })
+
+           console.log("AXIOSPARAM.NAME", axiosParam.name)
+    }
+    
+    
+
+
     function mapDataKeys(dataArr){
         let copyData= {}
         dataArr.map(data=>{
@@ -64,20 +110,16 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
     function handleChange(e){
         const val= e.target.value;
-        console.log("IN HANDLECHANGE", e.target.name)
+        console.log("IN HANDLECHANGE1", e)
         console.log("IN HANDLECHANGE2", e.target.value)
+        console.log("IN HANDLECHANGE KEY", e.target.key)
         setSymptom(val)
-      setAxiosParam({
-        ...axiosParam,
-        [e.target.name]:val 
-       })
+   
 
        console.log("CHECK SYMPTOM STATE ONhandle:", symptomChoosen )
     }
 
  
-
-
 
  
  
@@ -119,7 +161,7 @@ function toggleModal(e){
      onChange={handleChange}
     placeholder="select symptom"
      list="symptlist"
-     
+   
      
      />
      <datalist id="symptlist">
@@ -135,9 +177,17 @@ function toggleModal(e){
 <h1>SYMPTOM OPTIONS FORM</h1>
      {!Test[symptomMap[symptomChoosen]] ? <h1>Symptom Choosen still loading...</h1>
      
-     : ("choices" in Test[symptomMap[symptomChoosen]]? <> <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2> <input onChange={handleChange} name={Test[symptomMap[symptomChoosen]].name} list="options"/> <datalist id="options">{Test[symptomMap[symptomChoosen]].choices.map(data=>{
-         return <option value={data.text} name={data.value} />
-     })} </datalist> </>: <input onChange={handleChange}  type="range" name={Test[symptomMap[symptomChoosen]].name} min={Test[symptomMap[symptomChoosen]].min} max={Test[symptomMap[symptomChoosen]].max}/>) }
+     : ("choices" in Test[symptomMap[symptomChoosen]]? <> 
+     
+     <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2> 
+     
+     <input value={`${axiosParam}.${Test[symptomMap[symptomChoosen]].name}`} onChange={handleChangeOption} 
+     name={Test[symptomMap[symptomChoosen]].name} list="options"/> 
+
+     <datalist id="options">{Test[symptomMap[symptomChoosen]].choices.map((data, index)=>{
+         return <option value={data.text} name={data.name} index={index}/>
+     })} </datalist> </>: <input onChange={handleChangeOption}   type="range" 
+     name={Test[symptomMap[symptomChoosen]].name} min={Test[symptomMap[symptomChoosen]].min} max={Test[symptomMap[symptomChoosen]].max}/>) }
 
 </SymptomOptionsForm> )
 
