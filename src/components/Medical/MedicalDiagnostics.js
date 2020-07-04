@@ -26,8 +26,20 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
     const [axiosParam, setAxiosParam] = useState(()=>{
         //SETS ALL SYMPTOM NAMES TO INTIAL = 0 
+        //retursn object of TEST names= ""
+        //for form
         return mapDataKeys(Test)
     });
+
+
+    function mapDataKeys(dataArr){
+        let copyData= {}
+        dataArr.map(data=>{
+            copyData[data.name] =""
+        })
+        return copyData 
+    }
+
 
     console.log("AXIOSPARAMS", axiosParam)
 
@@ -35,6 +47,7 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
     const [symptomChoosen, setSymptom] =useState(null)
 
+    const [rangeText, setRangeText] =useState(0)
      
 
 
@@ -68,30 +81,46 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
         if(data.choices) {OptionsMap[data.name] = data.choices }
     })
 
+
+    function onSubmitOption(e){
+        alert(`SUBMIT OPTION: DONE`)
+       console.log(`SUBMIT OPTION: DONE ${e.target.value} or ${e.target.name}`)
+       e.preventDefault()
+     
+    }
+
     console.log("OPTIONS MAP", OptionsMap)
   
+    function handleSetInputText(e){
+        let val = e.target.value;
 
+        setRangeText(val)
+
+    }
 
     function handleChangeOption(e){
-        const val= e.target.value;
+        let val= e.target.value;
         const name=e.target.name;
+        //only convert if not a number!
 
-        let convertVal=null
+  
 
         if(name in OptionsMap){
             OptionsMap[name].map(data=>{
                 if(data.text ===val){
-                    convertVal=data.value
-                    return convertVal
+                    val=data.value
+                    return val 
                 }
             })
+
+            
         }
 
-    console.log("CONVERTVAL", convertVal)
+    console.log(" VALHEREEEE", val)
 
         setAxiosParam({
             ...axiosParam,
-            [e.target.name]:convertVal
+            [e.target.name]: val
            })
 
            console.log("AXIOSPARAM.NAME", axiosParam.name)
@@ -100,13 +129,6 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
     
 
 
-    function mapDataKeys(dataArr){
-        let copyData= {}
-        dataArr.map(data=>{
-            copyData[data.name] =""
-        })
-        return copyData 
-    }
 
     function handleChange(e){
         const val= e.target.value;
@@ -127,6 +149,10 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
  
 function toggleModal(e){
     setIsOpen(!modalIsOpen)
+    //clearn symptom state on form
+    setSymptom(null)
+   
+     
 }
   
 
@@ -171,8 +197,12 @@ function toggleModal(e){
 
      </datalist>
      </SymptomForm>): 
-     (<SymptomOptionsForm>
+     (<SymptomOptionsForm onSubmit={(e) => onSubmitOption(e)}>
 {console.log("CHECK SYMPTOM STATE:", symptomChoosen)}
+
+{/* WORK ON SYMPTOM OPTIONS FOR DATALIST 
+-CLEARING AFTER CLOSE/SUBMIT SYMPTOM */}
+
 
 <h1>SYMPTOM OPTIONS FORM</h1>
      {!Test[symptomMap[symptomChoosen]] ? <h1>Symptom Choosen still loading...</h1>
@@ -181,13 +211,16 @@ function toggleModal(e){
      
      <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2> 
      
-     <input value={`${axiosParam}.${Test[symptomMap[symptomChoosen]].name}`} onChange={handleChangeOption} 
+     <input onChange={handleChangeOption} 
+     placeholder="select options"
      name={Test[symptomMap[symptomChoosen]].name} list="options"/> 
 
-     <datalist id="options">{Test[symptomMap[symptomChoosen]].choices.map((data, index)=>{
-         return <option value={data.text} name={data.name} index={index}/>
-     })} </datalist> </>: <input onChange={handleChangeOption}   type="range" 
-     name={Test[symptomMap[symptomChoosen]].name} min={Test[symptomMap[symptomChoosen]].min} max={Test[symptomMap[symptomChoosen]].max}/>) }
+     <datalist id="options">{Test[symptomMap[symptomChoosen]].choices.map((data, key)=>{
+         return <option value={data.text} name={data.name} key={key}/>
+     })} </datalist> <button onSubmit={(e)=>onSubmitOption(e)}>Add Symptom</button></>: <>   <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2> <input onChange={handleSetInputText}   type="range" 
+     name={Test[symptomMap[symptomChoosen]].name} min={Test[symptomMap[symptomChoosen]].min} max={Test[symptomMap[symptomChoosen]].max}/>
+     <input type="text" id="textInput" value={rangeText} onChange={handleChangeOption}/> <button onSubmit={(e)=>onSubmitOption(e)}>Add Symptom</button>
+      </>) }
 
 </SymptomOptionsForm> )
 
