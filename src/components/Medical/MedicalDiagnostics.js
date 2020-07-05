@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { withRouter, Link } from "react-router-dom";
 import Navigation from "../Navigation/index";
 import SymptomOutput from "./SymptomsOutput"
-import Test  from "./TestOuput"
+import Test from "./TestOuput"
 
 //input components
 import InputRange from "./InputRange"
@@ -17,14 +17,14 @@ import axios from "axios";
 import Modal, { ModalProvider } from 'styled-react-modal'
 
 
-const MedicalDiagnostics1 = props=>{
- 
+const MedicalDiagnostics1 = props => {
 
-console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
- 
+    console.log("SYMPTOMSOUTPUT:", SymptomOutput)
 
-    const [axiosParam, setAxiosParam] = useState(()=>{
+
+
+    const [axiosParam, setAxiosParam] = useState(() => {
         //SETS ALL SYMPTOM NAMES TO INTIAL = 0 
         //retursn object of TEST names= ""
         //for form
@@ -32,12 +32,12 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
     });
 
 
-    function mapDataKeys(dataArr){
-        let copyData= {}
-        dataArr.map(data=>{
-            copyData[data.name] =""
+    function mapDataKeys(dataArr) {
+        let copyData = {}
+        dataArr.map(data => {
+            copyData[data.name] = ""
         })
-        return copyData 
+        return copyData
     }
 
 
@@ -45,23 +45,23 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
     const [modalIsOpen, setIsOpen] = useState(false)
 
-    const [symptomChoosen, setSymptom] =useState(null)
+    const [symptomChoosen, setSymptom] = useState(null)
 
-    const [rangeText, setRangeText] =useState(0)
-     
-
+    const [rangeText, setRangeText] = useState(0)
 
 
-    function onSubmit1(e){
-    
+
+
+    function onSubmit1(e) {
+
         setSymptom(e.target.name)
 
     }
-    
-    const symptomMap= {}
 
-    Test.map((data, index)=>{
-        symptomMap[data.text] = index 
+    const symptomMap = {}
+
+    Test.map((data, index) => {
+        symptomMap[data.text] = index
     })
 
     console.log("SYMP MAP", symptomMap)
@@ -74,172 +74,172 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
     // EACH KEY HAS ARRAY OF OPTION OBJECTS W/TEXT
     // EACH OBJECT HAS THE CORRECT TEXT & CORRESP VALUE
 
-     const OptionsMap={}
+    const OptionsMap = {}
 
-    Test.map((data, index)=>{
-        
-        if(data.choices) {OptionsMap[data.name] = data.choices }
+    Test.map((data, index) => {
+
+        if (data.choices) { OptionsMap[data.name] = data.choices }
     })
 
 
-    function onSubmitOption(e){
+    function onSubmitOption(e) {
         alert(`SUBMIT OPTION: DONE`)
-       console.log(`SUBMIT OPTION: DONE ${e.target.value} or ${e.target.name}`)
-       e.preventDefault()
-     
+        console.log(`SUBMIT OPTION: DONE ${e.target.value} or ${e.target.name}`)
+        e.preventDefault()
+
     }
 
     console.log("OPTIONS MAP", OptionsMap)
-  
-    function handleSetInputText(e){
+
+    function handleSetInputText(e) {
         let val = e.target.value;
 
         setRangeText(val)
 
     }
 
-    function handleChangeOption(e){
-        let val= e.target.value;
-        const name=e.target.name;
+    function handleChangeOption(e) {
+        let val = e.target.value;
+        const name = e.target.name;
         //only convert if not a number!
 
-  
 
-        if(name in OptionsMap){
-            OptionsMap[name].map(data=>{
-                if(data.text ===val){
-                    val=data.value
-                    return val 
+
+        if (name in OptionsMap) {
+            OptionsMap[name].map(data => {
+                if (data.text === val) {
+                    val = data.value
+                    return val
                 }
             })
 
-            
+
         }
 
-    console.log(" VALHEREEEE", val)
+        console.log(" VALHEREEEE", val)
 
         setAxiosParam({
             ...axiosParam,
             [e.target.name]: val
-           })
+        })
 
-           console.log("AXIOSPARAM.NAME", axiosParam.name)
+        console.log("AXIOSPARAM.NAME", axiosParam.name, "AXIOSPARAM OBJ:", axiosParam)
     }
-    
-    
 
 
 
-    function handleChange(e){
-        const val= e.target.value;
+
+
+    function handleChange(e) {
+        const val = e.target.value;
         console.log("IN HANDLECHANGE1", e)
         console.log("IN HANDLECHANGE2", e.target.value)
         console.log("IN HANDLECHANGE KEY", e.target.key)
         setSymptom(val)
-   
 
-       console.log("CHECK SYMPTOM STATE ONhandle:", symptomChoosen )
+
+        console.log("CHECK SYMPTOM STATE ONhandle:", symptomChoosen)
     }
 
- 
 
- 
- 
- 
- 
-function toggleModal(e){
-    setIsOpen(!modalIsOpen)
-    //clearn symptom state on form
-    setSymptom(null)
-   
-     
-}
-  
 
-        return(
-            <>
-            
+
+
+
+
+    function toggleModal(e) {
+        setIsOpen(!modalIsOpen)
+        //clearn symptom state on form
+        setSymptom(null)
+
+
+    }
+
+
+    return (
+        <>
+
             <CustomWrapper>
 
-            <DashHeader>
-                        <h2>Dashboard</h2>
-                      
-                    </DashHeader>
-                    <GlobalStats>
-     <h1>Medical Diagnostics</h1>
-     <button onClick={toggleModal}>ADD SYMPTOMS</button>
+                <DashHeader>
+                    <h2>Dashboard</h2>
 
-     <StyledModal
-      isOpen={modalIsOpen}
-     >
-     
-     <h2>ADD SYMPTOMS</h2>
-     <button onClick={toggleModal}>Close</button>
+                </DashHeader>
+                <GlobalStats>
+                    <h1>Medical Diagnostics</h1>
+                    <button onClick={toggleModal}>ADD SYMPTOMS</button>
 
-     {symptomChoosen === null?
+                    <StyledModal
+                        isOpen={modalIsOpen}
+                    >
 
-(<SymptomForm onSubmit={(e) => onSubmit1(e)} > 
- 
+                        <h2>ADD SYMPTOMS</h2>
+                        <button onClick={toggleModal}>Close</button>
 
- 
+                        {symptomChoosen === null ?
 
-     <input
-     onChange={handleChange}
-    placeholder="select symptom"
-     list="symptlist"
-   
-     
-     />
-     <datalist id="symptlist">
-       {Test.map((data, key)=>{
-           return <option key={key} value={data.text} name={data.name}  />
-       })}
+                            (<SymptomForm onSubmit={(e) => onSubmit1(e)} >
 
-     </datalist>
-     </SymptomForm>): 
-     (<SymptomOptionsForm onSubmit={(e) => onSubmitOption(e)}>
-{console.log("CHECK SYMPTOM STATE:", symptomChoosen)}
 
-{/* WORK ON SYMPTOM OPTIONS FOR DATALIST 
+
+
+                                <input
+                                    onChange={handleChange}
+                                    placeholder="select symptom"
+                                    list="symptlist"
+
+
+                                />
+                                <datalist id="symptlist">
+                                    {Test.map((data, key) => {
+                                        return <option key={key} value={data.text} name={data.name} />
+                                    })}
+
+                                </datalist>
+                            </SymptomForm>) :
+                            (<SymptomOptionsForm onSubmit={(e) => onSubmitOption(e)}>
+                                {console.log("CHECK SYMPTOM STATE:", symptomChoosen)}
+
+                                {/* WORK ON SYMPTOM OPTIONS FOR DATALIST 
 -CLEARING AFTER CLOSE/SUBMIT SYMPTOM */}
 
 
-<h1>SYMPTOM OPTIONS FORM</h1>
-     {!Test[symptomMap[symptomChoosen]] ? <h1>Symptom Choosen still loading...</h1>
-     
-     : ("choices" in Test[symptomMap[symptomChoosen]]? <> 
-     
-     <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2> 
-     
-     <input onChange={handleChangeOption} 
-     placeholder="select options"
-     name={Test[symptomMap[symptomChoosen]].name} list="options"/> 
+                                <h1>SYMPTOM OPTIONS FORM</h1>
+                                {!Test[symptomMap[symptomChoosen]] ? <h1>Symptom Choosen still loading...</h1>
 
-     <datalist id="options">{Test[symptomMap[symptomChoosen]].choices.map((data, key)=>{
-         return <option value={data.text} name={data.name} key={key}/>
-     })} </datalist> <button onSubmit={(e)=>onSubmitOption(e)}>Add Symptom</button></>: <>   <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2> <input onChange={handleSetInputText}   type="range" 
-     name={Test[symptomMap[symptomChoosen]].name} min={Test[symptomMap[symptomChoosen]].min} max={Test[symptomMap[symptomChoosen]].max}/>
-     <input type="text" id="textInput" value={rangeText} onChange={handleChangeOption}/> <button onSubmit={(e)=>onSubmitOption(e)}>Add Symptom</button>
-      </>) }
+                                    : ("choices" in Test[symptomMap[symptomChoosen]] ? <>
 
-</SymptomOptionsForm> )
+                                        <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2>
 
-    }
-    
-     
- 
+                                        <input onChange={handleChangeOption}
+                                            placeholder="select options"
+                                            name={Test[symptomMap[symptomChoosen]].name} list="options" />
 
- </StyledModal>
+                                        <datalist id="options">{Test[symptomMap[symptomChoosen]].choices.map((data, key) => {
+                                            return <option value={data.text} name={data.name} key={key} />
+                                        })} </datalist> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button></> : <>   <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2> <input onChange={handleSetInputText} type="range"
+                                            name={Test[symptomMap[symptomChoosen]].name} min={Test[symptomMap[symptomChoosen]].min} max={Test[symptomMap[symptomChoosen]].max} />
+                                            <input type="text" id="textInput" value={rangeText} onChange={handleChangeOption} /> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button>
+                                        </>)}
 
-            </GlobalStats>
+                            </SymptomOptionsForm>)
+
+                        }
+
+
+
+
+                    </StyledModal>
+
+                </GlobalStats>
             </CustomWrapper>
-         
-            </>
-        )
 
-        };
+        </>
+    )
 
-const MedicalDiagnostics= withRouter(MedicalDiagnostics1);
+};
+
+const MedicalDiagnostics = withRouter(MedicalDiagnostics1);
 export default MedicalDiagnostics;
 
 const SymptomForm = styled.form`
@@ -504,7 +504,7 @@ const ThirtyDayElements = styled.div`
 
 width: 46%;
 padding: 1rem;
-`; 
+`;
 
 const ThirtyDayElementsInner = styled.div`
 //title 2 total
@@ -514,7 +514,7 @@ display: flex;
 flex-direction: row;
 justify-content: space-around;
 
-`; 
+`;
 
 
 const ThirtyDayPercents = styled.div`
@@ -528,5 +528,5 @@ h6{
 
 }
 
-`; 
+`;
 
