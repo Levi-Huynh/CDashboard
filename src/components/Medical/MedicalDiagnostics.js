@@ -32,10 +32,40 @@ const MedicalDiagnostics1 = props => {
     });
 
 
+
+    let test = {
+        name1: {
+            "text": "Age",
+            "name": "Age",
+            "type": "integer",
+            "min": 0,
+            "max": 120,
+            "default": 35,
+            "category": "Constitutional and vital signs physical examination",
+            "subcategory1": "",
+            "subcategory2": "",
+            "subcategory3": "",
+            "subcategory4": ""
+        },
+        name2: {
+            "text": "BMI",
+            "name": "BMI",
+            "type": "double",
+            "min": 11.0,
+            "max": 60.0,
+            "default": 23.0,
+            "category": "Constitutional and vital signs physical examination",
+            "subcategory1": "",
+            "subcategory2": "",
+            "subcategory3": "",
+            "subcategory4": "",
+            "step": 0.1
+        }
+    }
     function mapDataKeys(dataArr) {
         let copyData = {}
         dataArr.map(data => {
-            copyData[data.name] = ""
+            copyData[data.name] = null
         })
         return copyData
     }
@@ -83,8 +113,13 @@ const MedicalDiagnostics1 = props => {
 
 
     function onSubmitOption(e) {
-        alert(`SUBMIT OPTION: DONE`)
-        console.log(`SUBMIT OPTION: DONE ${e.target.value} or ${e.target.name}`)
+        alert(`SUBMITTED CHECK AXIOS PARAM`)
+
+        // Object.keys(axiosParam).map(data => {
+        //     if (axiosParam[data] !== null) {
+        //         console.log("AXIOS PARAM key:", data, "data:", axiosParam[data])
+        //     }
+        // })
         e.preventDefault()
 
     }
@@ -104,6 +139,7 @@ const MedicalDiagnostics1 = props => {
         //only convert if not a number!
 
 
+        console.log(" VALHEREEEE", val)
 
         if (name in OptionsMap) {
             OptionsMap[name].map(data => {
@@ -116,7 +152,6 @@ const MedicalDiagnostics1 = props => {
 
         }
 
-        console.log(" VALHEREEEE", val)
 
         setAxiosParam({
             ...axiosParam,
@@ -168,7 +203,22 @@ const MedicalDiagnostics1 = props => {
                 <GlobalStats>
                     <h1>Medical Diagnostics</h1>
                     <button onClick={toggleModal}>ADD SYMPTOMS</button>
+                    {/* //list should be about 45% & stay to left of modal */}
+                    <SymptomListWrapper>
 
+
+                        {Object.keys(axiosParam).map(data => {
+                            if (axiosParam[data] !== null) {
+                                return <><h3>{Test[symptomMap[data]].category}</h3>
+                                    <p>{Test[symptomMap[data]].text}: {axiosParam[data]}</p>
+                                </>
+                            }
+                        })
+                        }
+
+
+
+                    </SymptomListWrapper>
                     <StyledModal
                         isOpen={modalIsOpen}
                     >
@@ -311,6 +361,18 @@ h1{
     font-family: "Roboto";
 
 }
+`;
+
+const SymptomListWrapper = styled.div`
+width: 40%;
+display: flex;
+flex-direction: column; 
+
+`;
+
+const SymptomList = styled.div`
+width: 100%;
+
 `;
 
 //----divide map & form into 2 elements
