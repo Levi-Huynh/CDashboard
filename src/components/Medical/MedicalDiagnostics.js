@@ -25,13 +25,12 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
  
 
     const [axiosParam, setAxiosParam] = useState(()=>{
-        //SETS ALL SYMPTOM NAMES TO INTIAL = 0 
         //retursn object of TEST names= ""
-        //for form
         return mapDataKeys(Test)
     });
 
 
+      //retursn object of TEST names= ""
     function mapDataKeys(dataArr){
         let copyData= {}
         dataArr.map(data=>{
@@ -41,22 +40,15 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
     }
 
 
-    console.log("AXIOSPARAMS", axiosParam)
 
     const [modalIsOpen, setIsOpen] = useState(false)
-
     const [symptomChoosen, setSymptom] =useState(null)
-
     const [rangeText, setRangeText] =useState(0)
      
 
-
-
     function onSubmit1(e){
     
-        setSymptom(e.target.name)
-
-    }
+        setSymptom(e.target.name)}
     
     const symptomMap= {}
 
@@ -64,36 +56,28 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
         symptomMap[data.text] = index 
     })
 
-    console.log("SYMP MAP", symptomMap)
-
-    //USER PASES TEXT INPUT
-    //CONVERT TEXT TO VALUE BEFORE 
-    //USING VALUE TO UPDATE AXIOS PARAM STATE
-
-    //STORE NAME AS KEY IN OPTION OBJECT
-    // EACH KEY HAS ARRAY OF OPTION OBJECTS W/TEXT
-    // EACH OBJECT HAS THE CORRECT TEXT & CORRESP VALUE
-
      const OptionsMap={}
 
     Test.map((data, index)=>{
         
         if(data.choices) {OptionsMap[data.name] = data.choices }
+
+        console.log("SYMP MAP", symptomMap, "OPT MAP", OptionsMap)
     })
 
 
     function onSubmitOption(e){
         alert(`SUBMIT OPTION: DONE`)
-       console.log(`SUBMIT OPTION: DONE ${e.target.value} or ${e.target.name}`)
        e.preventDefault()
+       //re render choose symptom input after submit
+       setSymptom(null)
      
     }
 
-    console.log("OPTIONS MAP", OptionsMap)
+
   
     function handleSetInputText(e){
         let val = e.target.value;
-
         setRangeText(val)
 
     }
@@ -101,10 +85,8 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
     function handleChangeOption(e){
         let val= e.target.value;
         const name=e.target.name;
-        //only convert if not a number!
 
-  
-
+        //only convert VALUE FROM TEXT TO VALUE IF AN OPTION && if not a number!
         if(name in OptionsMap){
             OptionsMap[name].map(data=>{
                 if(data.text ===val){
@@ -115,8 +97,6 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
             
         }
-
-    console.log(" VALHEREEEE", val)
 
         setAxiosParam({
             ...axiosParam,
@@ -130,7 +110,7 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
 
 
 
-    function handleChange(e){
+    function handleChangeChooseSymp(e){
         const val= e.target.value;
         console.log("IN HANDLECHANGE1", e)
         console.log("IN HANDLECHANGE2", e.target.value)
@@ -141,10 +121,6 @@ console.log("SYMPTOMSOUTPUT:", SymptomOutput )
        console.log("CHECK SYMPTOM STATE ONhandle:", symptomChoosen )
     }
 
- 
-
- 
- 
  
  
 function toggleModal(e){
@@ -184,7 +160,7 @@ function toggleModal(e){
  
 
      <input
-     onChange={handleChange}
+     onChange={handleChangeChooseSymp}
     placeholder="select symptom"
      list="symptlist"
    
