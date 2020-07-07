@@ -50,14 +50,21 @@ const MedicalDiagnostics1 = props => {
     // console.log("OPTIONSLIST", optionsList)
 
     const [modalIsOpen, setIsOpen] = useState(false)
+    
+    const [termsModal, setTermsModal] = useState(false)
 
+    const [termsAccept, setTermsAccept] = useState(false)
     const [symptomChoosen, setSymptom] = useState(null)
 
     const [rangeText, setRangeText] = useState(0)
 
-    const [sessId, setSessId] = useState({
-        
-        "sessId1": null})
+
+    function AcceptTerms(e){
+        e.preventDefault()
+        setTermsAccept(true)
+        toggleTermsModal(e)
+    }
+
 
 
 
@@ -122,10 +129,12 @@ const MedicalDiagnostics1 = props => {
 
     }
 
-
-  const analyzeSubmit=(e) =>{
-     e.preventDefault()
+    function InitiateNewSession(e){
+        e.preventDefault()
+  
         console.log("AXIOSPARAM OBJ:", axiosParam)
+
+       
 
   return axios({
             "method":"GET",
@@ -136,9 +145,8 @@ const MedicalDiagnostics1 = props => {
             console.log("RES AFTER SESS INIT:", res)
             let ID= res.data.SessionID
             console.log("RES AFTER SESS INIT:", ID)
-            localStorage.setItem('sessId', ID)
-            setSessId({...sessId, sessId1:ID})
-            console.log("STATE AFTER SESS INIT:", sessId)
+            // localStorage.setItem('sessId', ID)
+         
 
          return axios({
                 "method":"POST",
@@ -151,17 +159,99 @@ const MedicalDiagnostics1 = props => {
 
         })
         .then(res=>{
-            console.log("RES AFTER ACCEPT TERMS:", res)
-           let ID= res.config.params.SessionID
-            console.log(res.config.params.SessionID)
-            console.log("axiosParam:", axiosParam)
-         
-           
-          
+            console.log("RES AFTER ACCEPT TERMS", res)
+            let ID= res.config.params.SessionID
+          localStorage.setItem("SessionID", ID)
+        })
+        .catch(err=>
+            console.log("ERR", err)
+        )
+
+    }
+
+
+  
+
+
+    const RecPatientFeatures =(e)=>{
+        e.preventDefault()
+
+        let ID= localStorage.getItem("SessionID")   
+        console.log('ID CHECK', ID)
+
+        return axios({
+            "method": "GET",
+            "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedFeatures_PatientProvided", 
+            "params":{
+                "sessionID":ID
+            }
+        })
+        .then(res=>{
+
+            console.log("GET PATIENT REC FEATURES", res)
+        })
+        .catch(err=>{
+            console.log("ERR", err)
+        })
+
+    }
+
+    const RecPhyscianFeatures=(e)=>{
+        e.preventDefault()
+
+        let ID= localStorage.getItem("SessionID")   
+        console.log('ID CHECK', ID)
+
+        return axios({
+            "method": "GET",
+            "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedFeatures_PhysicianProvided", 
+            "params":{
+                "sessionID":ID
+            }
+        })
+        .then(res=>{
+
+            console.log("GET PATIENT REC FEATURES", res)
+        })
+        .catch(err=>{
+            console.log("ERR", err)
+        })
+
+
+    }
+
+    const SuggestedTests=(e)=>{
+        e.preventDefault()
+        let ID= localStorage.getItem("SessionID")   
+        console.log('ID CHECK', ID)
+
+        return axios({
+             "method": "GET",
+            "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedTests", 
+            "params":{
+                "sessionID":ID
+            }
+        })
+        .then(res=>{
+
+            console.log("GET PATIENT REC FEATURES", res)
+        })
+        .catch(err=>{
+            console.log("ERR", err)
+        })
+
+    }
+
+
+  const analyzeSubmit=(e) =>{
+     e.preventDefault()
+        console.log("AXIOSPARAM OBJ:", axiosParam)
+ 
           function newObj1(params ) { 
         
             var params = new URLSearchParams()
-            params.append("SessionID", res.config.params.SessionID)
+            console.log("localStorage ID",localStorage.getItem("SessionID") )
+            params.append("SessionID", localStorage.getItem("SessionID"))
             console.log("My params", params.get("SessionID"))            
             for(const data in axiosParam){
                 console.log("DATA:", data, "VAL:", axiosParam[data])
@@ -190,9 +280,6 @@ const MedicalDiagnostics1 = props => {
                  
             })
 
-            
-             
-        })
         .then(res =>{
           
             let ID =res.config.params.get("SessionID")
@@ -263,8 +350,11 @@ const MedicalDiagnostics1 = props => {
 
 
 
-
-
+    
+function toggleTermsModal(e){
+    
+    setTermsModal(!termsModal)
+}
 
 
     function toggleModal(e) {
@@ -286,10 +376,39 @@ const MedicalDiagnostics1 = props => {
 
                 </DashHeader>
                 <GlobalStats>
-                    <h1>Medical Diagnostics</h1>
+
+                <h1>Medical Diagnostics</h1>
+                <button onClick={(e)=>toggleTermsModal(e)}>TERMS OF USE</button>
+           
+                    {termsAccept === false? <h6>PLEASE ACCEPT TERMS TO USE SYMPTOM CHECKER</h6>:
+                    <SessionFunctionality>
+                     <button onClick={(e)=>InitiateNewSession(e)}>INITIATE NEW SESSION</button>
                     <button onClick={toggleModal}>ADD SYMPTOMS</button>
+                  
+                    <button onClick={(e)=>RecPatientFeatures(e)}>GET RECOMMENDATIONS FOR ADDITIONAL SYPTOM STATS (PATIENT PROVIDED)</button>
+                    <button onClick={(e)=>RecPhyscianFeatures(e)}>GET RECOMMENDATIONS FOR ADDITIONAL SYPTOM STATS (PHYSCIAN PROVIDED)</button>
+                    <button onClick={(e)=>SuggestedTests(e)}>GET SUGGESTED TESTS</button>
                     <button onClick={(e)=>analyzeSubmit(e)}>ANALYZE </button>
+                    </SessionFunctionality>
+                    
+                    }
+
                     {/* //list should be about 45% & stay to left of modal */}
+
+                    <StyledTermsModal
+                    isOpen={termsModal}>
+                     <h1>Accept The Terms</h1>
+                     <h6>I have read, understood and I accept and agree to comply with the <a style={{display: "table-cell"}} href = "https://endlessmedical.com/TermsOfUse/" target = "_blank" 
+rel = "noopener noreferrer">Terms of Use.</a> </h6>
+                   
+             
+                   <button onClick={(e)=>AcceptTerms(e)}>Accept</button>
+
+                          {/* should close terms modal keep state false for terms*/}
+                   <button onClick={(e)=>toggleTermsModal(e)}>Decline</button>
+                   
+                    </StyledTermsModal>
+
                     <SymptomListWrapper>
 
                  
@@ -394,6 +513,11 @@ const MedicalDiagnostics1 = props => {
 const MedicalDiagnostics = withRouter(MedicalDiagnostics1);
 export default MedicalDiagnostics;
 
+const SessionFunctionality = styled.div`
+display: flex;
+flex-direction: column; 
+`;
+
 const SymptomForm = styled.form`
 width: 100%;
 height: 100%;
@@ -421,6 +545,16 @@ const StyledModal = Modal.styled`
   transition: opacity ease 500ms;
 `;
 
+const StyledTermsModal = Modal.styled`
+width: 70%;
+height: 35%;
+display: flex;
+flex-direction: column;
+background-color: white;
+opacity: ${props => props.opacity};
+transition: opacity ease 500ms;
+
+`;
 
 const CustomWrapper = styled.div`
 width: 85%;
