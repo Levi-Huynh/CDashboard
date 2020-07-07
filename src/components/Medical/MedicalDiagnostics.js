@@ -181,7 +181,7 @@ const MedicalDiagnostics1 = props => {
           let myParams=  newObj1( )
 
         //   myParams.append("SessionID",res.config.params.SessionID )
-          console.log("My params", myParams.get("Age"))
+        //   console.log("My params", myParams.get("Age"))
  
             return axios({
                 "method":"POST",
@@ -193,8 +193,9 @@ const MedicalDiagnostics1 = props => {
             
              
         })
-        .then((res, ID)=>{
-
+        .then(res =>{
+          
+            let ID =res.config.params.get("SessionID")
             console.log("RES AFTER SYMPTOM UPDATE", res)
              
             return axios({
