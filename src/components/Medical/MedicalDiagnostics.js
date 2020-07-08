@@ -71,7 +71,7 @@ const MedicalDiagnostics1 = props => {
     const [testRec, setTestRec] = useState({
         "modal":false,
         "data": [], 
-        "fetch1": false
+         
     })
 
     
@@ -122,7 +122,7 @@ const MedicalDiagnostics1 = props => {
         //convert text to name here in onsubmit?
 
 
-        // console.log("ON SUBMIT OPTION CALLED: E.TARGET.VAL:", e.target.val, e.target.name)
+        console.log("ON SUBMIT OPTION CALLED: E.TARGET.VAL:", e.target.val, e.target.name)
 
         Object.keys(axiosParam).map(data1 => {
             var dataName = data1
@@ -134,7 +134,7 @@ const MedicalDiagnostics1 = props => {
                 //   create object here to turn inxo axiosParam object? 
                 //dataName needs be in []
                setOptionsList(prevState=> ({...prevState, [dataName]: axiosParam[data1]}) )
-               
+               console.log("updated optionslist:", optionsList.dataName)
            
             }
 
@@ -146,6 +146,9 @@ const MedicalDiagnostics1 = props => {
         e.preventDefault()
 
     }
+
+
+    //@@@--------------------------INITIATE NEW SESSION
 
     function InitiateNewSession(e){
         e.preventDefault()
@@ -191,82 +194,14 @@ const MedicalDiagnostics1 = props => {
   
 
 
-    const RecPatientFeatures =(e)=>{
-        e.preventDefault()
-        updateFeature(e)
 
-        let ID= localStorage.getItem("SessionID")   
-        console.log('ID CHECK', ID)
-
-
-        return axios({
-            "method": "GET",
-            "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedFeatures_PatientProvided", 
-            "params":{
-                "sessionID":ID
-            }
-        })
-        .then(res=>{
-
-            console.log("GET PATIENT REC FEATURES", res)
-            // if(res.data.SuggestedFeatures.length > 0){
-            //     setPatientRec({...patientRec, [data]:res.data.SuggestedFeatures})
-            //     togglePatientModal(e)
-            // }
-
-        })
-        .catch(err=>{
-            console.log("ERR", err)
-        })
-
-    }
-
-    const RecPhyscianFeatures=(e)=>{
-        e.preventDefault()
-
-        let ID= localStorage.getItem("SessionID")   
-        console.log('ID CHECK', ID)
-
-        return axios({
-            "method": "GET",
-            "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedFeatures_PhysicianProvided", 
-            "params":{
-                "sessionID":ID
-            }
-        })
-        .then(res=>{
-
-            console.log("GET DR REC FEATURES", res)
-        })
-        .catch(err=>{
-            console.log("ERR", err)
-        })
-
-
-    }
-
-    const handleTestClick= (e)=>{
-        e.preventDefault()
-      
-        setTestRec(prevState => ({
-            ...prevState,
-            fetch: true 
-         }));
-        console.log('HANDLE CLICK TEST', testRec.fetch1)
-    }
   
-    function toggleTestRecModal(){
- 
-        setTestRec(!testRec.modal)
-        console.log("TEST REC MODAL TOGGLED:", testRec.modal)
-    }
+  
 
  
+       //@@@---------------------- TEST RECOMMENDATIONS FETCH
     
     const SuggestedTests=async()=>{
-
-    
-        console.log("SUGG TEST COUNT:")
          
         let ID= localStorage.getItem("SessionID")   
   
@@ -277,7 +212,7 @@ const MedicalDiagnostics1 = props => {
                 "sessionID":ID
             }
         })
-        console.log("GET SUGGESTED TESTS", res)
+        console.log("SUGGESTED TESTS INVOKED. RES:", res)
 
         let name = "data"
                
@@ -287,28 +222,10 @@ const MedicalDiagnostics1 = props => {
 
                }))
                
-            //    toggleTestRecModal()
+         
                 
             }
 
-       
-      
-
-          
-        // .then(res=>{
-
-        //     console.log("GET SUGGESTED TESTS", res)
-        //     if(res.data.Tests.length > 0){
-        //        setTestRec({...testRec, data:res.data.Tests})
-               
-        //         toggleTestRecModal(e)
-        //     }
-
-        //     console.log('TESTREC:', testRec)
-        // })
-        // .catch(err=>{
-        //     console.log("ERR", err)
-        // })
 
     }
 
@@ -316,8 +233,84 @@ const MedicalDiagnostics1 = props => {
         (async () => {
           await SuggestedTests();
         })();
-      }, [testRec.fetch1]);
+      }, [testRec.modal]);
 
+
+
+         //@@@---------------------- PATIENT RECOMMENDATION FETCH
+      const PatientFeatures=async()=>{
+         
+        let ID= localStorage.getItem("SessionID")   
+  
+        var res= await axios({
+             "method": "GET",
+             "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedFeatures_PatientProvided", 
+            "params":{
+                "sessionID":ID
+            }
+        })
+        console.log("SUGGESTED TESTS INVOKED. RES:", res)
+
+        let name = "data"
+               
+            if(res.data.SuggestedFeatures.length > 0){
+               setTestRec(prevState=> ({
+                   ...prevState, [name]: res.data.SuggestedFeatures
+
+               }))
+               
+         
+                
+            }
+
+
+    }
+
+    useEffect(() => {
+        (async () => {
+          await PatientFeatures();
+        })();
+      }, [patientRec.modal]);
+
+
+    //@@@---------------------- DR RECOMMENDATION FETCH
+
+      const DoctorFeatures=async()=>{
+         
+        let ID= localStorage.getItem("SessionID")   
+  
+        var res= await axios({
+             "method": "GET",
+             "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedFeatures_PhysicianProvided", 
+            "params":{
+                "sessionID":ID
+            }
+        })
+        console.log("SUGGESTED TESTS INVOKED. RES:", res)
+
+        let name = "data"
+               
+            if(res.data.SuggestedFeatures.length > 0){
+               setTestRec(prevState=> ({
+                   ...prevState, [name]: res.data.SuggestedFeatures
+
+               }))
+               
+         
+                
+            }
+
+
+    }
+
+    useEffect(() => {
+        (async () => {
+          await DoctorFeatures();
+        })();
+      }, [physcianRec.modal]);
+
+
+      //@@@---------------------------------UPDATE FEATURE 
     function updateFeature(e){
         e.preventDefault()
         // console.log("AXIOSPARAM OBJ:", axiosParam)
@@ -340,14 +333,8 @@ const MedicalDiagnostics1 = props => {
             
         return params 
         }
-
-       
-
           let myParams=  newObj1( )
 
-        //   myParams.append("SessionID",res.config.params.SessionID )
-        //   console.log("My params", myParams.get("Age"))
- 
             return axios({
                 "method":"POST",
                 "url": "http://api.endlessmedical.com/v1/dx/UpdateFeature",
@@ -363,6 +350,8 @@ const MedicalDiagnostics1 = props => {
     }
 
 
+
+        //@@@---------------------------------SUBMIT ANALYZE AXIOS REQUEST 
   const analyzeSubmit=(e) =>{
      e.preventDefault()
 updateFeature(e)
@@ -389,16 +378,19 @@ updateFeature(e)
     
     }
     
-    // console.log("OPTIONS MAP", OptionsMap)
  
+ 
+        //@@@---------------------------------CHANGE HANDLER FOR SYMPTOM OPTION VALUES 
 
     function handleChangeOption(e) {
         let val = e.target.value;
         const name = e.target.name;
         //only convert if not a number!
+        //ONLY SET RANGE TEXT IF NUM. VALIDATE THAT NUM VAL A NUMB STRING OR REAL NUM
+        console.log("TYPE CHECK FOR VALS THAT ARE NUMS:", typeof(val), val)
         setRangeText(val)
 
-        // console.log("INSIDE HANDLECHANGE OPTION VAL:", val, name)
+        console.log("INSIDE HANDLECHANGE OPTION VAL:", val, name)
 
         if (name in OptionsMap) {
             OptionsMap[name].map(data => {
@@ -416,26 +408,37 @@ updateFeature(e)
             ...axiosParam,
             [e.target.name]: val
         })
-
-        // console.log("AXIOSPARAM.NAME",  "AXIOSPARAM OBJ:", axiosParam)
+    
+        //CLEAR SETRANGE???
+        
     }
 
 
+        //@@@---------------------------------CONVERT CHOICES VALUES BACK TO TEXT FOR LIST UI RENDER
+    function convertValToText(name, val){
+  
+        let text=""
+        OptionsMap[name].map(data=>{
+            if(data.value ===val){
+
+                 text= data.text 
+               
+                
+            }
+        })
+        return text
+    }
 
 
+    //@@@---------------------------------HANDLE CHANGE TO CHOOSE SYMPTOM
 
     function handleChange(e) {
         const val = e.target.value;
- 
-        // console.log("IN HANDLECHANGE2", e.target.value)
-    
         setSymptom(val)
-
-
-    
     }
 
 
+        //@@@---------------------------------MODAL TOGGLES FOR TERMS & SYMPTOM CHOICES
 
     
 function toggleTermsModal(){
@@ -443,26 +446,14 @@ function toggleTermsModal(){
     setTermsModal(!termsModal)
 }
 
-
-function togglePatientModal(){
-    
-    setPatientRec(!patientRec.modal)
-}
-function togglePhyModal(){
-    
-    setPhyscianRec(!physcianRec.modal)
-}
-
-
     function toggleModal(e) {
         setIsOpen(!modalIsOpen)
-        //clearn symptom state on form
         setSymptom(null)
 
 
     }
 
-    console.log('TESTREC AT RETURN:', testRec.data, testRec.modal)
+ 
 
     return (
         <>
@@ -483,10 +474,10 @@ function togglePhyModal(){
                      <button onClick={(e)=>InitiateNewSession(e)}>INITIATE NEW SESSION</button>
                     <button onClick={toggleModal}>ADD SYMPTOMS</button>
                   
-                    <button onClick={(e)=>RecPatientFeatures(e)}>GET RECOMMENDATIONS FOR ADDITIONAL SYPTOM STATS (PATIENT PROVIDED)</button>
-                    <button onClick={(e)=>RecPhyscianFeatures(e)}>GET RECOMMENDATIONS FOR ADDITIONAL SYPTOM STATS (PHYSCIAN PROVIDED)</button>
-                    <button onClick={(e)=>handleTestClick(e)}>GET SUGGESTED TESTS</button>
-                    <button onClick={(e)=>analyzeSubmit(e)}>ANALYZE </button>
+                    <button onClick={(e)=>setPatientRec(prevState =>({...prevState, modal:!prevState.modal}))}>GET RECOMMENDATIONS FOR ADDITIONAL SYMPTOM QUESTIONS (PATIENT PROVIDED)</button>
+                    <button onClick={(e)=>setPhyscianRec(prevState =>({...prevState, modal:!prevState.modal}))}>GET RECOMMENDATIONS FOR ADDITIONAL SYMPTOM QUESTIONS (PHYSCIAN PROVIDED)</button>
+                    <button onClick={(e)=>setTestRec(prevState =>({...prevState, modal:!prevState.modal}))}>SUGGESTED TESTS BASED ON SYMPTOMS</button>
+                    <button onClick={(e)=>analyzeSubmit(e)}>ANALYZE SYMPTOMS</button>
                     </SessionFunctionality>
                     
                     }
@@ -507,16 +498,21 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                    
                     </StyledTermsModal>
 
-                    <StyledRecsModal isOpen={testRec.data.length>0?true:false}>
+               
+
+                    <StyledRecsModal isOpen={testRec.modal}>
+                             
+                    {/* RECOMMENDED TESTS  MODAL */}
+                        <button onClick={(e)=>setTestRec(prevState =>({...prevState, modal:!prevState.modal}))}>Close</button>
                
                  {
-                     testRec.data && testRec.data.length > 0? ( <>
+                      testRec.data && testRec.data.length > 0? ( <>
                        <h6> Recommended Tests to increase diagnosis accuracies:
-            (Recommended Tests with percentages less than 50% may not be accurate recommendation)
+            (Recommended Tests with percentages less than 50% may not be likely recommended)
                        </h6>
                        
                        {testRec.data.map(data=>{
-                           return <><p>{Object.keys(data)[0]}</p>
+                           return <><p>{Object.keys(data)[0]}:</p> <p>{Object.values(data)[0]}%</p>
                            </>
                        })}
                      </>): <h5>No Suggested Tests Available</h5>
@@ -525,11 +521,58 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                    
                     </StyledRecsModal>
 
+                    <StyledRecsModal isOpen={patientRec.modal}>
+                             
+                             {/* PATIENT TESTS  MODAL */}
+                                 <button onClick={(e)=>setPatientRec(prevState =>({...prevState, modal:!prevState.modal}))}>Close</button>
+                        
+                          {
+                               patientRec.data && patientRec.data.length > 0? ( <>
+                                <h6> Recommended Symptom questions (patient provided) to increase diagnosis accuracies:
+                     (Recommended Tests with percentages less than 50% likely not recommended)
+                                </h6>
+                                
+                                {patientRec.data.map(data=>{
+                                    return <><p>{Object.keys(data)[0]}:</p> <p>{Object.values(data)[0]}%</p>
+                                    </>
+                                })}
+                              </>): <h5>No Recommended Symptom Questions Available</h5>
+                          }
+         
+                            
+                             </StyledRecsModal>
+
+
+                             <StyledRecsModal isOpen={physcianRec.modal}>
+                             
+                             {/* DR TESTS  MODAL */}
+                                 <button onClick={(e)=>setPhyscianRec(prevState =>({...prevState, modal:!prevState.modal}))}>Close</button>
+                        
+                          {
+                               physcianRec.data && physcianRec.data.length > 0? ( <>
+                                <h6> Recommended Symptom questions (physcian provided) to increase diagnosis accuracies:
+                     (Recommended Tests with percentages less than 50% may likely not recommended)
+                                </h6>
+                                
+                                { physcianRec.data.map(data=>{
+                                    return <><p>{Object.keys(data)[0]}:</p> <p>{Object.values(data)[0]}%</p>
+                                    </>
+                                })}
+                              </>): <h5>No Recommended Symptom Questions Available</h5>
+                          }
+         
+                            
+                             </StyledRecsModal>
+
+
+
                     <SymptomListWrapper>
 
                  
 
                         { 
+
+                        // RENDER LIST OF USERS'S SYMTOM CHOCIES
                         
                         Object.keys(optionsList).map(data => { 
                     
@@ -537,9 +580,9 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                            
                             if ( optionsList[data] !== null) {
                                 // console.log("INSIDE SYMPTOM WRAPPER LIST OPTIONSLIST  DATA NOT NULL:",  data, optionsList[data])
-
+                                // console.log("symptomMapName[data] (index for Symp.text):", symptomMapName[data])
                                 return <><h6>{Symp[symptomMapName[data]].category}</h6>
-                                    <p>{Symp[symptomMapName[data]].text} {"choices" in Symp[symptomMapName[data]]? OptionsMap[data][axiosParam[data]-1].text: axiosParam[data] }</p>
+                                    <p>{Symp[symptomMapName[data]].text} {"choices" in Symp[symptomMapName[data]]? convertValToText(data, axiosParam[data]): axiosParam[data] }</p>
                                 </>
                             }
                         })
@@ -674,7 +717,7 @@ transition: opacity ease 500ms;
 
 const StyledRecsModal = Modal.styled`
 width: 70%;
-height: 80%;
+height: 100%;
 display: flex;
 flex-direction: column;
 background-color: white;
@@ -728,205 +771,3 @@ display: flex;
 flex-direction: column; 
 `;
 
-const SymptomList = styled.div`
-width: 100%;
-`;
-
-//----divide map & form into 2 elements
-const CustomForm = styled.form`
-max-width: 100%;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-align-content: center;
-border: 1px solid blue;
-background: blue;
- 
-font-family: "Roboto";
-padding: .8rem;
-color:  #4D4CAC; 
-border-radius: 15px;
-background: white;
-// border: 1px solid  #636363;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
- 
-`;
-
-const GraphDiv = styled.div`
-max-width: 100%;
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-align-content: center;
- 
-background: white;
- 
-font-family: "Roboto";
-padding: .8rem;
-color:  #4D4CAC; 
-border-radius: 15px;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-// border: 1px solid  #636363;
-`;
-
-//-------------------------
-
-const GlobalSum = styled.div`
-//6 SQUARES ACROSS
-// margin: 1rem .8rem 0 .8rem; 
-width: 16%;
-display: flex;
-//column for stats in box 
-flex-direction: column; 
-align-items: center;
-align-content: center;
-justify-content: center;
-text-align:center;
-font-family: "Roboto";
-padding: .8rem;
-color:  #4D4CAC; 
-border-radius: 15px;
-background: white;
-// border: 1px solid  #636363;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
- 
-h2{
- 
-font-weight: normal;
-font-size: 1rem;
-span{
-    color: #FE687D;
-    font-weight: bold;
-}
-}
-`;
-
-
-const MapDiv = styled.div`
-width: 100%
-font-family: "Roboto";
-// padding: .8rem;
-color:  #4D4CAC; 
-border-radius: 15px;
-background: white;
-// border: 1px solid  #636363;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-margin: 1rem .8rem 0 .8rem; 
-text-align:center;
-h6{
-    font-size: 1.7rem;
-    font-weight: normal;
-}
-`;
-
-
-
-const CountryStats = styled.div`
-width: 100%;
-font-size: .5rem;
-display:flex;
-display: flex;
-flex-direction:row; 
-justify-content: space-between;
-text-align: center;
-margin-top: 30px;
-// margin: 30px 1.5rem 0 1.5rem;
-justify-content: space-around;
-`;
-
-const CountryTotal = styled.div`
-//3 big buttons across under map
-width: 40%
-display:flex;
-flex-direction: column;
-align-items:center;
-text-align: center;
-font-family: "Roboto";
-// padding: .8rem;
-color:  #4D4CAC; 
-border-radius: 15px;
-background: white;
-padding: .5rem;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-h4{
-    font-size: 1.5rem;
-}
-h5{
-    font-size: 1.3rem;
-}
-h6{
-    font-size: 1rem;
-}
-`;
-
-const ThirtyDayWrapper = styled.div`
-width: 100%;
-display: flex;
-flex-direction: column; 
-justify-content: center;
-align-items: center;
-margin-top: 30px;
-width: 100%
-font-family: "Roboto";
-// padding: .8rem;
-color:  #4D4CAC; 
-border-radius: 15px;
-background: white;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-margin: 30px .8rem 0 .8rem; 
-text-align:center;
-h6{
-    font-size: 1.7rem;
-    font-weight: normal;
-}
-`;
-
-
-const ThirtyDaySty = styled.div`
-width: 100%;
-display: flex;
-flex-direction: row; 
-justify-content: space-between;
-// margin-top: 30px;
- 
-font-family: "Roboto";
-// padding: .8rem;
-color:  #4D4CAC; 
-// border-radius: 15px;
-background: white;
-// box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-// margin: 30px .8rem 0 .8rem; 
-text-align:center;
-h6{
-    font-size: 1.5rem;
-    font-weight: normal;
-}
-`;
-
-
-const ThirtyDayElements = styled.div`
-//title 2 total
-width: 46%;
-padding: 1rem;
-`;
-
-const ThirtyDayElementsInner = styled.div`
-//title 2 total
-width: 46%;
-display: flex;
-flex-direction: row;
-justify-content: space-around;
-`;
-
-
-const ThirtyDayPercents = styled.div`
-width: 46%;
-display: flex;
-flex-direction: column;
-align-items: center;
-h6{
-    font-size: 1rem;
-}
-`;
