@@ -4,6 +4,7 @@ import { withRouter, Link } from "react-router-dom";
 import Navigation from "../Navigation/index";
 import SymptomOutput from "./SymptomsOutput"
 import Test from "./TestOuput"
+import Symp from "./SymptomsOutput"
 
 //input components
 import InputRange from "./InputRange"
@@ -15,6 +16,7 @@ import DashNav from "../DashNav";
 //import libraries
 import axios from "axios";
 import Modal, { ModalProvider } from 'styled-react-modal'
+import { updateLocale } from "moment";
 
 
 const MedicalDiagnostics1 = props => {
@@ -26,14 +28,14 @@ const MedicalDiagnostics1 = props => {
 
     const [axiosParam, setAxiosParam] = useState(() => {
    
-        //retursn object of TEST names= ""
+        //retursn object of Symp names= ""
         //for form
-        return mapDataKeys(Test)
+        return mapDataKeys(Symp)
     });
 
 
     const [optionsList, setOptionsList] = useState(()=>{
-        return mapDataKeys(Test)
+        return mapDataKeys(Symp)
     })
 
     
@@ -58,6 +60,22 @@ const MedicalDiagnostics1 = props => {
 
     const [rangeText, setRangeText] = useState(0)
 
+    const [patientRec, setPatientRec] = useState({
+        "modal":false,
+        "data": []
+    })
+    const [physcianRec, setPhyscianRec] = useState({
+        "modal":false,
+        "data": []
+    })
+    const [testRec, setTestRec] = useState({
+        "modal":false,
+        "data": [], 
+        "fetch1": false
+    })
+
+    
+
 
     function AcceptTerms(e){
         e.preventDefault()
@@ -76,7 +94,7 @@ const MedicalDiagnostics1 = props => {
 
     const symptomMap = {}
 
-    Test.map((data, index) => {
+    Symp.map((data, index) => {
         symptomMap[data.text] = index
     })
 
@@ -85,7 +103,7 @@ const MedicalDiagnostics1 = props => {
     //----------------------------
     const symptomMapName = {}
 
-    Test.map((data, index) => {
+    Symp.map((data, index) => {
         symptomMapName[data.name] = index
     })
 
@@ -93,7 +111,7 @@ const MedicalDiagnostics1 = props => {
 
     const OptionsMap = {}
 
-    Test.map((data, index) => {
+    Symp.map((data, index) => {
 
         if (data.choices) { OptionsMap[data.name] = data.choices }
     })
@@ -175,9 +193,11 @@ const MedicalDiagnostics1 = props => {
 
     const RecPatientFeatures =(e)=>{
         e.preventDefault()
+        updateFeature(e)
 
         let ID= localStorage.getItem("SessionID")   
         console.log('ID CHECK', ID)
+
 
         return axios({
             "method": "GET",
@@ -189,6 +209,11 @@ const MedicalDiagnostics1 = props => {
         .then(res=>{
 
             console.log("GET PATIENT REC FEATURES", res)
+            // if(res.data.SuggestedFeatures.length > 0){
+            //     setPatientRec({...patientRec, [data]:res.data.SuggestedFeatures})
+            //     togglePatientModal(e)
+            // }
+
         })
         .catch(err=>{
             console.log("ERR", err)
@@ -211,7 +236,7 @@ const MedicalDiagnostics1 = props => {
         })
         .then(res=>{
 
-            console.log("GET PATIENT REC FEATURES", res)
+            console.log("GET DR REC FEATURES", res)
         })
         .catch(err=>{
             console.log("ERR", err)
@@ -220,32 +245,67 @@ const MedicalDiagnostics1 = props => {
 
     }
 
-    const SuggestedTests=(e)=>{
+    const handleTestClick= (e)=>{
         e.preventDefault()
-        let ID= localStorage.getItem("SessionID")   
-        console.log('ID CHECK', ID)
+        let fetch="fetch"
+        setTestRec({...testRec, fetch: !testRec.fetch})
+    }
 
-        return axios({
+    const SuggestedTests=async()=>{
+         
+        let ID= localStorage.getItem("SessionID")   
+  
+        var res= await axios({
              "method": "GET",
             "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedTests", 
             "params":{
                 "sessionID":ID
             }
         })
-        .then(res=>{
+        console.log("GET SUGGESTED TESTS", res)
 
-            console.log("GET PATIENT REC FEATURES", res)
-        })
-        .catch(err=>{
-            console.log("ERR", err)
-        })
+        let name = "data"
+               
+            if(res.data.Tests.length > 0){
+               setTestRec(prevState=> ({
+                   ...prevState, [name]: res.data.Tests
+
+               }))
+               
+               toggleTestRecModal()
+                
+            }
+
+       
+      
+
+          
+        // .then(res=>{
+
+        //     console.log("GET SUGGESTED TESTS", res)
+        //     if(res.data.Tests.length > 0){
+        //        setTestRec({...testRec, data:res.data.Tests})
+               
+        //         toggleTestRecModal(e)
+        //     }
+
+        //     console.log('TESTREC:', testRec)
+        // })
+        // .catch(err=>{
+        //     console.log("ERR", err)
+        // })
 
     }
 
+    useEffect(() => {
+        (async () => {
+          await SuggestedTests();
+        })();
+      }, [testRec.fetch1]);
 
-  const analyzeSubmit=(e) =>{
-     e.preventDefault()
-        console.log("AXIOSPARAM OBJ:", axiosParam)
+    function updateFeature(e){
+        e.preventDefault()
+        // console.log("AXIOSPARAM OBJ:", axiosParam)
  
           function newObj1(params ) { 
         
@@ -254,7 +314,7 @@ const MedicalDiagnostics1 = props => {
             params.append("SessionID", localStorage.getItem("SessionID"))
             console.log("My params", params.get("SessionID"))            
             for(const data in axiosParam){
-                console.log("DATA:", data, "VAL:", axiosParam[data])
+                // console.log("DATA:", data, "VAL:", axiosParam[data])
                 if(axiosParam[data] !==null){
                     console.log("DATA NOT EMPTY:", data, "VAL:", axiosParam[data])
                      params.append("name", data)
@@ -279,11 +339,22 @@ const MedicalDiagnostics1 = props => {
                 "params": myParams
                  
             })
+            .then(res=>{
+                console.log("UPDATE FEAT OK", res.data)
+            })
+            .catch(err=>
+                console.log("ERR", err))
 
-        .then(res =>{
+    }
+
+
+  const analyzeSubmit=(e) =>{
+     e.preventDefault()
+updateFeature(e)
+ 
           
-            let ID =res.config.params.get("SessionID")
-            console.log("RES AFTER SYMPTOM UPDATE", res)
+            let ID =localStorage.getItem("SessionID")
+            console.log("LOCAL STRG ID", ID)
              
             return axios({
                 "method":"GET",
@@ -293,8 +364,9 @@ const MedicalDiagnostics1 = props => {
                 }
                  
             })
-        }
-        )
+        .then(res=>{
+            console.log("ANALYZE OK", res.data)
+        })
         .catch(err=>{
             console.log("ERR:", err)
         })
@@ -351,9 +423,24 @@ const MedicalDiagnostics1 = props => {
 
 
     
-function toggleTermsModal(e){
+function toggleTermsModal(){
     
     setTermsModal(!termsModal)
+}
+
+
+function togglePatientModal(){
+    
+    setPatientRec(!patientRec.modal)
+}
+function togglePhyModal(){
+    
+    setPhyscianRec(!physcianRec.modal)
+}
+function toggleTestRecModal(){
+    
+    setTestRec(!testRec.modal)
+    console.log("TEST REC MODAL TOGGLED:", testRec.modal)
 }
 
 
@@ -365,6 +452,7 @@ function toggleTermsModal(e){
 
     }
 
+    console.log('TESTREC AT RETURN:', testRec.data, testRec.modal)
 
     return (
         <>
@@ -387,7 +475,7 @@ function toggleTermsModal(e){
                   
                     <button onClick={(e)=>RecPatientFeatures(e)}>GET RECOMMENDATIONS FOR ADDITIONAL SYPTOM STATS (PATIENT PROVIDED)</button>
                     <button onClick={(e)=>RecPhyscianFeatures(e)}>GET RECOMMENDATIONS FOR ADDITIONAL SYPTOM STATS (PHYSCIAN PROVIDED)</button>
-                    <button onClick={(e)=>SuggestedTests(e)}>GET SUGGESTED TESTS</button>
+                    <button onClick={(e)=>handleTestClick(e)}>GET SUGGESTED TESTS</button>
                     <button onClick={(e)=>analyzeSubmit(e)}>ANALYZE </button>
                     </SessionFunctionality>
                     
@@ -409,6 +497,24 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                    
                     </StyledTermsModal>
 
+                    <StyledRecsModal isOpen={testRec.modal}>
+               
+                 {
+                     testRec.data && testRec.data.length > 0? ( <>
+                       <h6> Recommended Tests to increase diagnosis accuracies:
+            (Recommended Tests with percentages less than 50% may not be accurate recommendation)
+                       </h6>
+                       
+                       {testRec.data.map(data=>{
+                           return <><p>{data}</p>
+                           </>
+                       })}
+                     </>): <h5>No Suggested Tests Available</h5>
+                 }
+
+                   
+                    </StyledRecsModal>
+
                     <SymptomListWrapper>
 
                  
@@ -422,8 +528,8 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                             if ( optionsList[data] !== null) {
                                 // console.log("INSIDE SYMPTOM WRAPPER LIST OPTIONSLIST  DATA NOT NULL:",  data, optionsList[data])
 
-                                return <><h6>{Test[symptomMapName[data]].category}</h6>
-                                    <p>{Test[symptomMapName[data]].text} {"choices" in Test[symptomMapName[data]]? OptionsMap[data][axiosParam[data]-1].text: axiosParam[data] }</p>
+                                return <><h6>{Symp[symptomMapName[data]].category}</h6>
+                                    <p>{Symp[symptomMapName[data]].text} {"choices" in Symp[symptomMapName[data]]? OptionsMap[data][axiosParam[data]-1].text: axiosParam[data] }</p>
                                 </>
                             }
                         })
@@ -454,7 +560,7 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
 
                                 />
                                 <datalist id="symptlist">
-                                    {Test.map((data, key) => {
+                                    {Symp.map((data, key) => {
                                         return <option key={key} value={data.text} name={data.name} />
                                     })}
 
@@ -468,27 +574,27 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
 
 
                                 <h1>SYMPTOM OPTIONS FORM</h1>
-                                {!Test[symptomMap[symptomChoosen]] ? <h1>Symptom Choosen still loading...</h1>
+                                {!Symp[symptomMap[symptomChoosen]] ? <h1>Symptom Choosen still loading...</h1>
 
-                                    : ("choices" in Test[symptomMap[symptomChoosen]] ? <>
+                                    : ("choices" in Symp[symptomMap[symptomChoosen]] ? <>
 
                     <SymptomOptionsForm onSubmit={(e) => onSubmitOption(e)}>
 
-                                        <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2>
+                                        <h2>CHOOSE SYMPTOM OPTIONS FOR {Symp[symptomMap[symptomChoosen]].name} </h2>
 
                                         <input  onChange={(e)=>handleChangeOption(e)}
                                             placeholder="select options"
-                                            name={Test[symptomMap[symptomChoosen]].name} list="options" />
+                                            name={Symp[symptomMap[symptomChoosen]].name} list="options" />
 
-                                        <datalist id="options">{Test[symptomMap[symptomChoosen]].choices.map((data, key) => {
-                                            return <option value={data.text} name={Test[symptomMap[symptomChoosen]].name} key={key}  onChange={(e)=>handleChangeOption(e)}/>
+                                        <datalist id="options">{Symp[symptomMap[symptomChoosen]].choices.map((data, key) => {
+                                            return <option value={data.text} name={Symp[symptomMap[symptomChoosen]].name} key={key}  onChange={(e)=>handleChangeOption(e)}/>
                                         })} </datalist> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button>
                                         </SymptomOptionsForm>
                                         </> : <>  
                                         <SymptomOptionsForm onSubmit={(e) => onSubmitOption(e)}>
-                                         <h2>CHOOSE SYMPTOM OPTIONS FOR {Test[symptomMap[symptomChoosen]].name} </h2> <input onChange={(e)=>handleChangeOption(e)}  type="range"
-                                            name={Test[symptomMap[symptomChoosen]].name} min={Test[symptomMap[symptomChoosen]].min} max={Test[symptomMap[symptomChoosen]].max} />
-                                            <input  id="textInput"  name={Test[symptomMap[symptomChoosen]].name} type="text" value={rangeText} /> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button>
+                                         <h2>CHOOSE SYMPTOM OPTIONS FOR {Symp[symptomMap[symptomChoosen]].name} </h2> <input onChange={(e)=>handleChangeOption(e)}  type="range"
+                                            name={Symp[symptomMap[symptomChoosen]].name} min={Symp[symptomMap[symptomChoosen]].min} max={Symp[symptomMap[symptomChoosen]].max} />
+                                            <input  id="textInput"  name={Symp[symptomMap[symptomChoosen]].name} type="text" value={rangeText!==0?rangeText:Symp[symptomMap[symptomChoosen]].default} /> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button>
                                        
                                             </SymptomOptionsForm>
                                         </>)}
@@ -548,6 +654,17 @@ const StyledModal = Modal.styled`
 const StyledTermsModal = Modal.styled`
 width: 70%;
 height: 35%;
+display: flex;
+flex-direction: column;
+background-color: white;
+opacity: ${props => props.opacity};
+transition: opacity ease 500ms;
+
+`;
+
+const StyledRecsModal = Modal.styled`
+width: 70%;
+height: 80%;
 display: flex;
 flex-direction: column;
 background-color: white;
