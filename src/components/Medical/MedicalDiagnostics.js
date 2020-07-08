@@ -247,11 +247,26 @@ const MedicalDiagnostics1 = props => {
 
     const handleTestClick= (e)=>{
         e.preventDefault()
-        let fetch="fetch"
-        setTestRec({...testRec, fetch: !testRec.fetch})
+      
+        setTestRec(prevState => ({
+            ...prevState,
+            fetch: true 
+         }));
+        console.log('HANDLE CLICK TEST', testRec.fetch1)
+    }
+  
+    function toggleTestRecModal(){
+ 
+        setTestRec(!testRec.modal)
+        console.log("TEST REC MODAL TOGGLED:", testRec.modal)
     }
 
+ 
+    
     const SuggestedTests=async()=>{
+
+    
+        console.log("SUGG TEST COUNT:")
          
         let ID= localStorage.getItem("SessionID")   
   
@@ -272,7 +287,7 @@ const MedicalDiagnostics1 = props => {
 
                }))
                
-               toggleTestRecModal()
+            //    toggleTestRecModal()
                 
             }
 
@@ -437,11 +452,6 @@ function togglePhyModal(){
     
     setPhyscianRec(!physcianRec.modal)
 }
-function toggleTestRecModal(){
-    
-    setTestRec(!testRec.modal)
-    console.log("TEST REC MODAL TOGGLED:", testRec.modal)
-}
 
 
     function toggleModal(e) {
@@ -497,7 +507,7 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                    
                     </StyledTermsModal>
 
-                    <StyledRecsModal isOpen={testRec.modal}>
+                    <StyledRecsModal isOpen={testRec.data.length>0?true:false}>
                
                  {
                      testRec.data && testRec.data.length > 0? ( <>
@@ -506,7 +516,7 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                        </h6>
                        
                        {testRec.data.map(data=>{
-                           return <><p>{data}</p>
+                           return <><p>{Object.keys(data)[0]}</p>
                            </>
                        })}
                      </>): <h5>No Suggested Tests Available</h5>
