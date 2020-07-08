@@ -405,13 +405,13 @@ updateFeature()
             OptionsMap[name].map(data => {
                 if (data.text === val) {
                     val = data.value
-                    return val
+                    console.log("VAL in optionsmap loop:", val)
                 }
             })
 
 
         }
-
+        console.log("VAL outside optionsMap loop, before setAxiosParam:", val)
 
         setAxiosParam({
             ...axiosParam,
@@ -576,7 +576,8 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
 
 <SympAndResults>
                     <SymptomListWrapper>
-
+{/* 
+                    SET MAP TO SHOW THIS HEADER INSIDE OPTIONSLIST MAP? */}
                     <h3>Selected Symptoms</h3>
 
                         { 
@@ -613,6 +614,9 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                     </SymptomListWrapper>:<SymptomListWrapper><h3>Possible Diagnosis</h3></SymptomListWrapper>}
 
                     </SympAndResults>
+
+
+
                     <StyledModal
                         isOpen={modalIsOpen}
                     >
@@ -657,19 +661,20 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
 
                                         <h2>CHOOSE SYMPTOM OPTIONS FOR {Symp[symptomMap[symptomChoosen]].name} </h2>
 
-                                        <input  onChange={(e)=>handleChangeOption(e)}
-                                            placeholder="select options"
-                                            name={Symp[symptomMap[symptomChoosen]].name} list="options" />
+                                       
 
-                                        <datalist id="options">{Symp[symptomMap[symptomChoosen]].choices.map((data, key) => {
-                                            return <option value={data.text} name={Symp[symptomMap[symptomChoosen]].name} key={key}  onChange={(e)=>handleChangeOption(e)}/>
-                                        })} </datalist> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button>
+                                        <select  onChange={(e)=>handleChangeOption(e)}  name={Symp[symptomMap[symptomChoosen]].name} value={axiosParam.symptomChoosen}>
+                                        <option value="" selected>select options</option>
+                                            {Symp[symptomMap[symptomChoosen]].choices.map((data, key) => {
+                                             
+                                            return <option value={data.text} name={Symp[symptomMap[symptomChoosen]].name} key={key}>{data.text}</option>
+                                        })} </select> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button>
                                         </SymptomOptionsForm>
                                         </> : <>  
                                         <SymptomOptionsForm onSubmit={(e) => onSubmitOption(e)}>
                                          <h2>CHOOSE SYMPTOM OPTIONS FOR {Symp[symptomMap[symptomChoosen]].name} </h2> <input onChange={(e)=>handleChangeOption(e)}  type="range"
                                             name={Symp[symptomMap[symptomChoosen]].name} min={Symp[symptomMap[symptomChoosen]].min} max={Symp[symptomMap[symptomChoosen]].max} />
-                                            <input  id="textInput"  name={Symp[symptomMap[symptomChoosen]].name} type="text" value={rangeText!==0?rangeText:Symp[symptomMap[symptomChoosen]].default} /> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button>
+                                            <input  id="textInput"  name={Symp[symptomMap[symptomChoosen]].name} type="number" onChange={(e)=>handleChangeOption(e)} value={rangeText!==0?rangeText:Symp[symptomMap[symptomChoosen]].default} /> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button>
                                        
                                             </SymptomOptionsForm>
                                         </>)}
