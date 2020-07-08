@@ -74,6 +74,11 @@ const MedicalDiagnostics1 = props => {
          
     })
 
+    const [analysis, setAnalysis] = useState({
+        "display": false,
+        "data":[]
+    })
+
     
 
 
@@ -311,8 +316,8 @@ const MedicalDiagnostics1 = props => {
 
 
       //@@@---------------------------------UPDATE FEATURE 
-    function updateFeature(e){
-        e.preventDefault()
+    function updateFeature(){
+        
         // console.log("AXIOSPARAM OBJ:", axiosParam)
  
           function newObj1(params ) { 
@@ -352,15 +357,15 @@ const MedicalDiagnostics1 = props => {
 
 
         //@@@---------------------------------SUBMIT ANALYZE AXIOS REQUEST 
-  const analyzeSubmit=(e) =>{
-     e.preventDefault()
-updateFeature(e)
+  const analyzeSubmit=async() =>{
+     
+updateFeature()
  
           
             let ID =localStorage.getItem("SessionID")
-            console.log("LOCAL STRG ID", ID)
+            // console.log("LOCAL STRG ID", ID)
              
-            return axios({
+            var res=await axios({
                 "method":"GET",
                 "url": "http://api.endlessmedical.com/v1/dx/Analyze",
                 "params": {
@@ -368,16 +373,20 @@ updateFeature(e)
                 }
                  
             })
-        .then(res=>{
-            console.log("ANALYZE OK", res.data)
-        })
-        .catch(err=>{
-            console.log("ERR:", err)
-        })
 
-    
+            console.log("ANALYZE INVOKED. RES.DATA:", res.data)
+            let data="data"
+  
+            if(res.data.Diseases.length>0){
+                setAnalysis(prevState=>({...prevState, [data]: res.data.Diseases}))
+            }
     }
     
+    useEffect(() => {
+        (async () => {
+          await analyzeSubmit();
+        })();
+      }, [analysis.display]);
  
  
         //@@@---------------------------------CHANGE HANDLER FOR SYMPTOM OPTION VALUES 
@@ -477,7 +486,7 @@ function toggleTermsModal(){
                     <button onClick={(e)=>setPatientRec(prevState =>({...prevState, modal:!prevState.modal}))}>GET RECOMMENDATIONS FOR ADDITIONAL SYMPTOM QUESTIONS (PATIENT PROVIDED)</button>
                     <button onClick={(e)=>setPhyscianRec(prevState =>({...prevState, modal:!prevState.modal}))}>GET RECOMMENDATIONS FOR ADDITIONAL SYMPTOM QUESTIONS (PHYSCIAN PROVIDED)</button>
                     <button onClick={(e)=>setTestRec(prevState =>({...prevState, modal:!prevState.modal}))}>SUGGESTED TESTS BASED ON SYMPTOMS</button>
-                    <button onClick={(e)=>analyzeSubmit(e)}>ANALYZE SYMPTOMS</button>
+                    <button onClick={(e)=>setAnalysis(prevState =>({...prevState, display:!prevState.display}))}>ANALYZE SYMPTOMS</button>
                     </SessionFunctionality>
                     
                     }
@@ -565,10 +574,10 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                              </StyledRecsModal>
 
 
-
+<SympAndResults>
                     <SymptomListWrapper>
 
-                 
+                    <h3>Selected Symptoms</h3>
 
                         { 
 
@@ -581,7 +590,7 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                             if ( optionsList[data] !== null) {
                                 // console.log("INSIDE SYMPTOM WRAPPER LIST OPTIONSLIST  DATA NOT NULL:",  data, optionsList[data])
                                 // console.log("symptomMapName[data] (index for Symp.text):", symptomMapName[data])
-                                return <><h6>{Symp[symptomMapName[data]].category}</h6>
+                                return <><p><span>Category: {Symp[symptomMapName[data]].category}</span></p>
                                     <p>{Symp[symptomMapName[data]].text} {"choices" in Symp[symptomMapName[data]]? convertValToText(data, axiosParam[data]): axiosParam[data] }</p>
                                 </>
                             }
@@ -591,6 +600,19 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
 
 
                     </SymptomListWrapper>
+
+
+                    {analysis.display && analysis.data.length>0? <SymptomListWrapper>
+                        <h3>Possible Diagnosis</h3>
+                        
+                        {analysis.data.map(data1=>{
+                            return <><p>{Object.keys(data1)[0]}: {Object.values(data1)[0]}%</p></>
+                        })}
+
+
+                    </SymptomListWrapper>:<SymptomListWrapper><h3>Possible Diagnosis</h3></SymptomListWrapper>}
+
+                    </SympAndResults>
                     <StyledModal
                         isOpen={modalIsOpen}
                     >
@@ -765,9 +787,17 @@ h1{
 }
 `;
 
+const SympAndResults = styled.div` 
+width: 100%;
+display: flex;
+flex-direction: row; 
+justify-content: space-between;
+`;
+
 const SymptomListWrapper = styled.div`
 width: 40%;
 display: flex;
 flex-direction: column; 
+text-align: left
 `;
 
