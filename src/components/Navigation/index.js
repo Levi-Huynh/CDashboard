@@ -40,7 +40,7 @@ const Navigation = props => {
                     ></i>
                     <Button
                         onClick={landingRedirect}
-                        label="CovidTrackS"
+                        label="Patienti"
                         color="white"
                         plain="true"
                     />

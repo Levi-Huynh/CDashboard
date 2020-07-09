@@ -10,13 +10,14 @@ import cvbg2 from '../assets/cvbg2.jpg'
 import day1 from '../assets/day1.jpg'
 import cvbg3 from '../assets/cvbg3.jpg'
 import news from '../assets/news.jpg'
+import med from '../assets/med.jpg'
 
 
 const Landing = props => {
-  const [currentActivity, setCurrentActivity] = useState("updates");
+  const [currentActivity, setCurrentActivity] = useState("AI Powered Symptom Checker");
   const [number, setNumber] = useState(1);
 
-  const activity = ["new cases", "confirmed cases", "recovered cases", "stats by country", "live totals", "global totals", "news headlines", "updates"];
+  const activity = ["AI Powered Symptom Checker", "Unbiased Symptom Analyses", "Physcian Evaluated Results", "Analyses Withou Patient Private Data", "Suggestions on Patient Next Best Steps", "Categorized diagnoses","Track Global Covid19 Case Numbers", "Customize Covid19 Data By Country"];
 
   function updateText() {
     setCurrentActivity(activity[number]);
@@ -35,31 +36,33 @@ const Landing = props => {
       <Navigation />
       <LandingScreen>
         <h2>
-          Stay Current on Covid-19 <span>{currentActivity}</span>
+       Patienti <span>{currentActivity}</span>
         </h2>
       </LandingScreen>
 
 
       <FeaturesInfo>
         <InfoBox>
-          <h3>Track Covid-19 </h3>
-          <p>Easily track the status on Covid-19 cases anywhere on the globe. Discover the latest news headlines regarding the progress of treatment and responses.</p>
+          <h3>Patient Dashboard </h3>
+          <p>Access AI powered recommendations for the next best patient path.  Machine learning models build the recommendations based on patient provided inputs to increase accuracy of pre-diagnostic information, and
+            and recommendations.  View the latest global stats on the Covid19 pandemic. Customize case analyses by country.  
+          </p>
           <ExploreButton to={routes.DASHBOARD}  >Explore →</ExploreButton>
         </InfoBox>
         <FeatureBox>
-          <FeaturePic src={cvbg2} />
-          <h3>Day One by Country</h3>
-          <p>Discover all cases by case type for a country from the first recorded case. Cases include: confirmed, recovered, deaths</p>
+          <FeaturePic src={med} />
+          <h3>AI Powered Informational Pre-Diagnostics</h3>
+          <p>Update features and symptom related information to get recommendations for the next best path towards wellness.</p>
         </FeatureBox>
         <FeatureBox>
           <FeaturePic src={day1} />
-          <h3>Newest Totals</h3>
-          <p>A summary of new and total cases per country updated daily.</p>
+          <h3>Covid19 Global Pandemic</h3>
+          <p>View live global stats of the current Covid19 pandemic</p>
         </FeatureBox>
         <FeatureBox>
           <FeaturePic src={news} />
-          <h3>The Headlines</h3>
-          <p>Browse the latest new articles from various sources of Covid19 headlines</p>
+          <h3>Customize Covid19 Analyses</h3>
+          <p>Filter Covid19 stats by case types, transmission types, region, report dates to create customized analyses by country</p>
         </FeatureBox>
       </FeaturesInfo>
     </LandingPageContainer>
@@ -69,6 +72,7 @@ const Landing = props => {
 export default withRouter(Landing);
 
 const LandingPageContainer = styled.div`
+// background: #222327;
 `;
 
 
