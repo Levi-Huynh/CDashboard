@@ -11,13 +11,14 @@ import day1 from '../assets/day1.jpg'
 import cvbg3 from '../assets/cvbg3.jpg'
 import news from '../assets/news.jpg'
 import med from '../assets/med.jpg'
+import landing from '../assets/path5137.png'
 
 
 const Landing = props => {
   const [currentActivity, setCurrentActivity] = useState("AI Powered Symptom Checker");
   const [number, setNumber] = useState(1);
 
-  const activity = ["AI Powered Symptom Checker", "Unbiased Symptom Analyses", "Physcian Evaluated Results", "Analyses Withou Patient Private Data", "Suggestions on Patient Next Best Steps", "Categorized diagnoses","Track Global Covid19 Case Numbers", "Customize Covid19 Data By Country"];
+  const activity = ["AI Powered Symptom Checker", "Unbiased Symptom Analyses", "Physcian Evaluated Results", "Analyses Without Patient Private Data", "Suggestions on Patient Next Best Steps", "Categorized diagnoses","Track Global Covid19 Case Numbers", "Customize Covid19 Data By Country"];
 
   function updateText() {
     setCurrentActivity(activity[number]);
@@ -30,14 +31,23 @@ const Landing = props => {
     setTimeout(updateText, 2000);
   }, [number]);
 
-
+ 
   return (
     <LandingPageContainer>
-      <Navigation />
-      <LandingScreen>
-        <h2>
+     
+ <Wave>
+    <Navigation />
+    <LandingTitle>
+      <h2>
        Patienti <span>{currentActivity}</span>
         </h2>
+        </LandingTitle>
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#ffff" fill-opacity="1" d="M0,64L48,80C96,96,192,128,288,170.7C384,213,480,267,576,261.3C672,256,768,192,864,192C960,192,1056,256,1152,277.3C1248,299,1344,277,1392,266.7L1440,256L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+ </Wave>
+
+      <LandingScreen>
+    
       </LandingScreen>
 
 
@@ -73,32 +83,63 @@ export default withRouter(Landing);
 
 const LandingPageContainer = styled.div`
 // background: #222327;
+max-width: 100%;
+height: 100vh;
+margin-bottom:0px;
+border: .3px solid white;
 `;
 
+const Wave = styled.div`
+border: .3px solid white;
+margin-top: 0px;
+background:  #FFCDCE;
+// display: block;
+svg{
+  display: block;
+}
+`
 
-const LandingScreen = styled.div`
-background: url(${cvbg3});
-background-size:cover;
+const LandingTitle= styled.div`
+
+h2 {
+  margin: 100px 0 0px 0;
+  color: #737AAE;
+  font-family: "Roboto";
+  font-size: 48px;
+  font-weight: normal;
+  span{
+    font-weight: bold;
+    color: #FE687D;
+  }
+@media(max-width: 500px){
+height: 100vh;
+}
 display: flex;
 justify-content: center;
 align-items: center;
 max-width: 100%;
-height: 100vh;
+height: 100%;
+// border: 1px solid red;
+`;
 
-h2 {
-    margin: -200px 0 32px 0;
-    color: white;
-    font-family: "Roboto";
-    font-size: 48px;
-    font-weight: normal;
-    span{
-      font-weight: bold;
-      color: #FE687D;
-    }
-@media(max-width: 500px){
-  height: 98vh;
-}
-`
+const LandingScreen = styled.div`
+ 
+background-image: url(${landing});
+// background-size:cover;
+background-position: center;
+background-repeat: no-repeat;
+padding: 0 0 0 0;
+
+// position: relative;
+display: flex;
+justify-content: center;
+align-items: center;
+max-width: 100%;
+height: 70%;
+margin-top:0px;
+// border: 1px solid blue;
+
+`;
 const GoButton = styled(Link)`
   display: flex
   align-items: center;
@@ -126,7 +167,7 @@ const ExploreButton = styled(GoButton)`
   width: 125px;
   padding: 10px;
   
-`
+`;
 
 const FeaturesInfo = styled.div`
   margin: 125px 2% 20px 2%;
@@ -135,7 +176,7 @@ const FeaturesInfo = styled.div`
   @media(max-width: 500px){
     flex-direction: column;
   }
-`
+`;
 
 const InfoBox = styled.div`
   width: 23%;
@@ -158,7 +199,7 @@ const InfoBox = styled.div`
     width: 95%;
     margin-bottom: 20px;
   }
-`
+`;
 
 const FeatureBox = styled(InfoBox)`
   border: 1px solid #ECECEC;
@@ -168,9 +209,8 @@ const FeatureBox = styled(InfoBox)`
   p {
     font-size: 14px;
   }
-`
+`;
 const FeaturePic = styled.img`
   width: 100%;
   height: 185px;
-`
-
+`;

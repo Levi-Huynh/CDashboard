@@ -6,12 +6,14 @@ import { Link } from "react-router-dom";
 
 
 const Navbar = styled.div`
-  position: absolute;
+//   position: absolute;
   display: flex;
   justify-content: space-between;
   width: 100%;
   margin-top: 50px;
   padding-top: 20px;
+
+  border: 1xp solid red;
 `;
 
 const LoginLink = styled(Link)`
@@ -41,7 +43,7 @@ const Navigation = props => {
                     <Button
                         onClick={landingRedirect}
                         label="Patienti"
-                        color="white"
+                        color="#737AAE"
                         plain="true"
                     />
                 </Heading>

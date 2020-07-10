@@ -25,7 +25,6 @@ const Theme = styled.div`
   font-family: "Roboto";
   font-size: "14px";
   height: "20px";
- color: black;
 
 `;
 
