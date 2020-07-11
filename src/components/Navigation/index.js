@@ -38,12 +38,12 @@ const Navigation = props => {
                 <Heading level="3" margin="none">
                     <i
                         class="fas fa-heartbeat"
-                        style={{ color: "#FE687D", margin: "0 5px 0 20px" }}
+                        style={{ color: "white", margin: "0 5px 0 20px" }}
                     ></i>
                     <Button
                         onClick={landingRedirect}
                         label="Patienti"
-                        color="#737AAE"
+                        color="#5243C0"
                         plain="true"
                     />
                 </Heading>
