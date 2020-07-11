@@ -758,7 +758,7 @@ width: 85%;
 height: 100%;
 padding: 1rem;
 background:#F6F4FC;
-font-family: Roboto;
+font-family:'Poppins', sans-serif;
 display: flex:
 flex-direction: column;
 align-items: center;
@@ -788,7 +788,7 @@ border-radius: 15px;
 border: 1.5px solid green;
 h1{
     font-weight: bold;
-    font-family: "Roboto";
+    font-family:'Poppins', sans-serif;
 }
 `;
 

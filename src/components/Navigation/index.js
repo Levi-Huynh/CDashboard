@@ -23,7 +23,7 @@ const LoginLink = styled(Link)`
 
   font-size: 1.5rem;
   padding: 5px 20px;
-  font-family: "Zilla Slab", serif;
+  font-family: 'Poppins', sans-serif;
   border-radius: 5px;
 `;
 

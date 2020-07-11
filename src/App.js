@@ -22,7 +22,7 @@ import { ModalProvider } from 'styled-react-modal'
 
 const Theme = styled.div`
 
-  font-family: "Roboto";
+font-family: 'Poppins', sans-serif;
   font-size: "14px";
   height: "20px";
 

@@ -379,7 +379,7 @@ width: 85%;
 height: 100%;
 padding: 1rem;
 background:#F6F4FC;
-font-family: Roboto;
+font-family: 'Poppins', sans-serif;
 display: flex:
 flex-direction: column;
 align-items: center;
@@ -412,7 +412,7 @@ border: 1.5px solid green;
 h1{
 
     font-weight: bold;
-    font-family: "Roboto";
+    font-family:'Poppins', sans-serif;
 
 }
 `;
@@ -428,7 +428,7 @@ align-content: center;
 border: 1px solid blue;
 background: blue;
  
-font-family: "Roboto";
+font-family:'Poppins', sans-serif;
 padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
@@ -449,7 +449,7 @@ align-content: center;
  
 background: white;
  
-font-family: "Roboto";
+font-family: 'Poppins', sans-serif;
 padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
@@ -470,7 +470,7 @@ align-items: center;
 align-content: center;
 justify-content: center;
 text-align:center;
-font-family: "Roboto";
+font-family: 'Poppins', sans-serif;
 padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
@@ -495,7 +495,7 @@ span{
 
 const MapDiv = styled.div`
 width: 100%
-font-family: "Roboto";
+font-family: 'Poppins', sans-serif;
 // padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
@@ -536,7 +536,7 @@ display:flex;
 flex-direction: column;
 align-items:center;
 text-align: center;
-font-family: "Roboto";
+font-family: 'Poppins', sans-serif;
 // padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
@@ -564,7 +564,7 @@ justify-content: center;
 align-items: center;
 margin-top: 30px;
 width: 100%
-font-family: "Roboto";
+font-family:'Poppins', sans-serif;
 // padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
@@ -587,7 +587,7 @@ flex-direction: row;
 justify-content: space-between;
 // margin-top: 30px;
  
-font-family: "Roboto";
+font-family: 'Poppins', sans-serif;
 // padding: .8rem;
 color:  #4D4CAC; 
 // border-radius: 15px;

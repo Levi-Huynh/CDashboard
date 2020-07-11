@@ -111,7 +111,7 @@ const LandingTitle= styled.div`
 h2 {
   margin: 100px 0 0px 0;
   color: #5243C0;
-  font-family: "Roboto";
+  font-family: 'Poppins', sans-serif;
   font-size: 48px;
   font-weight: normal;
   span{
@@ -158,7 +158,7 @@ const GoButton = styled(Link)`
   display: flex
   align-items: center;
   text-decoration: none;
-  font-family: "Roboto";
+  font-family: 'Poppins', sans-serif;
   font-size: 2rem;
   color: white;
   border-radius: 0 10px 10px 0;
@@ -206,7 +206,7 @@ const InfoBoxTop = styled.div`
   // border: 1px solid red;
   h3 {
     font-size: 32px;
-    font-family: "Zilla Slab", serif;
+    font-family: 'Poppins', sans-serif;
     font-weight: bold;
     margin-top: 120px;
     padding-left: .5rem;
@@ -215,7 +215,7 @@ const InfoBoxTop = styled.div`
   }
   p {
     font-size: 18px;
-    font-family: "Zilla Slab", serif;
+    font-family: 'Poppins', sans-serif;
    
     padding-left: .5rem;
   }
@@ -266,7 +266,7 @@ const InfoBox = styled.div`
     margin-left: 15%;
     margin-right: 15%;
     font-size: 32px;
-    font-family: "Zilla Slab", serif;
+    font-family:'Poppins', sans-serif;
     font-weight: bold;
   
    
@@ -274,7 +274,7 @@ const InfoBox = styled.div`
   }
   p {
     font-size: 18px;
-    font-family: "Zilla Slab", serif;
+    font-family: 'Poppins', sans-serif;
     margin-left: 15%;
     margin-right: 15%;
     
@@ -286,6 +286,7 @@ const InfoBox = styled.div`
 `;
 
 const FeatureBox = styled(InfoBox)`
+
   // border: 1px solid #ECECEC;
   h3 {
     font-size: 20px;
@@ -295,6 +296,6 @@ const FeatureBox = styled(InfoBox)`
   }
 `;
 const FeaturePic = styled.img`
-  width: 100%;
-  height: 70%;
+  width: 50%;
+  height: 50%;
 `;

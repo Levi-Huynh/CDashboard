@@ -138,7 +138,7 @@ const GoButton = styled.div`
   display: flex
   align-items: center;
   text-decoration: none;
-  font-family: "Roboto";
+  font-family: 'Poppins', sans-serif;
   font-size: 2rem;
   color: #636363;
   border-radius: 0 10px 10px 0;

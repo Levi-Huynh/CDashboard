@@ -5,6 +5,7 @@ import Navigation from "./Navigation/index";
 import update from 'immutability-helper';
 import PredictGraph from './MapComponents/PredictGraph'
 
+ 
 import axios from "axios";
 
  
@@ -92,8 +93,8 @@ class Global extends React.Component {
         super(props);
 
     this.state={
+        Date: new Date().toDateString(),
         GlobalRes: {},
-        Date: '',
         errorMsg: " ",
         StateAbbrev:"",
         CountryFullName: "USA",
@@ -202,6 +203,7 @@ class Global extends React.Component {
         
     this.entityClick = this.entityClick.bind(this)
     }
+
 
 
     entityClick(eventObj, dataObj) {
@@ -404,7 +406,7 @@ class Global extends React.Component {
 
                 this.setState({
                     GlobalRes: GRES,
-                    Date: DATE,
+                   
 
                 })
 
@@ -451,6 +453,9 @@ class Global extends React.Component {
             })
     }
 
+
+ 
+
     componentWillUnmount = () => this.abortController.abort();
 
   abortController = new window.AbortController();
@@ -464,7 +469,7 @@ class Global extends React.Component {
                 <GlobalWrapper>
                     <DashHeader>
                         <h2>Dashboard</h2>
-                        <h2>{this.state.Date}</h2>
+                        <h2>{this.state.Date}</h2> 
                     </DashHeader>
 
                     <GlobalStats>
@@ -717,7 +722,7 @@ width: 85%;
 height: 100%;
 padding: 1rem;
 background:#F6F4FC;
-font-family: Roboto;
+font-family: 'Poppins', sans-serif;
 display: flex:
 flex-direction: column;
 align-items: center;
@@ -748,7 +753,7 @@ border-radius: 15px;
 h1{
 
     font-weight: bold;
-    font-family: "Roboto";
+    font-family: 'Poppins', sans-serif;
 
 }
 `;
@@ -764,7 +769,7 @@ align-items: center;
 align-content: center;
 justify-content: center;
 text-align:center;
-font-family: "Roboto";
+font-family:'Poppins', sans-serif;
 padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
@@ -789,7 +794,7 @@ span{
 
 const MapDiv = styled.div`
 width: 100%
-font-family: "Roboto";
+font-family:'Poppins', sans-serif;
 // padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
@@ -830,7 +835,7 @@ display:flex;
 flex-direction: column;
 align-items:center;
 text-align: center;
-font-family: "Roboto";
+font-family: 'Poppins', sans-serif;
 // padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
@@ -858,7 +863,7 @@ justify-content: center;
 align-items: center;
 margin-top: 30px;
 width: 100%
-font-family: "Roboto";
+font-family: 'Poppins', sans-serif;
 // padding: .8rem;
 color:  #4D4CAC; 
 border-radius: 15px;
@@ -881,7 +886,7 @@ flex-direction: row;
 justify-content: space-between;
 // margin-top: 30px;
  
-font-family: "Roboto";
+font-family: 'Poppins', sans-serif;
 // padding: .8rem;
 color:  #4D4CAC; 
 // border-radius: 15px;
