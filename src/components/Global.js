@@ -5,8 +5,10 @@ import Navigation from "./Navigation/index";
 import update from 'immutability-helper';
 import PredictGraph from './MapComponents/PredictGraph'
 
+import MainIcon from '../assets/countryIcon.png'
+
  
-import axios from "axios";
+import axios from 'axios';
 
  
 // Include the react-fusioncharts component
@@ -24,7 +26,7 @@ import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 
 //import graphs country summary
 import Chart from 'react-apexcharts'
-import { updateLocale } from "moment";
+ 
 
 // Adding the chart and theme as dependency to the core fusionchart
 ReactFC.fcRoot(FusionCharts, FusionMaps, World, FusionTheme);
@@ -219,7 +221,7 @@ class Global extends React.Component {
         .get(`https://covid19-api.org/api/countries`)
         .then(res=>{
         
-        console.log("RES.DATA", res.data)
+        // console.log("RES.DATA", res.data)
         let allNames= res.data;
        
         console.log("countrName from label:", countryName)
@@ -229,7 +231,7 @@ class Global extends React.Component {
           
            for(const countries of allNames){
             if(countries.name === countryName){
-                console.log(countries.name === countryName, "name in obj is found")
+                // console.log(countries.name === countryName, "name in obj is found")
                 let abbrev=countries.alpha2
                 return abbrev
             }
@@ -272,7 +274,7 @@ class Global extends React.Component {
 
     })
     .then(res=> {
-        console.log("time, resdata,", res.data)
+        // console.log("time, resdata,", res.data)
        let time=res.data 
         let cases1 =[]
     let deaths1=[]
@@ -303,7 +305,7 @@ class Global extends React.Component {
 
 
     
-      console.log("30 STATS:", this.state.series30[0],this.state.series30[1], this.state.series30[2] )
+    //   console.log("30 STATS:", this.state.series30[0],this.state.series30[1], this.state.series30[2] )
         //ML 2 week prediction 
             return axios
             .get(`https://covid19-api.org/api/prediction/${this.state.StateAbbrev}`) //area spline chart compare last 2 & next 2 weeks trends
@@ -331,16 +333,16 @@ class Global extends React.Component {
           prev2weeks1 = prev2weeks1.slice(0,14)
 
           let currDayTotal= this.state.series30[0].data[this.state.series30[0].data.length-1]
-          console.log("Curr Day", currDayTotal)
-          console.log("all predict cases", predictCases)
+        //   console.log("Curr Day", currDayTotal)
+        //   console.log("all predict cases", predictCases)
           let predictLastDay=predictCases[0]
-          console.log("LAST-PREDICT-DAY", predictLastDay)
+        //   console.log("LAST-PREDICT-DAY", predictLastDay)
 
           let predictPercent= predictLastDay- currDayTotal
           predictPercent=  (predictPercent / currDayTotal).toFixed(2); 
 
 
-          console.log("LAST-PREDICT-DAY", predictLastDay, "Curr Day", currDayTotal, "final percent", predictPercent)
+        //   console.log("LAST-PREDICT-DAY", predictLastDay, "Curr Day", currDayTotal, "final percent", predictPercent)
           
 
           this.setState({
@@ -410,7 +412,7 @@ class Global extends React.Component {
 
                 })
 
-                console.log("state", this.state.GlobalRes.TotalConfirmed)
+                // console.log("state", this.state.GlobalRes.TotalConfirmed)
                 return axios.get(`https://covid19-api.org/api/status/US`)
 
             })
@@ -418,11 +420,11 @@ class Global extends React.Component {
                
         //save ccountry total cases in state
                 let totalRes=res.data
-                console.log("initial US country totals:", totalRes)
+                // console.log("initial US country totals:", totalRes)
         this.setState({
             CountryTotals :{...this.state.CountryTotals, Cases:totalRes.cases, Recovered:totalRes.recovered, Deaths:totalRes.deaths }
         })
-        console.log("state Countrytotals here:", this.state.CountryTotals)
+        // console.log("state Countrytotals here:", this.state.CountryTotals)
         return axios
         .get(`https://covid19-api.org/api/diff/US`)
         //returns obj 
@@ -431,7 +433,7 @@ class Global extends React.Component {
             .then(res=>{
                 console.log("RES AFTER GET PERCENTS FOR US", res)
                 let percents = res.data
-                console.log("PERCENTS", percents)
+                // console.log("PERCENTS", percents)
 
 
 
@@ -471,6 +473,16 @@ class Global extends React.Component {
                         <h2>Dashboard</h2>
                         <h2>{this.state.Date}</h2> 
                     </DashHeader>
+
+                    <Title>
+                    <TitleImage src={MainIcon}/> 
+                    </Title>
+
+                    <Title>
+
+                    <h2>Covid19 Global Pandemic</h2>
+          <p>View live global stats of the current Covid19 pandemic</p>
+                    </Title>
 
                     <GlobalStats>
                         {/* pinkcolorcontainer in here */}
@@ -721,7 +733,7 @@ const GlobalWrapper = styled.div`
 width: 85%;
 height: 100%;
 padding: 1rem;
-background:#F6F4FC;
+background:white;
 font-family: 'Poppins', sans-serif;
 display: flex:
 flex-direction: column;
@@ -791,6 +803,17 @@ span{
 
 `;
 
+const Title = styled(GlobalStats)`
+width: 45%;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+border-radius: 15px;
+`;
+
+const TitleImage = styled.img`
+width: 100%;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+border-radius: 15px;
+`;
 
 const MapDiv = styled.div`
 width: 100%
