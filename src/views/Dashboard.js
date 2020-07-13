@@ -6,6 +6,7 @@ import Navigation from "../components/Navigation/index";
 import DashNav from "../components/DashNav"
 import * as routes from "../routes/routes";
 import { Box, Button, Heading } from "grommet";
+import Country from "../components/Country"
 import Global from "../components/Global"
 import WorldStats from "../components/WorldStats"
 import MedicalDiagnostics from "../components/Medical/MedicalDiagnostics"
@@ -15,6 +16,7 @@ const Dashboard = props => {
  const [dashOption, setDash] = useState([
 
     {name: "CountryStat", active: true},
+    {name: "Global", active:false},
     {name: "CustomizedStat", active:false},
     {name: "MedicalDiagnostics", active: false }
   ])
@@ -65,15 +67,18 @@ plain="true"
           </Heading>
         </Box>
       </LogoContainer>
-      <NavTitle key={3}  onClick={()=>handleDash("MedicalDiagnostics")}>
+      <NavTitle key={1}  onClick={()=>handleDash("MedicalDiagnostics")}>
      AI Powered Pre-Diagnostics 
 </NavTitle>
-      <NavTitle key={1} onClick={()=>handleDash("CountryStat")}>
+      <NavTitle key={2} onClick={()=>handleDash("CountryStat")}>
         Statistics By Country
 </NavTitle  >
-      <NavTitle key={2} onClick={()=>handleDash("CustomizedStat")}>
+      <NavTitle key={3} onClick={()=>handleDash("CustomizedStat")}>
         Customized Statistics Search 
 </NavTitle >
+<NavTitle key={4} onClick={()=>handleDash("Global")}>
+        Global Overview
+</NavTitle  >
      
     
 
@@ -85,7 +90,7 @@ plain="true"
 
 
                     {/* GLobal Stats */}
-        {dashOption[0].active === true? <Global/> : dashOption[1].active ===true? <WorldStats/>: <MedicalDiagnostics/>}
+        {dashOption[0].active === true? <Country/> : dashOption[1].active ===true? <Global/>: dashOption[2].active ===true? <WorldStats/> :<MedicalDiagnostics/>}
     
 
 
