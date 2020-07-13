@@ -5,7 +5,7 @@ import Navigation from "./Navigation/index";
 import update from 'immutability-helper';
 import PredictGraph from './MapComponents/PredictGraph'
 
-import MainIcon from '../assets/countryIcon.png'
+import MainIcon from '../assets/globalban.png'
 
  
 import axios from 'axios';
@@ -471,18 +471,15 @@ class Global extends React.Component {
                 <GlobalWrapper>
                     <DashHeader>
                         <h2>Dashboard</h2>
-                        <h2>{this.state.Date}</h2> 
+                        {/* <h2>{this.state.Date}</h2>  */}
                     </DashHeader>
 
-                    <Title>
-                    <TitleImage src={MainIcon}/> 
+                <GlobalStats>
+                    <Title >
+                   <h2><span> {this.state.Date}</span> </h2>
                     </Title>
 
-                    <Title>
-
-                    <h2>Covid19 Global Pandemic</h2>
-          <p>View live global stats of the current Covid19 pandemic</p>
-                    </Title>
+                    </GlobalStats>
 
                     <GlobalStats>
                         {/* pinkcolorcontainer in here */}
@@ -752,13 +749,14 @@ justify-content: space-between;
 const GlobalStats = styled.div`
  
 
-width: 80%;
+width: 100%;
 display: flex;
 flex-direction:row; 
 justify-content: space-between;
 text-align: center;
-margin-top: 30px;
-margin: 30px 1.5rem 0 8.5rem;
+ 
+// margin: 30px 1.5rem 0 8.5rem;
+margin: 30px 0rem 0 0rem;
 border-radius: 15px;
     color: #FE687D;
 // border: 1px solid red;
@@ -803,16 +801,37 @@ span{
 
 `;
 
-const Title = styled(GlobalStats)`
-width: 45%;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-border-radius: 15px;
+const Title = styled.div`
+background-image: url(${MainIcon});
+ background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+padding: 0 0 0 0;
+display: flex;
+flex-direction: row;
+justify-content: space around;
+ 
+width: 100%;
+height: 45vh;
+
+ h2{
+  color: white;
+    font-weight: normal;
+    font-size: 3rem;
+    margin-left: 40rem;
+    margin-top: 15rem;
+    span{
+    
+        font-weight: bold;
+    }
+    }
+// border: 1px solid red;
 `;
 
 const TitleImage = styled.img`
 width: 100%;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-border-radius: 15px;
+ 
+ 
 `;
 
 const MapDiv = styled.div`
