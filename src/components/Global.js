@@ -4,6 +4,7 @@ import { withRouter, Link } from "react-router-dom";
 import Navigation from "./Navigation/index";
 import update from 'immutability-helper';
 import PredictGraph from './MapComponents/PredictGraph'
+import Global30Chart from './MapComponents/Global30Day';
 
 import MainIcon from '../assets/globalban.png'
 
@@ -96,7 +97,23 @@ class Global extends React.Component {
 
     this.state={
         Date: new Date().toDateString(),
-        GlobalRes: {},
+        Time: new Date().toLocaleTimeString('en-US'),
+        GlobalRes: {
+      
+        },
+        GLobalChangeIncrease:{
+            total_cases: false,
+            total_deaths: false,
+            total_recovered: false 
+        },
+        GLobal30:{
+           dataCases: [], //nested arr [[date, value]...]
+           dataRecovered: [],
+           dataDeaths:[],
+            min: null,
+            max: null, 
+
+        },
         errorMsg: " ",
         StateAbbrev:"",
         CountryFullName: "USA",
@@ -407,10 +424,12 @@ class Global extends React.Component {
                 const DATE = res.data.Date
 
                 this.setState({
-                    GlobalRes: GRES,
-                   
-
-                })
+                  
+                    GlobalRes:
+                       
+                    GRES
+                    
+            })
 
                 // console.log("state", this.state.GlobalRes.TotalConfirmed)
                 return axios.get(`https://covid19-api.org/api/status/US`)
@@ -449,6 +468,55 @@ class Global extends React.Component {
 
         
             })
+            .then(res=>{
+                return axios
+                .get(`https://covid19-api.org/api/timeline`)
+            })
+            .then(res=>{
+                console.log("RES TIMELINE", res.data)
+                let Change=res.data
+                let thirtyGlobal= res.data.slice(0,30)
+                //new array with data & value
+
+                let thirtyCases=[]
+                let thirtyRecovered=[]
+                let thirtyDeaths=[]
+
+              
+                thirtyGlobal.map(data=>{
+                    thirtyCases.push([data.last_update.slice(5,10), data.total_cases])
+                    thirtyRecovered.push([data.last_update.slice(5,10), data.total_recovered])
+                    thirtyDeaths.push([data.last_update.slice(5,10), data.total_deaths])
+
+                })
+
+               let findMax= thirtyGlobal
+               
+            findMax.sort(function(a,b){return b.cases -a.cases})
+              
+                let maxD = findMax[0].total_cases
+                let minD = findMax[findMax.length-1].total_deaths 
+                console.log("GLOBAL30 SORTED", thirtyGlobal, "MAX:", maxD)
+
+                this.setState({
+                    GLobalChangeIncrease:{
+                        ...this.state.GLobalChangeIncrease, 
+                        total_cases: Change[1].total_cases > Change[0].total_cases? true: false,
+                        total_deaths: Change[1].total_deaths > Change[0].total_deaths? true: false,
+                        total_recovered: Change[1].total_recovered > Change[0].total_recovered? true: false,
+                    }, 
+                    GLobal30:{
+                        ...this.state.GLobal30,
+                        dataCases: thirtyCases,
+                        dataRecovered: thirtyRecovered,
+                        dataDeaths: thirtyDeaths,
+                        min: minD,
+                        max: maxD 
+                    }
+                })
+
+                console.log("GLOBAL30 STATE", this.state.GLobal30, this.state.GLobalChangeIncrease)
+            })
 
             .catch(err => {
                 console.log("err", err)
@@ -471,12 +539,13 @@ class Global extends React.Component {
                 <GlobalWrapper>
                     <DashHeader>
                         <h2>Dashboard</h2>
-                        {/* <h2>{this.state.Date}</h2>  */}
+                        <h2>{this.state.Date}</h2> 
                     </DashHeader>
 
                 <GlobalStats>
                     <Title >
-                   <h2><span> {this.state.Date}</span> </h2>
+                        <h5><span>Covid19 Cases Overview</span></h5>
+                   <h6> {this.state.Time}</h6>
                     </Title>
 
                     </GlobalStats>
@@ -712,6 +781,10 @@ PREDICTION PERCENTAGE */}
 
      </ThirtyDayPercents>
      </ThirtyDaySty>
+
+     <ThirtyDaySty>
+         <Global30Chart global30={this.state.Global30}/>
+     </ThirtyDaySty>
   
  </ThirtyDayWrapper>
 
@@ -729,7 +802,7 @@ export default withRouter(Global);
 const GlobalWrapper = styled.div`
 width: 85%;
 height: 100%;
-padding: 1rem;
+// padding: 1rem;
 background:white;
 font-family: 'Poppins', sans-serif;
 display: flex:
@@ -737,13 +810,18 @@ flex-direction: column;
 align-items: center;
 justify-content: center;
 align-content: center;
-
+margin-left: .8rem;
 `;
 
 const DashHeader = styled.div`
 display:flex;
 flex-direction: row;
 justify-content: space-between;
+color: #5243C0; 
+h2{
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
 `;
 
 const GlobalStats = styled.div`
@@ -755,10 +833,9 @@ flex-direction:row;
 justify-content: space-between;
 text-align: center;
  
-// margin: 30px 1.5rem 0 8.5rem;
 margin: 30px 0rem 0 0rem;
 border-radius: 15px;
-    color: #FE687D;
+     
 // border: 1px solid red;
 h1{
 
@@ -781,7 +858,7 @@ justify-content: center;
 text-align:center;
 font-family:'Poppins', sans-serif;
 padding: .8rem;
-color:  #4D4CAC; 
+color:  #5243C0;  
 border-radius: 15px;
 background: white;
 // border: 1px solid  #636363;
@@ -794,7 +871,7 @@ font-weight: normal;
 font-size: 1rem;
 
 span{
-    color: #FE687D;
+    color:#5243C0; 
     font-weight: bold;
 }
 }
@@ -807,24 +884,40 @@ background-image: url(${MainIcon});
 background-position: center;
 background-repeat: no-repeat;
 padding: 0 0 0 0;
-display: flex;
-flex-direction: row;
-justify-content: space around;
+// display: flex;
+// flex-direction: column;
+// align-items: center;
+// justify-content: space around;
  
 width: 100%;
 height: 45vh;
 
- h2{
+ h5{
   color: white;
     font-weight: normal;
     font-size: 3rem;
-    margin-left: 40rem;
-    margin-top: 15rem;
+    margin-left: 30rem;
+    margin-top: 13rem;
+    margin-bottom: 0px;
     span{
     
         font-weight: bold;
-    }
-    }
+    };
+};
+
+    h6{
+        color: white;
+        font-weight: normal;
+        font-size: 2.5rem;
+        margin-left: 40rem;
+        margin-top: 0px;
+        span{
+    
+            font-weight: bold;
+        };
+    };
+
+
 // border: 1px solid red;
 `;
 
@@ -838,7 +931,7 @@ const MapDiv = styled.div`
 width: 100%
 font-family:'Poppins', sans-serif;
 // padding: .8rem;
-color:  #4D4CAC; 
+color: #5243C0; 
 border-radius: 15px;
 background: white;
 // border: 1px solid  #636363;
@@ -879,7 +972,7 @@ align-items:center;
 text-align: center;
 font-family: 'Poppins', sans-serif;
 // padding: .8rem;
-color:  #4D4CAC; 
+color:  #5243C0; 
 border-radius: 15px;
 background: white;
 
@@ -907,7 +1000,7 @@ margin-top: 30px;
 width: 100%
 font-family: 'Poppins', sans-serif;
 // padding: .8rem;
-color:  #4D4CAC; 
+color:  #5243C0; 
 border-radius: 15px;
 background: white;
 
@@ -930,7 +1023,7 @@ justify-content: space-between;
  
 font-family: 'Poppins', sans-serif;
 // padding: .8rem;
-color:  #4D4CAC; 
+color: #5243C0; 
 // border-radius: 15px;
 background: white;
 

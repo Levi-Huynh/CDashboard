@@ -54,13 +54,13 @@ const Dashboard = props => {
           <Heading level="3" margin-bottom="5">
             <i
               class="fas fa-heartbeat"
-              style={{ color: "#FE687D", margin: "0 5px 0 20px" }}
+              style={{ color: "#FFC4D6", margin: "0 5px 0 20px" }}
             ></i>
             <Button
 
-              label="CovidTrackS"
-              color=" #636363"
-              plain="true"
+label="iSymptom"
+color="#5243C0"
+plain="true"
             />
           </Heading>
         </Box>
@@ -126,11 +126,12 @@ margin-bottom: 100px;
 const DashWrapper = styled.div`
 
 width: 15%;
-height: 100vh;
+min-height: 100%;
  
 padding: 1rem;
- 
-
+border-radius: 15px;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+background: white;
 
 `;
 
@@ -140,7 +141,7 @@ const GoButton = styled.div`
   text-decoration: none;
   font-family: 'Poppins', sans-serif;
   font-size: 2rem;
-  color: #636363;
+  color: white;
   border-radius: 0 10px 10px 0;
   background: #FE687D;
   border: 1px solid #FE687D;
@@ -154,13 +155,13 @@ const NavTitle = styled(GoButton)`
 font-size: 1.2rem;
  border: none;
  background: none;
- color: #636363;
+ color:#5243C0;
  margin: 2rem;
  margin-bottom: 7rem;
   width: 80%;
   &:hover {
     
-    color: #FE687D;
+    color:  #B6AAFE;
   }
   
 ;`

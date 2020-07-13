@@ -17,12 +17,12 @@ const DashNav = props => {
           <Heading level="3" margin-bottom="5">
             <i
               class="fas fa-heartbeat"
-              style={{ color: "#FE687D", margin: "0 5px 0 20px" }}
+              style={{ color: "white", margin: "0 5px 0 20px" }}
             ></i>
             <Button
 
-              label="CovidTrackS"
-              color=" #636363"
+              label="iSymptom"
+              color="#5243C0"
               plain="true"
             />
           </Heading>
@@ -58,6 +58,7 @@ export default withRouter(DashNav);
 
 const LogoContainer = styled.div` 
 margin-bottom: 100px;
+
 `;
 
 
