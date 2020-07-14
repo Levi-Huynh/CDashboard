@@ -44,7 +44,7 @@ class Global30Chart extends React.Component {
             show: true
           }
         },
-        colors: ['#77B6EA', 'red', 'blue'],
+        colors: ['#FFC4D6', '#B6AAFE', '#A4DDD4'],
         dataLabels: {
           enabled: false,
         },
@@ -71,15 +71,21 @@ class Global30Chart extends React.Component {
           categories: [],
           title: {
             // text: 'Date'
+          },
+          labels:{
+            style: {colors: '#5243C0',
+          },
           }
         },
         yaxis: {
           // show: false,
+     
           title: {
             text: 'Totals'
           },
           labels: {
-     
+            style: {colors: '#5243C0',
+          },
             formatter: function(val) {
              val=val.toString()
              
@@ -101,6 +107,8 @@ class Global30Chart extends React.Component {
            }
             }
           },
+
+       
           min: 5,
           max: 40,
         },

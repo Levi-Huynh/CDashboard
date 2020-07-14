@@ -23,9 +23,10 @@ class Deaths extends React.Component {
           height: 350,
           type: 'line',
           zoom: {
-            enabled: false
+            enabled: true
           }
         },
+        colors: ['#A6DFD6'],
         dataLabels: {
           enabled: false
         },
@@ -49,7 +50,10 @@ class Deaths extends React.Component {
         },
         xaxis: {
           type: 'datetime',
-
+          labels:{
+            style: {colors: '#5243C0',
+          },
+          },
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
         },
         yaxis: {
@@ -59,7 +63,8 @@ class Deaths extends React.Component {
           },
            
            labels: {
-     
+            style: {colors: '#5243C0',
+          },
               formatter: function(val) {
                
                   val=val.toString()

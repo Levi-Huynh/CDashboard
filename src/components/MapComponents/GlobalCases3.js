@@ -21,9 +21,10 @@ class Cases extends React.Component {
             height: 350,
             type: 'line',
             zoom: {
-              enabled: false
+              enabled: true
             }
           },
+          colors:['#9FD196'],
           dataLabels: {
             enabled: false
           },
@@ -47,6 +48,10 @@ class Cases extends React.Component {
           },
           xaxis: {
             type: 'datetime',
+            labels:{
+              style: {colors: '#5243C0',
+            },
+            },
 
             categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
           },
@@ -57,7 +62,8 @@ class Cases extends React.Component {
             },
              
              labels: {
-       
+              style: {colors: '#5243C0',
+            },
                 formatter: function(val) {
                  
                     val=val.toString()

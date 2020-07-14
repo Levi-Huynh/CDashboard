@@ -24,6 +24,7 @@ class Recovered extends React.Component {
             enabled: false
           }
         },
+        colors: ['#FF7F7F'],
         dataLabels: {
           enabled: false
         },
@@ -47,7 +48,10 @@ class Recovered extends React.Component {
         },
         xaxis: {
           type: 'datetime',
-
+          labels:{
+            style: {colors: '#5243C0',
+          },
+          },
           categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
         },
         yaxis: {
@@ -57,7 +61,8 @@ class Recovered extends React.Component {
           },
            
            labels: {
-     
+            style: {colors: '#5243C0',
+          },
               formatter: function(val) {
                
                   val=val.toString()
