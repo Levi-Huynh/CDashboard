@@ -7,7 +7,7 @@ import PredictGraph from './MapComponents/PredictGraph'
 import Global30Chart from './MapComponents/Global30Day';
 import ReactApexChart from './MapComponents/Global30Day'
 
-import MainIcon from '../assets/globalban.png'
+import CountryIcon from '../assets/customIcon.png'
 
  
 import axios from 'axios';
@@ -103,6 +103,7 @@ class Country extends React.Component {
         GlobalRes: {
       
         },
+        DisplayGraphs: false,
         GLobalChangeIncrease:{
             total_cases: false,
             total_deaths: false,
@@ -117,7 +118,7 @@ class Country extends React.Component {
             max: null, 
 
         },
-        errorMsg: " ",
+        errorMsg: null,
         StateAbbrev:"",
         CountryFullName: "USA",
         CountryTotals: {
@@ -168,6 +169,31 @@ class Country extends React.Component {
             // },
             // align: 'left'
           },
+          yaxis:{
+            labels: {
+                style: {colors: '#5243C0',
+              },
+                formatter: function(val) {
+                 val=val.toString()
+                 
+               if(val.length >6){
+                   let result = parseInt(val)
+                   var zero = 6;
+                   var rounded = Math.round(result/Math.pow(10, zero))
+                   return rounded.toString() + 'M'
+               }else if(val.length > 3 && val.length <= 6){
+                let result = parseInt(val)
+                var zero = 3;
+                var rounded = Math.round(result/Math.pow(10, zero))
+                return rounded.toString() + 'K'
+               } else if(val.length <= 3){
+                let result = parseInt(val)
+                var zero = 0;
+                var rounded = Math.round(result/Math.pow(10, zero))
+                return rounded.toString() 
+               }
+                }
+              }},
           legend: {
             tooltipHoverFormatter: function(val, opts) {
               return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
@@ -267,9 +293,13 @@ class Country extends React.Component {
         console.log("check abbrev:", my)
         if(my == null){
             console.log("data not available")
+            this.setState({errorMsg: "Country Data Not Available"})
         }
 
+        countryName = countryName.toUpperCase()
+
         this.setState({
+            errorMsg: null,
             StateAbbrev : my, 
             CountryFullName: countryName
         })
@@ -284,8 +314,29 @@ class Country extends React.Component {
         console.log("res get abbrev:", res)
         //save ccountry total cases in state
 
+        function convertChange(val){
+            
+            val=val.toString()
+            if(val.length >6){
+                let result = parseInt(val)
+                var zero = 6;
+                var rounded = Math.round(result/Math.pow(10, zero))
+                return rounded.toString() + 'M'
+            }else if(val.length > 3 && val.length <= 6){
+             let result = parseInt(val)
+             var zero = 3;
+             var rounded = Math.round(result/Math.pow(10, zero))
+             return rounded.toString() + 'K'
+            } else if(val.length <= 3){
+             let result = parseInt(val)
+             var zero = 0;
+             var rounded = Math.round(result/Math.pow(10, zero))
+             return rounded.toString() 
+            }
+         }
+
         this.setState({
-            CountryTotals :{...this.state.CountryTotals, Cases:res.data.cases, Recovered:res.data.recovered, Deaths:res.data.deaths }
+            CountryTotals :{...this.state.CountryTotals, Cases:convertChange(res.data.cases), Recovered:convertChange(res.data.recovered), Deaths:convertChange(res.data.deaths) }
         })
 
                //30 day trend for cases, recovered, deaths
@@ -318,7 +369,7 @@ class Country extends React.Component {
       this.setState({
           series30: update(this.state.series30, {0:{data:{$set: cases1}}, 1:{data:{$set: recovered1}},  2:{data:{$set: deaths1}} }),
         options30: {...this.state.options30, xaxis: {...this.state.options30.xaxis, categories:xaxis1} },
-  
+  DisplayGraphs: true
       })
 
 
@@ -393,23 +444,6 @@ class Country extends React.Component {
         })
 
     })
-    .then(res=>{
-        axios({
-            method:"GET",
-            url:"https://who-covid-19-data.p.rapidapi.com/api/data",
-            headers:{
-            "content-type":"application/octet-stream",
-            "x-rapidapi-host":"who-covid-19-data.p.rapidapi.com",
-            "x-rapidapi-key":"df660fcfb2msh8068165b821fa6ap1b7145jsn0967348c7cfc",
-            "useQueryString":true
-            },
-            params:{ //these all need to be set on state to be recieved from form  
-            "region":"European Region",
-            "cases":"35000",  
-            "reportDate":"2020-03-25",
-            }})
-})
-    
     .catch(err=>{
         console.log("err", err)
     })
@@ -429,11 +463,12 @@ class Country extends React.Component {
                 const GRES = res.data.Global
                 const DATE = res.data.Date
 
+             
+
+                 console.log('NEWRES COUNTRY:', GRES)
                 this.setState({
                   
-                    GlobalRes:
-                       
-                    GRES
+                   GlobalRes:GRES
                     
             })
 
@@ -446,8 +481,29 @@ class Country extends React.Component {
         //save ccountry total cases in state
                 let totalRes=res.data
                 // console.log("initial US country totals:", totalRes)
+
+                function convertChange(val){
+                  
+                    val=val.toString()
+                    if(val.length >6){
+                        let result = parseInt(val)
+                        var zero = 6;
+                        var rounded = Math.round(result/Math.pow(10, zero))
+                        return rounded.toString() + 'M'
+                    }else if(val.length > 3 && val.length <= 6){
+                     let result = parseInt(val)
+                     var zero = 3;
+                     var rounded = Math.round(result/Math.pow(10, zero))
+                     return rounded.toString() + 'K'
+                    } else if(val.length <= 3){
+                     let result = parseInt(val)
+                     var zero = 0;
+                     var rounded = Math.round(result/Math.pow(10, zero))
+                     return rounded.toString() 
+                    }
+                 }
         this.setState({
-            CountryTotals :{...this.state.CountryTotals, Cases:totalRes.cases, Recovered:totalRes.recovered, Deaths:totalRes.deaths }
+            CountryTotals :{...this.state.CountryTotals, Cases:convertChange(totalRes.cases), Recovered:convertChange(totalRes.recovered), Deaths:convertChange(totalRes.deaths) }
         })
         // console.log("state Countrytotals here:", this.state.CountryTotals)
         return axios
@@ -501,72 +557,49 @@ class Country extends React.Component {
 
                 <GlobalStats>
                     <Title >
-                        <h5><span>Covid19 Cases Overview</span></h5>
+                        <h5><span>Country Overview & AI Predictions</span></h5>
                    <h6> {this.state.Time}</h6>
                     </Title>
 
                     </GlobalStats>
 
+                    <CountryStats>
+               
+               <CountryTotal>
+          
+               <h1><span>{this.state.CountryTotals.Cases}</span></h1>
+               <h2>{this.state.CountryFullName} CASES</h2>
+
+        
+               </CountryTotal>
+
+               <CountryTotal>
+            
+               <h1><span> {this.state.CountryTotals.Recovered}</span></h1>
+               <h2>{this.state.CountryFullName} RECOVERED</h2>
+
+
+
+               </CountryTotal>
+
+               <CountryTotal>
+         
+               <h1><span>{this.state.CountryTotals.Deaths}</span></h1>     
+                <h2> {this.state.CountryFullName} DEATHS </h2>
+
+
+               </CountryTotal>
+
+                {this.state.errorMsg?<h1>"COUNTRY DATA NOT AVAILABLE"</h1>:<h1></h1>}
+               </CountryStats>
                   
                     <MapDiv>
                         <h6>Choose A Country On the Map to Overview</h6>
                         <ReactFC {...chartConfigs} {...this.state} onClick={this.dataplotclick}/>
                     </MapDiv>
 
-            <CountryStats>
-               
-                    <CountryTotal>
-                    <h4>{this.state.CountryFullName} CASES</h4>
-                    <h5>{this.state.CountryTotals.Cases}</h5>
 
-                    {Math.sign(this.state.CountryTotals.newCasePercent) === -1? (
-                        <h6>
-                        <i class="fas fa-sort-down "
-                        style={{ color: "red" }} 
-                        ></i> ({this.state.CountryTotals.newCasePercent}%)</h6>
-                     
-                    ):(<h6>
-                        <i class="fas fa-sort-up "
-                        style={{ color: "red" }} 
-                        ></i> ({this.state.CountryTotals.newCasePercent}%)</h6>)}
-
-                    </CountryTotal>
-
-                    <CountryTotal>
-                    <h4>{this.state.CountryFullName} RECOVERED</h4>
-                    <h5>{this.state.CountryTotals.Recovered}</h5>
-
-                    {Math.sign(this.state.CountryTotals.newRecoveredPercent) === -1? (
-                        <h6>
-                        <i class="fas fa-sort-down"
-                        style={{ color: "red" }} 
-                        ></i> ({this.state.CountryTotals.newRecoveredPercent}%)</h6>
-                     
-                    ):(<h6>
-                        <i class="fas fa-sort-up "
-                        style={{ color: "red" }} 
-                        ></i> ({this.state.CountryTotals.newRecoveredPercent}%)</h6>)}
-
-                    </CountryTotal>
-
-                    <CountryTotal>
-                    <h4> {this.state.CountryFullName} DEATHS</h4>
-                    <h5>{this.state.CountryTotals.Deaths}</h5>
-
-                    {Math.sign(this.state.CountryTotals.newDeathsPercent) === -1? (
-                        <h6>
-                        <i class="fas fa-sort-down "
-                        style={{ color: "red" }} 
-                        ></i> ({this.state.CountryTotals.newDeathsPercent}%)</h6>
-                     
-                    ):(<h6>
-                        <i class="fas fa-sort-up "
-                        style={{ color: "red" }} 
-                        ></i> ({this.state.CountryTotals.newDeathsPercent}%)</h6>)}
-
-                    </CountryTotal>
-
-                    </CountryStats>
+{this.state.DisplayGraphs?(<>
 
                         <ThirtyDayWrapper>
 
@@ -574,40 +607,37 @@ class Country extends React.Component {
                     <ThirtyDaySty>
                         {/* row container*/}
                     <ThirtyDayElements>
-                    <h6>{this.state.CountryFullName} PREVIOUS 30 DAYS</h6>
+                    <h6><span>{this.state.CountryFullName} PREVIOUS 30 DAYS</span></h6>
                      </ThirtyDayElements>   
                     
-                    <ThirtyDayElements>
-                    <h6> CHANGE IN TOTALS</h6>
-                    </ThirtyDayElements>   
-                           {/* row container end*/}
+                    
                     </ThirtyDaySty>
 
                     <ThirtyDaySty>
-                         {/* row container*/}
-                    <Chart options={this.state.options30} series={this.state.series30} type="line" height={350} width={700} />
+                         
+                    <Chart options={this.state.options30} series={this.state.series30} type="line" height={600} width={1250} />
                     
                     {/* container with column for each change total */}
                     
                     
                     
                     
-                    <ThirtyDayPercents>
-                    
+                    <Percents30Day>
+                    <h6><span> CHANGE IN TOTALS</span></h6>
  {Math.sign(this.state.CountryTotals.newCasePercent) === -1? (
                                   <ThirtyDayElementsInner>        
                         <h6>
-                        <i class="fas fa-sort-down fa-3x"
-                        style={{ color: "red" , margin: "10px 10px  2px 2px", }} 
-                        ></i> ({this.state.CountryTotals.newCasePercent}%) Decrease in Cases</h6>
+                        <i  class="fa fa-long-arrow-down fa-3x" aria-hidden="true"
+                        style={{ color: "red" , margin: "5px 10px 2px 2px",}} 
+                        ></i>  ({this.state.CountryTotals.newCasePercent}%) Decrease in Cases</h6>
                      </ThirtyDayElementsInner>
                     ):  (
-                        <ThirtyDayElementsInner>      
-                            <i class="fas fa-sort-up fa-3x"
-                        style={{ color: "red",  margin: "10px 0 10px 0", border: "1px solid black" , padding:"5px,0"}} 
+                        <ThirtyDayElementsInner> 
+                              <h6>     
+                            <i class="fa fa-long-arrow-up fa-3x" aria-hidden="true"
+                        style={{ color: "red" , margin: "5px 10px 2px 2px",}} 
                         ></i>
-                    <h6>
-                         ({this.state.CountryTotals.newCasePercent}%) Increase in Cases</h6>
+                  ({this.state.CountryTotals.newCasePercent}%) Increase in Cases</h6>
                     
                     </ThirtyDayElementsInner>)}
 
@@ -615,15 +645,15 @@ class Country extends React.Component {
 
 <ThirtyDayElementsInner>     
                         <h6>
-                        <i class="fas fa-sort-down fa-3x"
-                        style={{ color: "red" , margin: "10px 10px 2px 2px",}} 
+                        <i  class="fa fa-long-arrow-down fa-3x" aria-hidden="true"
+                        style={{ color: "red" , margin: "5px 10px 2px 2px",}} 
                         ></i> ({this.state.CountryTotals.newRecoveredPercent}%) Decrease in Recovered</h6>
                         </ThirtyDayElementsInner>
                     ):(
                         <ThirtyDayElementsInner>     
                     <h6>
-                        <i class="fas fa-sort-up fa-3x mt-10"
-                        style={{ color: "red", margin: "10px 10px  2px 2px", }} 
+                    <i class="fa fa-long-arrow-up fa-3x" aria-hidden="true"
+                        style={{ color: "red", margin: "5px 10px  2px 2px", }} 
                         ></i> ({this.state.CountryTotals.newRecoveredPercent}%) Increase in Recovered</h6>
                             </ThirtyDayElementsInner>
                         )}
@@ -631,27 +661,27 @@ class Country extends React.Component {
 {Math.sign(this.state.CountryTotals.newDeathsPercent) === -1? (
     <ThirtyDayElementsInner>     
                         <h6>
-                        <i class="fas fa-sort-down fa-3x"
-                        style={{ color: "red" , margin: "10px 10px  2px 2px",}} 
+                        <i  class="fa fa-long-arrow-down fa-3x" aria-hidden="true"
+                        style={{ color: "red" , margin: "5px 10px  2px 2px",}} 
                         ></i> ({this.state.CountryTotals.newDeathsPercent}%) Decrease in Deaths</h6>
                       </ThirtyDayElementsInner>
                     ):(
                         <ThirtyDayElementsInner>     
                     <h6>
-                        <i class="fas fa-sort-up mt-10 fa-3x"
-                        style={{ color: "red" , margin: "10px 10px 2px 2px",}} 
+                    <i class="fa fa-long-arrow-up fa-3x" aria-hidden="true"
+                        style={{ color: "red" , margin: "5px 10px 2px 2px",}} 
                         ></i> ({this.state.CountryTotals.newDeathsPercent}%) Increase in Deaths</h6>
                          </ThirtyDayElementsInner>
                         )}
 
-                    </ThirtyDayPercents>
+                    </Percents30Day>
                     
                     {/* row container end*/}
                     </ThirtyDaySty>
 
                     </ThirtyDayWrapper>
 
-{/* PREDICTION */}
+
 
 <ThirtyDayWrapper>
 
@@ -659,17 +689,15 @@ class Country extends React.Component {
                         
 <ThirtyDaySty>
 <ThirtyDayElements>
-<h6>{this.state.CountryFullName} 14 DAY PREDICTION</h6>
+<h6><span>{this.state.CountryFullName} 14 DAY PREDICTION</span></h6>
 </ThirtyDayElements>   
 
-<ThirtyDayElements>
-<h6>PREDICTION TREND</h6>
-</ThirtyDayElements>
+
 </ThirtyDaySty>
 
 
 <ThirtyDaySty>
-{/* <Chart  options={this.state.optionsPredict} series={this.state.seriesPredict} type="area" height={350} width={700} /> */}
+
 <PredictGraph predict={this.state.Prediction}/>
 
 
@@ -677,17 +705,18 @@ class Country extends React.Component {
 PREDICTION PERCENTAGE */}
 
   <ThirtyDayPercents>
+  <h6><span>PREDICTION TREND</span></h6>
                     
                     {Math.sign(this.state.Prediction.trendPercent) === -1? (
                                                      <ThirtyDayElementsInner>        
                                            <h6>
-                                           <i class="fas fa-sort-down fa-3x"
+                                           <i  class="fa fa-long-arrow-down fa-3x" aria-hidden="true"
                                            style={{ color: "red" , margin: "10px 10px  2px 2px", }} 
                                            ></i> ({this.state.Prediction.trendPercent}%) Decrease in Cases</h6>
                                         </ThirtyDayElementsInner>
                                        ):  (
                                            <ThirtyDayElementsInner>      
-                                               <i class="fas fa-sort-up fa-3x"
+                                              <i class="fa fa-long-arrow-up fa-3x" aria-hidden="true"
                                            style={{ color: "red",  margin: "10px 0 10px 0", border: "1px solid black" , padding:"5px,0"}} 
                                            ></i>
                                        <h6>
@@ -699,9 +728,9 @@ PREDICTION PERCENTAGE */}
      </ThirtyDayPercents>
      </ThirtyDaySty>
 
+
   
-  
- </ThirtyDayWrapper>
+ </ThirtyDayWrapper> </>): <><h1></h1> </>}
 
                 </GlobalWrapper>
 
@@ -736,6 +765,9 @@ color: #5243C0;
 h2{
     margin-left: 2rem;
     margin-right: 2rem;
+
+}
+
 }
 `;
 
@@ -794,7 +826,7 @@ span{
 `;
 
 const Title = styled.div`
-background-image: url(${MainIcon});
+background-image: url(${CountryIcon});
  background-size: cover;
 background-position: center;
 background-repeat: no-repeat;
@@ -836,16 +868,11 @@ height: 45vh;
 // border: 1px solid red;
 `;
 
-const TitleImage = styled.img`
-width: 100%;
- 
- 
-`;
 
 const MapDiv = styled.div`
 width: 100%
 font-family:'Poppins', sans-serif;
-// padding: .8rem;
+ padding: .5rem;
 color: #5243C0; 
 border-radius: 15px;
 background: white;
@@ -854,8 +881,9 @@ box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16);
 margin: 1rem .8rem 0 .8rem; 
 text-align:center;
 h6{
-    font-size: 1.7rem;
-    font-weight: normal;
+    margin-top: 70px;
+    font-size: 3rem;
+    font-weight: bold;
 }
 `;
 
@@ -863,50 +891,62 @@ h6{
 
 const CountryStats = styled.div`
 width: 100%;
+// border: 1px solid black;
 
-font-size: .5rem;
 display:flex;
-display: flex;
+
 flex-direction:row; 
-justify-content: space-between;
-text-align: center;
-margin-top: 30px;
-// margin: 30px 1.5rem 0 1.5rem;
 justify-content: space-around;
+text-align: center;
+margin-top: 70px;
+margin-bottom: 100px;
+
 
 
 `;
 
 const CountryTotal = styled.div`
 //3 big buttons across under map
-width: 40%
+min-width: 40%
+margin: 1rem, 3rem, 0px 0px; 
+display: flex;
 
-display:flex;
-flex-direction: column;
-align-items:center;
-text-align: center;
-font-family: 'Poppins', sans-serif;
-// padding: .8rem;
-color:  #5243C0; 
+
+//column for stats in box 
+flex-direction: column; 
+align-items: center;
+align-content: center;
+justify-content: center;
+text-align:center;
+font-family:'Poppins', sans-serif;
+padding: .8rem;
+color:  #5243C0;  
 border-radius: 15px;
 background: white;
-
-padding: .5rem;
+//  border: 1px solid red;
 box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
 
-h4{
+h2{
+ 
+    font-weight: normal;
     font-size: 1.5rem;
+    
+    span{
+        color:#5243C0; 
+        font-weight: bold;
+    }
+
 }
-h5{
-    font-size: 1.3rem;
-}
-h6{
-    font-size: 1rem;
-}
+h1{
+    3rem;
+    span{
+        color:#5243C0; 
+        font-weight: bold;
+    }
 `;
 
 const ThirtyDayWrapper = styled.div`
-width: 100%;
+width: 95%;
 display: flex;
 flex-direction: column; 
 justify-content: center;
@@ -914,7 +954,7 @@ align-items: center;
 margin-top: 30px;
 width: 100%
 font-family: 'Poppins', sans-serif;
-// padding: .8rem;
+padding: .5rem;
 color:  #5243C0; 
 border-radius: 15px;
 background: white;
@@ -934,12 +974,10 @@ width: 100%;
 display: flex;
 flex-direction: row; 
 justify-content: space-between;
-// margin-top: 30px;
- 
 font-family: 'Poppins', sans-serif;
-// padding: .8rem;
+
 color: #5243C0; 
-// border-radius: 15px;
+border-radius: 15px;
 background: white;
 
 // box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
@@ -957,6 +995,12 @@ const ThirtyDayElements = styled.div`
 
 width: 46%;
 padding: 1rem;
+h6{
+    font-size: 2.5rem;
+    span{
+        font-weight: normal;
+    }
+}
 `; 
 
 const ThirtyDayElementsInner = styled.div`
@@ -966,6 +1010,7 @@ width: 46%;
 display: flex;
 flex-direction: row;
 justify-content: space-around;
+
 
 `; 
 
@@ -977,9 +1022,20 @@ flex-direction: column;
 align-items: center;
 
 h6{
-    font-size: 1rem;
-
+    font-size: 1.5rem;
+    font-weight:bold;
+span{
+    font-weight:normal;
+}
 }
 
+}
 `; 
 
+
+const Percents30Day= styled(ThirtyDayPercents)`
+// border: 1px solid black;
+h6{
+    margin-top: 5px;
+}
+`;

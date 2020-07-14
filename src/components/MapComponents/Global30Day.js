@@ -181,7 +181,7 @@ class Global30Chart extends React.Component {
       
 
 <div id="chart">
-<Chart options={this.state.options} series={this.state.series} type="area" height={600} width={2000} />
+<Chart options={this.state.options} series={this.state.series} type="area" height={600} width={1600} />
 </div>
     )}}
     

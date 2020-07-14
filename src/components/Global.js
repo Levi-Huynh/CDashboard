@@ -269,7 +269,7 @@ render() {
                     </GlobalStats>
 
 
-
+<ThirtyDayWrapper>
 
 {/* CASES */}
 <ThirtyDaySty>
@@ -306,10 +306,12 @@ render() {
          </ThirtyDayPercents>
          </ThirtyDaySty>
 
-
+         </ThirtyDayWrapper>
 
          {/* RECOVERED */}
-         
+
+      <ThirtyDayWrapper>
+   
 <ThirtyDaySty>
       
       <ThirtyDayElements>
@@ -340,9 +342,10 @@ render() {
 
          </ThirtyDayPercents>
          </ThirtyDaySty>
-
+         </ThirtyDayWrapper>
          {/* DEATHS */}
-         
+
+      <ThirtyDayWrapper>      
 <ThirtyDaySty>
       
       <ThirtyDayElements>
@@ -371,8 +374,10 @@ render() {
            )}
       </ThirtyDayPercents>
       </ThirtyDaySty>
+      </ThirtyDayWrapper>
 
 
+<ThirtyDayWrapper>
 <ThirtyDaySty>
       
          <ThirtyDayElements>
@@ -386,7 +391,7 @@ render() {
 
          
          </ThirtyDaySty>
-  
+         </ThirtyDayWrapper>
 
                     </GlobalWrapper>
     </>)
@@ -519,28 +524,7 @@ height: 45vh;
 // border: 1px solid red;
 `;
 
-const TitleImage = styled.img`
-width: 100%;
- 
- 
-`;
 
-const MapDiv = styled.div`
-width: 100%
-font-family:'Poppins', sans-serif;
-// padding: .8rem;
-color: #5243C0; 
-border-radius: 15px;
-background: white;
-// border: 1px solid  #636363;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-margin: 1rem .8rem 0 .8rem; 
-text-align:center;
-h6{
-    font-size: 1.7rem;
-    font-weight: normal;
-}
-`;
 
 
 
@@ -589,7 +573,7 @@ h6{
 `;
 
 const ThirtyDayWrapper = styled.div`
-width: 100%;
+width: 95%;
 display: flex;
 flex-direction: column; 
 justify-content: center;
@@ -597,7 +581,7 @@ align-items: center;
 margin-top: 30px;
 width: 100%
 font-family: 'Poppins', sans-serif;
-// padding: .8rem;
+padding: .5rem;
 color:  #5243C0; 
 border-radius: 15px;
 background: white;
@@ -617,15 +601,13 @@ width: 100%;
 display: flex;
 flex-direction: row; 
 justify-content: space-between;
-// margin-top: 30px;
- 
 font-family: 'Poppins', sans-serif;
-//  border: 1px solid black;
+ //border: 1px solid black;
 color: #5243C0; 
  
 background: white;
 
-// box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+//box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
 // margin: 30px .8rem 0 .8rem; 
 text-align:center;
 h6{
