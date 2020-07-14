@@ -4,7 +4,15 @@ import { withRouter, Link } from "react-router-dom";
 import Navigation from "./Navigation/index";
 import MainIcon from '../assets/globalban.png'
 import axios from 'axios';
+
+
+//CHARTS
+import Cases from './MapComponents/GlobalCases3';
+import Deaths from './MapComponents/GlobalDeaths3';
+import Recovered from './MapComponents/GlobalRecovered3';
+
 import Global30Chart from './MapComponents/Global30Day';
+
 //import graphs country summary
 import Chart from 'react-apexcharts'
 
@@ -38,6 +46,12 @@ class Global extends React.Component{
              max: null, 
  
          },
+         Global90:{
+            dataCases: [], //nested arr [[date, value]...]
+            dataRecovered: [],
+            dataDeaths:[],
+            xAxis:[],
+         }
     }
 
     }
@@ -80,36 +94,47 @@ componentDidMount(){
         .get(`https://covid19-api.org/api/timeline`)
     })
     .then(res=>{
-        console.log("RES TIMELINE", res.data)
+        // console.log("RES TIMELINE", res.data)
         let Change=res.data
-        let thirtyGlobal= res.data.slice(0,30)
+        let thirtyGlobal= res.data.slice(0,90)
         //new array with data & value
 
-        let thirtyCases=[]
-        let thirtyRecovered=[]
-        let thirtyDeaths=[]
-        let xAxis1=[]
+        // let thirtyCases=[]
+        // let thirtyRecovered=[]
+        // let thirtyDeaths=[]
+        // let xAxis1=[]
+
+        
+        let thirtyCases90=[]
+        let thirtyRecovered90=[]
+        let thirtyDeaths90=[]
+        let xAxis190=[]
+      
       
         thirtyGlobal.map(data=>{
-            // thirtyCases.push([data.last_update.slice(5,10), data.total_cases])
-            // thirtyRecovered.push([data.last_update.slice(5,10), data.total_recovered])
-            // thirtyDeaths.push([data.last_update.slice(5,10), data.total_deaths])
+        
 
+            // thirtyCases.push(data.total_cases)
+            // thirtyRecovered.push( data.total_recovered)
+            // thirtyDeaths.push( data.total_deaths)
+            // xAxis1.push(data.last_update.slice(5,10))
 
-            thirtyCases.push(data.total_cases)
-            thirtyRecovered.push( data.total_recovered)
-            thirtyDeaths.push( data.total_deaths)
-            xAxis1.push(data.last_update.slice(5,10))
+            
+
+            thirtyCases90.push(data.total_cases)
+            thirtyRecovered90.push( data.total_recovered)
+            thirtyDeaths90.push( data.total_deaths)
+            xAxis190.push(data.last_update.slice(5,10))
 
         })
 
        let findMax= thirtyGlobal
        
     findMax.sort(function(a,b){return b.cases -a.cases})
-      console.log("FINDMAX", findMax)
+       
         let maxD = findMax[0].total_cases
         let minD = findMax[findMax.length-1].total_deaths 
-        console.log("GLOBAL30 SORTED", thirtyGlobal, "MAX:", maxD,  "MIN:", "CHANGE[1]:", Change[1], "CHANGE[2]:", Change[2])
+        // console.log("GLOBAL30 SORTED", thirtyGlobal, "MAX:", maxD,  "MIN:", "CHANGE[1]:", Change[1], "CHANGE[2]:", Change[2])
 
         function convertChange(today, yesterday){
            let val= today-yesterday
@@ -149,16 +174,23 @@ componentDidMount(){
             },
             GLobal30:{
                 ...this.state.GLobal30,
-                dataCases: thirtyCases,
-                dataRecovered: thirtyRecovered,
-                dataDeaths: thirtyDeaths,
+                dataCases: thirtyCases90.slice(0,30),
+                dataRecovered: thirtyRecovered90.slice(0,30),
+                dataDeaths: thirtyDeaths90.slice(0,30),
                 min : minD,
                 max: maxD,
-                xAxis: xAxis1
+                xAxis: xAxis190.slice(0,30)
+            },
+            Global90:{
+                ...this.state.GLobal90,
+                dataCases: thirtyCases90,  
+                dataRecovered: thirtyRecovered90, 
+                dataDeaths: thirtyDeaths90, 
+                xAxis: xAxis190 
             }
         })
 
-        console.log("GLOBAL30 STATE", this.state.GLobal30, this.state.Change)
+        console.log("GLOBAL30 STATE",   this.state.Global90)
     })
     .catch(err => {
         console.log("err", err)
@@ -237,17 +269,25 @@ render() {
                     </GlobalStats>
 
 
-                    <ThirtyDaySty>
-         {/* <Global30Chart global30={this.state.Global30}/> */}
-         <ThirtyDayElements>
-<h6>GLOBAL 30 DAY TREND</h6>
-</ThirtyDayElements>
-</ThirtyDaySty>
+
+
+{/* CASES */}
 <ThirtyDaySty>
-<ThirtyDayPercents>
-            
-            
-            {this.state.GLobalChangeIncrease.total_cases? (
+      
+         <ThirtyDayElements>
+<h6>90 DAY TREND: CASES</h6>
+</ThirtyDayElements>
+ 
+
+</ThirtyDaySty>
+
+<ThirtyDaySty>
+        
+         <Cases  global90={this.state.Global90}/>
+
+         <ThirtyDayPercents>
+         <h6>CASE CHANGES FROM PREVIOUS DAY</h6>
+         {this.state.GLobalChangeIncrease.total_cases? (
                    <ThirtyDayElementsInner>
                <h6>
                <i class="fas fa-sort-up "
@@ -261,23 +301,29 @@ render() {
               
            )}
                
-       
-               {this.state.GLobalChangeIncrease.total_deaths? (
-                   <ThirtyDayElementsInner>
-               <h6>
-               <i class="fas fa-sort-up "
-               style={{ color: "red" }} 
-               ></i> {this.state.Change.deaths} Deaths Increase From Previous Day</h6> 
-                </ThirtyDayElementsInner>
-            ):(    <ThirtyDayElementsInner><i class="fas fa-sort-down"
-            style={{ color: "red" }} 
-            ></i> <h6>  {this.state.Change.deaths} Deaths Decrease From Previous Day</h6>)
-          </ThirtyDayElementsInner>
-              
-           )}
                    
 
-                   {this.state.GLobalChangeIncrease.total_recovered? (
+         </ThirtyDayPercents>
+         </ThirtyDaySty>
+
+
+
+         {/* RECOVERED */}
+         
+<ThirtyDaySty>
+      
+      <ThirtyDayElements>
+      <h6>90 DAY TREND: RECOVERED</h6>
+</ThirtyDayElements>
+</ThirtyDaySty>
+
+<ThirtyDaySty>
+        
+         <Recovered global90R={this.state.Global90}/>
+
+         <ThirtyDayPercents>
+         <h6>RECOVERED CHANGES FROM PREVIOUS DAY</h6>
+         {this.state.GLobalChangeIncrease.total_recovered? (
                    <ThirtyDayElementsInner>
                <h6>
                <i class="fas fa-sort-up "
@@ -291,12 +337,49 @@ render() {
               
            )}
                    
-                   
-       
-       
-       
-       </ThirtyDayPercents>
+
+         </ThirtyDayPercents>
+         </ThirtyDaySty>
+
+         {/* DEATHS */}
+         
+<ThirtyDaySty>
+      
+      <ThirtyDayElements>
+      <h6>90 DAY TREND: DEATHS</h6>
+</ThirtyDayElements>
 </ThirtyDaySty>
+
+<ThirtyDaySty>
+     
+      <Deaths global90={this.state.Global90}/>
+
+      <ThirtyDayPercents>
+      <h6>DEATH CHANGES FROM PREVIOUS DAY</h6>
+      {this.state.GLobalChangeIncrease.total_deaths? (
+                   <ThirtyDayElementsInner>
+               <h6>
+               <i class="fas fa-sort-up "
+               style={{ color: "red" }} 
+               ></i> {this.state.Change.deaths} Deaths Increase From Previous Day</h6> 
+                </ThirtyDayElementsInner>
+            ):(    <ThirtyDayElementsInner><i class="fas fa-sort-down"
+            style={{ color: "red" }} 
+            ></i> <h6>  {this.state.Change.deaths} Deaths Decrease From Previous Day</h6>)
+          </ThirtyDayElementsInner>
+              
+           )}
+      </ThirtyDayPercents>
+      </ThirtyDaySty>
+
+
+<ThirtyDaySty>
+      
+         <ThirtyDayElements>
+<h6>GLOBAL 30 DAY TREND</h6>
+</ThirtyDayElements>
+</ThirtyDaySty>
+
 <ThirtyDaySty>
         
          <Global30Chart global30={this.state.GLobal30}/>
@@ -537,9 +620,9 @@ justify-content: space-between;
 // margin-top: 30px;
  
 font-family: 'Poppins', sans-serif;
-// padding: .8rem;
+//  border: 1px solid black;
 color: #5243C0; 
-// border-radius: 15px;
+ 
 background: white;
 
 // box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
@@ -577,7 +660,7 @@ flex-direction: column;
 align-items: center;
 
 h6{
-    font-size: 1rem;
+    font-size: 1.4rem;
 
 }
 

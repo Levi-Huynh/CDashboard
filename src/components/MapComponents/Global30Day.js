@@ -41,7 +41,7 @@ class Global30Chart extends React.Component {
             opacity: 0.2
           },
           toolbar: {
-            show: false
+            show: true
           }
         },
         colors: ['#77B6EA', 'red', 'blue'],
@@ -81,12 +81,24 @@ class Global30Chart extends React.Component {
           labels: {
      
             formatter: function(val) {
+             val=val.toString()
              
-              val= parseInt(val)
-              var zero= 6;
-              var rounded = Math.round(val/Math.pow(10, zero))
-              return rounded + "M"
-              
+           if(val.length >6){
+               let result = parseInt(val)
+               var zero = 6;
+               var rounded = Math.round(result/Math.pow(10, zero))
+               return rounded.toString() + 'M'
+           }else if(val.length > 3 && val.length <= 6){
+            let result = parseInt(val)
+            var zero = 3;
+            var rounded = Math.round(result/Math.pow(10, zero))
+            return rounded.toString() + 'K'
+           } else if(val.length <= 3){
+            let result = parseInt(val)
+            var zero = 0;
+            var rounded = Math.round(result/Math.pow(10, zero))
+            return rounded.toString() 
+           }
             }
           },
           min: 5,
@@ -98,11 +110,14 @@ class Global30Chart extends React.Component {
           },
         },
         legend: {
+          show: true,
           position: 'top',
           horizontalAlign: 'right',
           floating: true,
           offsetY: -25,
           offsetX: -5
+          
+      
         }
       },
       zoom: {
@@ -158,7 +173,7 @@ class Global30Chart extends React.Component {
       
 
 <div id="chart">
-<Chart options={this.state.options} series={this.state.series} type="area" height={450} width={1000} />
+<Chart options={this.state.options} series={this.state.series} type="area" height={600} width={2000} />
 </div>
     )}}
     
