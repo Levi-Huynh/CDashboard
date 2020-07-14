@@ -74,8 +74,8 @@ const chartConfigs = {
             // "numbersuffix": "%",
             // "includevalueinlabels": "1",
             "labelsepchar": ": ",
-            "entityFillHoverColor": "#FFF9C4",
-            "entityFillColor": "#F0F5FF",
+            "entityFillHoverColor": "#9F8EFF",
+            "entityFillColor": "#B6AAFE",
             "theme": "gammel",
 
             "palette": "1"
@@ -416,64 +416,7 @@ class Country extends React.Component {
 }
 
 
-getGlobal30(e){
-  e.preventDefault()
-        return axios
-        .get(`https://covid19-api.org/api/timeline`)
-    
-    .then(res=>{
-        console.log("RES TIMELINE", res.data)
-        let Change=res.data
-        let thirtyGlobal= res.data.slice(0,30)
-        //new array with data & value
 
-        let thirtyCases=[]
-        let thirtyRecovered=[]
-        let thirtyDeaths=[]
-        let xAxis1=[]
-      
-        thirtyGlobal.map(data=>{
-            thirtyCases.push([data.last_update.slice(5,10), data.total_cases])
-            thirtyRecovered.push([data.last_update.slice(5,10), data.total_recovered])
-            thirtyDeaths.push([data.last_update.slice(5,10), data.total_deaths])
-            xAxis1.push(data.last_update.slice(5,10))
-
-        })
-
-       let findMax= thirtyGlobal
-       
-    findMax.sort(function(a,b){return b.cases -a.cases})
-      console.log("FINDMAX", findMax)
-        let maxD = findMax[0].total_cases
-        let minD = findMax[findMax.length-1].total_deaths 
-        console.log("GLOBAL30 SORTED", thirtyGlobal, "MAX:", maxD,  "MIN:", "CHANGE[1]:", Change[1], "CHANGE[2]:", Change[2])
-
-        this.setState({
-            GLobalChangeIncrease:{
-                ...this.state.GLobalChangeIncrease, 
-                total_cases: Change[1].total_cases > Change[0].total_cases? true: false,
-                total_deaths: Change[1].total_deaths > Change[0].total_deaths? true: false,
-                total_recovered: Change[1].total_recovered > Change[0].total_recovered? true: false,
-            }, 
-      
-            GLobal30:{
-                ...this.state.GLobal30,
-                dataCases: thirtyCases,
-                dataRecovered: thirtyRecovered,
-                dataDeaths: thirtyDeaths,
-                min : minD,
-                max: maxD,
-                xAxis: xAxis1
-            }
-        })
-
-        console.log("GLOBAL30 STATE", this.state.GLobal30, this.state.GLobalChangeIncrease)
-    })
-    .catch(err => {
-        console.log("err", err)
-    })
-
-}
 
     componentDidMount() {
 
@@ -564,49 +507,9 @@ getGlobal30(e){
 
                     </GlobalStats>
 
-                    <GlobalStats>
-                        {/* pinkcolorcontainer in here */}
-                        {/* <h1>DAILY GLOBAL SUMMARY <span>{this.state.Date}</span></h1> */}
-
-                        <GlobalSum>
-
-                            <h2>NEW CONFIRMED</h2>
-                            <h4><span>{this.state.GlobalRes.NewConfirmed}</span></h4>
-                        </GlobalSum>
-
-                        <GlobalSum>
-                            <h2>NEW DEATHS</h2>
-                            <h4><span>{this.state.GlobalRes.NewDeaths}</span></h4>
-                        </GlobalSum>
-
-                        <GlobalSum>
-                            <h2>NEW RECOVERED</h2>
-                            <h4><span>{this.state.GlobalRes.NewRecovered}</span></h4>
-                        </GlobalSum>
-
-                        <GlobalSum>
-                            <h2>TOTAL CONFIRMED</h2>
-                            <h4><span>{this.state.GlobalRes.TotalConfirmed}</span></h4>
-                        </GlobalSum>
-
-                        <GlobalSum>
-                            <h2>TOTAL DEATHS</h2>
-                            <h4><span>{this.state.GlobalRes.TotalDeaths}</span></h4>
-                        </GlobalSum>
-
-                        <GlobalSum>
-                            <h2>TOTAL RECOVERED</h2>
-                            <h4> <span>{this.state.GlobalRes.TotalRecovered}</span></h4>
-                        </GlobalSum>
-
-
-
-
-                        {/* pinkcolorcontainer in here */}
-                    </GlobalStats>
-
+                  
                     <MapDiv>
-                        <h6>Choose Country to View Cases Summary</h6>
+                        <h6>Choose A Country On the Map to Overview</h6>
                         <ReactFC {...chartConfigs} {...this.state} onClick={this.dataplotclick}/>
                     </MapDiv>
 

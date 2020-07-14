@@ -18,6 +18,12 @@ class Global extends React.Component{
         Date: new Date().toDateString(),
         Time: new Date().toLocaleTimeString('en-US'),
         GlobalRes: {},
+        Change:{
+            cases: null,
+            deaths: null,
+            recovered: null
+
+        },
         GLobalChangeIncrease:{
             total_cases: false,
             total_deaths: false,
@@ -46,9 +52,27 @@ componentDidMount(){
         const GRES = res.data.Global
         const DATE = res.data.Date
 
+        let newRes={}
+
+        for(const val in GRES){
+           let myVal=GRES[val].toString()
+            if(myVal.length > 6){
+                myVal= parseInt(myVal)
+                var zero= 6;
+                var rounded = Math.round(myVal/Math.pow(10, zero))
+                newRes[val] = rounded.toString()+'M'
+            }else if(myVal.length <= 6){
+                myVal= parseInt(myVal)
+                var zero= 3;
+                var rounded = Math.round(myVal/Math.pow(10, zero))
+                newRes[val] = rounded.toString() + 'K'
+            }
+        }
+
+        console.log('NEWRES:', newRes)
         this.setState({
           
-            GlobalRes:GRES
+            GlobalRes:newRes
             
  
         })
@@ -67,9 +91,14 @@ componentDidMount(){
         let xAxis1=[]
       
         thirtyGlobal.map(data=>{
-            thirtyCases.push([data.last_update.slice(5,10), data.total_cases])
-            thirtyRecovered.push([data.last_update.slice(5,10), data.total_recovered])
-            thirtyDeaths.push([data.last_update.slice(5,10), data.total_deaths])
+            // thirtyCases.push([data.last_update.slice(5,10), data.total_cases])
+            // thirtyRecovered.push([data.last_update.slice(5,10), data.total_recovered])
+            // thirtyDeaths.push([data.last_update.slice(5,10), data.total_deaths])
+
+
+            thirtyCases.push(data.total_cases)
+            thirtyRecovered.push( data.total_recovered)
+            thirtyDeaths.push( data.total_deaths)
             xAxis1.push(data.last_update.slice(5,10))
 
         })
@@ -82,14 +111,42 @@ componentDidMount(){
         let minD = findMax[findMax.length-1].total_deaths 
         console.log("GLOBAL30 SORTED", thirtyGlobal, "MAX:", maxD,  "MIN:", "CHANGE[1]:", Change[1], "CHANGE[2]:", Change[2])
 
+        function convertChange(today, yesterday){
+           let val= today-yesterday
+           val=val.toString()
+           if(val.length >6){
+               let result = parseInt(val)
+               var zero = 6;
+               var rounded = Math.round(result/Math.pow(10, zero))
+               return rounded.toString() + 'M'
+           }else if(val.length > 3 && val.length <= 6){
+            let result = parseInt(val)
+            var zero = 3;
+            var rounded = Math.round(result/Math.pow(10, zero))
+            return rounded.toString() + 'K'
+           } else if(val.length <= 3){
+            let result = parseInt(val)
+            var zero = 0;
+            var rounded = Math.round(result/Math.pow(10, zero))
+            return rounded.toString() 
+           }
+        }
+
         this.setState({
             GLobalChangeIncrease:{
                 ...this.state.GLobalChangeIncrease, 
-                total_cases: Change[1].total_cases > Change[0].total_cases? true: false,
-                total_deaths: Change[1].total_deaths > Change[0].total_deaths? true: false,
-                total_recovered: Change[1].total_recovered > Change[0].total_recovered? true: false,
+                total_cases: Change[0].total_cases > Change[1].total_cases? true: false,
+
+                total_deaths: Change[0].total_deaths > Change[1].total_deaths? true: false,
+                total_recovered: Change[0].total_recovered > Change[1].total_recovered? true: false,
             }, 
-      
+            Change:{
+                ...this.state.Change,
+                cases:  convertChange(Change[0].total_cases, Change[1].total_cases),
+                deaths: convertChange(Change[0].total_deaths, Change[1].total_deaths),
+                recovered: convertChange(Change[0].total_recovered, Change[1].total_recovered)
+
+            },
             GLobal30:{
                 ...this.state.GLobal30,
                 dataCases: thirtyCases,
@@ -101,7 +158,7 @@ componentDidMount(){
             }
         })
 
-        console.log("GLOBAL30 STATE", this.state.GLobal30, this.state.GLobalChangeIncrease)
+        console.log("GLOBAL30 STATE", this.state.GLobal30, this.state.Change)
     })
     .catch(err => {
         console.log("err", err)
@@ -138,34 +195,39 @@ render() {
                         {/* <h1>DAILY GLOBAL SUMMARY <span>{this.state.Date}</span></h1> */}
 
                         <GlobalSum>
-
+                        <h1><span>{this.state.GlobalRes.NewConfirmed}</span></h1>
                             <h2>NEW CONFIRMED</h2>
-                            <h4><span>{this.state.GlobalRes.NewConfirmed}</span></h4>
+                           
                         </GlobalSum>
 
                         <GlobalSum>
+                        <h1><span>{this.state.GlobalRes.NewDeaths}</span></h1>
                             <h2>NEW DEATHS</h2>
-                            <h4><span>{this.state.GlobalRes.NewDeaths}</span></h4>
+                         
                         </GlobalSum>
 
                         <GlobalSum>
+                        <h1><span>{this.state.GlobalRes.NewRecovered}</span></h1>
                             <h2>NEW RECOVERED</h2>
-                            <h4><span>{this.state.GlobalRes.NewRecovered}</span></h4>
+                       
                         </GlobalSum>
 
                         <GlobalSum>
+                        <h1><span>{this.state.GlobalRes.TotalConfirmed}</span></h1>
                             <h2>TOTAL CONFIRMED</h2>
-                            <h4><span>{this.state.GlobalRes.TotalConfirmed}</span></h4>
+                      
                         </GlobalSum>
 
                         <GlobalSum>
+                        <h1><span>{this.state.GlobalRes.TotalDeaths}</span></h1>
                             <h2>TOTAL DEATHS</h2>
-                            <h4><span>{this.state.GlobalRes.TotalDeaths}</span></h4>
+                       
                         </GlobalSum>
 
                         <GlobalSum>
+                        <h1> <span>{this.state.GlobalRes.TotalRecovered}</span></h1>
                             <h2>TOTAL RECOVERED</h2>
-                            <h4> <span>{this.state.GlobalRes.TotalRecovered}</span></h4>
+                     
                         </GlobalSum>
 
 
@@ -180,10 +242,67 @@ render() {
          <ThirtyDayElements>
 <h6>GLOBAL 30 DAY TREND</h6>
 </ThirtyDayElements>
+</ThirtyDaySty>
+<ThirtyDaySty>
+<ThirtyDayPercents>
+            
+            
+            {this.state.GLobalChangeIncrease.total_cases? (
+                   <ThirtyDayElementsInner>
+               <h6>
+               <i class="fas fa-sort-up "
+               style={{ color: "red" }} 
+               ></i> {this.state.Change.cases} Case Increase From Previous Day</h6> 
+                </ThirtyDayElementsInner>
+            ):(    <ThirtyDayElementsInner><i class="fas fa-sort-down"
+            style={{ color: "red" }} 
+            ></i> <h6>  {this.state.Change.cases} Case Decrease From Previous Day</h6>)
+          </ThirtyDayElementsInner>
+              
+           )}
+               
+       
+               {this.state.GLobalChangeIncrease.total_deaths? (
+                   <ThirtyDayElementsInner>
+               <h6>
+               <i class="fas fa-sort-up "
+               style={{ color: "red" }} 
+               ></i> {this.state.Change.deaths} Deaths Increase From Previous Day</h6> 
+                </ThirtyDayElementsInner>
+            ):(    <ThirtyDayElementsInner><i class="fas fa-sort-down"
+            style={{ color: "red" }} 
+            ></i> <h6>  {this.state.Change.deaths} Deaths Decrease From Previous Day</h6>)
+          </ThirtyDayElementsInner>
+              
+           )}
+                   
+
+                   {this.state.GLobalChangeIncrease.total_recovered? (
+                   <ThirtyDayElementsInner>
+               <h6>
+               <i class="fas fa-sort-up "
+               style={{ color: "red" }} 
+               ></i> {this.state.Change.recovered} Recovered Increase From Previous Day</h6> 
+                </ThirtyDayElementsInner>
+            ):(    <ThirtyDayElementsInner><i class="fas fa-sort-down"
+            style={{ color: "red" }} 
+            ></i> <h6>  {this.state.Change.recovered} Recovered Decrease From Previous Day</h6>)
+          </ThirtyDayElementsInner>
+              
+           )}
+                   
+                   
+       
+       
+       
+       </ThirtyDayPercents>
+</ThirtyDaySty>
+<ThirtyDaySty>
         
          <Global30Chart global30={this.state.GLobal30}/>
-         <button onClick={(e) =>this.getGlobal30(e)}>Get Global 30</button>
-     </ThirtyDaySty>
+
+         
+         </ThirtyDaySty>
   
 
                     </GlobalWrapper>

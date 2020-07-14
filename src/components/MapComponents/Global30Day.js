@@ -7,104 +7,6 @@ import update from 'immutability-helper';
 
 
 
-//       class Global30Chart extends React.Component {
-//         constructor(props) {
-//           super(props);
-
-//           this.state = {
-          
-//             series: [{
-//                 name: 'Total Cases',
-//                 data: []
-//               },
-//               {
-//                 name: 'Total Deaths',
-//                 data: []
-//               },
-//               {
-//                 name: 'Total Recovered',
-//                 data: []
-//               },
-            
-//             ],
-//             options: {
-//               chart: {
-//                 height: 350,
-//                 type: 'scatter',
-//                 zoom: {
-//                     enabled: true,
-//                   type: 'xy'
-//                 }
-//               },
-//               dataLabels: {
-//                 enabled: false
-//               },
-//               grid: {
-//                 xaxis: {
-//                   lines: {
-//                     show: true
-//                   },
-                  
-//                 },
-//                 yaxis: {
-//                   lines: {
-//                     show: true
-//                   }
-//                 },
-//               },
-//               xaxis: {
-//                 type: 'datetime',
-//               },
-//               yaxis: {
-//                 max: null,
-//                 min: null 
-//               }
-//             },
-          
-          
-//           };
-//         }
-
-    
-//         componentDidMount(props){
-//           console.log("GLOBAL30 PROPS", this.props.global30)
-//         }
-
-
-//         componentDidUpdate(prevProps){
-//             if(this.props.global30 !== prevProps.global30){
-//                 console.log('CDU INVOKED', this.props.global30)
-//               this.setState({
-                
-//                   options: {...this.state.options, yaxis: {...this.state.yaxis, max: this.props.global30.max, min:this.props.global30.min}
-                  
-//                 }
-                  
-//               })
-        
-        //       this.setState({
-        //         series: update(this.state.series, { 0:{data:{$set: this.props.global30.dataCases}}, 1:{data:{$set: this.props.global30.dataDeaths}}, 2:{data:{$set: this.props.global30.dataRecovered}}  })
-        //       })
-        
-           
-          
-        // }
-        
-        // console.log("30 CDU SERIES STATE GLOBAL 30:",  this.state.series, "CDU global30 PROPS:", this.props.global30, this.state.options.yaxis)
-        
-//           }
-        
-
-//         render() {
-//           return (
-            
-
-//       <div id="chart">
-//   <Chart options={this.state.options} series={this.state.series} type="scatter" height={350} width={700} />
-// </div>
-//         )}}
-//     export default Global30Chart;
-
 
 class Global30Chart extends React.Component {
   constructor(props) {
@@ -150,7 +52,7 @@ class Global30Chart extends React.Component {
           curve: 'smooth'
         },
         title: {
-          text: 'Global 30 Day Overview',
+          // text: 'Global 30 Day Overview',
           align: 'left'
         },
         grid: {
@@ -164,17 +66,20 @@ class Global30Chart extends React.Component {
           // size: 1
         },
         xaxis: {
+          // show: false,
           type: 'datetime',
           categories: [],
           title: {
-            text: 'Date'
+            // text: 'Date'
           }
         },
         yaxis: {
+          // show: false,
           title: {
             text: 'Totals'
           },
           labels: {
+     
             formatter: function(val) {
              
               val= parseInt(val)
@@ -199,8 +104,23 @@ class Global30Chart extends React.Component {
           offsetY: -25,
           offsetX: -5
         }
-      }
-    
+      },
+      zoom: {
+        enabled: true,
+        type: 'x',  
+        autoScaleYaxis: false,  
+        zoomedArea: {
+          fill: {
+            color: '#90CAF9',
+            opacity: 0.4
+          },
+          stroke: {
+            color: '#0D47A1',
+            opacity: 0.4,
+            width: 1
+          }
+        }
+    }
     
     };
   }
@@ -238,7 +158,7 @@ class Global30Chart extends React.Component {
       
 
 <div id="chart">
-<Chart options={this.state.options} series={this.state.series} type="area" height={350} width={700} />
+<Chart options={this.state.options} series={this.state.series} type="area" height={450} width={1000} />
 </div>
     )}}
     
