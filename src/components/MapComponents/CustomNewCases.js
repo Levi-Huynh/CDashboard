@@ -53,14 +53,6 @@ import update from 'immutability-helper';
               xaxis: {
                 categories: [],
                 labels: {
-                  formatter: function (val) {
-                    return val 
-                  }
-                }
-              },
-              yaxis: {
-                title: {
-                  text: undefined},
                   formatter: function(val) {
                     val=val.toString()
                     
@@ -82,8 +74,15 @@ import update from 'immutability-helper';
                   }
                    }
                  
+                }
+              },
+              yaxis: {
+                title: {
+                  text: undefined},
+                  labels:{
+          
                 
-                },
+                }},
               tooltip: {
                 y: {
                   formatter: function (val) {

@@ -61,8 +61,7 @@ class Recovered extends React.Component {
           },
            
            labels: {
-            style: {colors: '#5243C0',
-          },
+            style: {colors: '#5243C0'},
               formatter: function(val) {
                
                   val=val.toString()

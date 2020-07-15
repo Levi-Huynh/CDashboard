@@ -52,38 +52,32 @@ import update from 'immutability-helper';
               xaxis: {
                 categories: [],
                 labels: {
-                  formatter: function (val) {
-                    return val 
-                  }
+                  formatter: function(val) {
+                    val=val.toString()
+                    
+                  if(val.length >6){
+                      let result = parseInt(val)
+                      var zero = 6;
+                      var rounded = Math.round(result/Math.pow(10, zero))
+                      return rounded.toString() + 'M'
+                  }else if(val.length > 3 && val.length <= 6){
+                   let result = parseInt(val)
+                   var zero = 3;
+                   var rounded = Math.round(result/Math.pow(10, zero))
+                   return rounded.toString() + 'K'
+                  } else if(val.length <= 3){
+                   let result = parseInt(val)
+                   var zero = 0;
+                   var rounded = Math.round(result/Math.pow(10, zero))
+                   return rounded.toString() 
+                  }}
                 }
               },
               yaxis: {
                 title: {
                   text: undefined
                 },
-                formatter: function(val) {
-                  val=val.toString()
-                  
-                if(val.length >6){
-                    let result = parseInt(val)
-                    var zero = 6;
-                    var rounded = Math.round(result/Math.pow(10, zero))
-                    return rounded.toString() + 'M'
-                }else if(val.length > 3 && val.length <= 6){
-                 let result = parseInt(val)
-                 var zero = 3;
-                 var rounded = Math.round(result/Math.pow(10, zero))
-                 return rounded.toString() + 'K'
-                } else if(val.length <= 3){
-                 let result = parseInt(val)
-                 var zero = 0;
-                 var rounded = Math.round(result/Math.pow(10, zero))
-                 return rounded.toString() 
-                }
-                 }
-               
-              
-              },
+              } ,
               tooltip: {
                 y: {
                   formatter: function(val) {
