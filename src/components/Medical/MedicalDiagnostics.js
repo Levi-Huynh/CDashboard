@@ -496,20 +496,20 @@ function toggleTermsModal(){
                    <SympAndResults1>
                    <SessionFunctionality>
 
-                        <SympAndResults1>
+                        <SympAndResults2>
                             <h4>INITIATE BRAND NEW SESSION</h4>
                      <MainButton onClick={(e)=>InitiateNewSession(e)}> <i class="fa fa-mouse-pointer" aria-hidden="true" ></i></MainButton>
-                     </SympAndResults1>
+                     </SympAndResults2>
                    
-                     <SympAndResults1>
+                     <SympAndResults2>
                      <h4>ADD SYMPTOMS</h4>
                     <MainButton onClick={toggleModal}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></MainButton>
-                    </SympAndResults1>
+                    </SympAndResults2>
 
-                    <SympAndResults1>    
+                    <SympAndResults2>    
                     <h4>SUGGESTION OF SYMPTOM QUESTIONS (PATIENT PROVIDED)</h4>                
                     <MainButton onClick={(e)=>setPatientRec(prevState =>({...prevState, modal:!prevState.modal}))}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></MainButton>
-                    </SympAndResults1>
+                    </SympAndResults2>
                    
                     </SessionFunctionality>
             
@@ -529,7 +529,7 @@ function toggleTermsModal(){
                     </SympAndResults1>
                     
 
-                    <SympAndResults1>
+                    <SympAndResults1> 
                         <h4>ANALYZE SYMPTOMS</h4>
                     <MainButton onClick={(e)=>setAnalysis(prevState =>({...prevState, display:!prevState.display}))}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></MainButton>
        </SympAndResults1>
@@ -796,12 +796,16 @@ flex-direction: row;
  justify-content: space-between; 
  color:#5243C0;
  text-align:left;
- padding: 0 2rem 0 .7rem;
-//  border: 1px solid black;
+ padding: 0 4.5rem 0 .5rem;
+//   border: 1px solid black;
  margin-right: 2rem;
+ 
 `;
 
+const SympAndResults2 = styled(SympAndResults1)`
+margin-left: 4rem;
 
+`;
 
 const MainButton = styled(TermsButton)`
 width: 20%

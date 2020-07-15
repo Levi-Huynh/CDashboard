@@ -11,7 +11,7 @@ import graphs from '../assets/graphs.png'
 import heart from '../assets/heart.png'
 import landing from '../assets/path5137.png'
 
-import feat1 from '../assets/sympL.png'
+import feat1 from '../assets/landMain.png'
 
 const Landing = props => {
   const [currentActivity, setCurrentActivity] = useState("AI Powered Symptom Checker");
@@ -59,7 +59,7 @@ const Landing = props => {
           <p>Access AI powered recommendations for the next best patient path.  Machine learning models build the recommendations based on patient provided inputs to increase accuracy of pre-diagnostic information, and
             and recommendations.  View the latest global stats on the Covid19 pandemic. Customize case analyses by country.  
           </p>
-          <ExploreButton to={routes.DASHBOARD}  >Explore →</ExploreButton>
+          <ExploreButton to={routes.DASHBOARD}  >Explore <i class="fa fa-mouse-pointer" aria-hidden="true" style={{margin:'0 0 0 .8rem'}}></i></ExploreButton>
         </InfoBoxTop>
 </FeaturetteWrapper>
 
@@ -179,8 +179,8 @@ const ExploreButton = styled(GoButton)`
   border-radius: 10px;
   // border-left: 1px solid #FE687D;
   font-weight: bold;
-  width: 125px;
-  padding: 10px;
+  width: 30%;
+  padding: 15px;
    
   
 `;
