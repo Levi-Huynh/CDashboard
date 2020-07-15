@@ -8,7 +8,7 @@ import CustomCases from "./MapComponents/CustomCases"
 import CustomNewCases from "./MapComponents/CustomNewCases"
 import CustomDeath from "./MapComponents/CustomDeaths" 
 
-
+import CustomIcon from "../assets/globalIcon.png"
 //import components
 import DashNav from "./DashNav";
 import Navigation from "./Navigation/index";
@@ -24,8 +24,18 @@ const Initial_State={
     transmissionType: null,
     region: null,
     cases: null,
-    reportDate: null
+    reportDate: null,
+    displayNote: false
 }
+
+
+
+const [Time, setTime]= useState( new Date().toLocaleTimeString('en-US'))
+const [Date1, setDate]=useState( new Date().toDateString())
+
+
+const [displayGraph, setDisplayGraph] = useState(false)
+
 
 const graph_Initial_State={
   Cases: [],
@@ -38,6 +48,7 @@ const graph_Initial_State={
   transmissionType: null,
   reportDate: null, 
   region: null,
+ 
 }
 
     const [formInputs, setFormData] = useState({
@@ -46,7 +57,8 @@ const graph_Initial_State={
         transmissionType: null,
         region: null,
         cases: null,
-        reportDate: null
+        reportDate: null,
+        displayNote: false
 
     });
 
@@ -60,15 +72,17 @@ const graph_Initial_State={
       transmissionType: null,
       reportDate: null, 
       region: null,
+ 
     })
 
-    const [resStatus, setStatus] = useState("")
+    const [resStatus, setStatus] = useState(null)
 
     function handleChange(e){
         const val= e.target.value;
       setFormData({
         ...formInputs,
-        [e.target.name]:val 
+        [e.target.name]:val, 
+        displayNote: true  
        })
     }
 
@@ -115,6 +129,7 @@ const transmissionMap={
   const onSubmit1 = (e)=>{
       console.log("FORMIPNUTS", formInputs)
       //reset status for new submit
+    
       setStatus("")
       setGraphData({...graph_Initial_State})
       e.preventDefault()
@@ -227,13 +242,16 @@ const transmissionMap={
        
 
         setGraphData({...graphData, Cases:casesArr, newCases:newCasesArr, Deaths:deathArr, xaxis:xaxisNames, dateRangeStart:startDate, 
-          dateRangeEnd:endDate, transmissionType: transmissionTypeSet.size===1? transmissionMap[uniqueData[0].transmissionType].name :null, region:regionTypeSet.size===1? uniqueData[0].region : null})
+          dateRangeEnd:endDate, transmissionType: transmissionTypeSet.size===1? transmissionMap[uniqueData[0].transmissionType].name :null, region:regionTypeSet.size===1? uniqueData[0].region : null
+      })
 
+  
        
     console.log("GRAPHDATA:",   graphData)
          
 
         setFormData({...Initial_State})
+        setDisplayGraph(true)
  
     })
     .catch(err=>{
@@ -260,21 +278,25 @@ function ButtonAlert(e){
 
             <DashHeader>
                         <h2>Dashboard</h2>
-                        <h6>Optional Customizations</h6>
+                        <h2>{Date1}</h2> 
                       
                     </DashHeader>
             
-     
+            
+                    <GlobalStats>
+                    <Title >
+                        <h5><span>Customize Covid19 Data and Graphs</span></h5>
+        <h6>{Time}</h6> 
+                    </Title>
+
+                    </GlobalStats>
+     {resStatus?(<>
+     <NotePad1>
         <h2>{resStatus}</h2>
-        
-        <h2>{formInputs.cases !==null? `Limit Search Starting at ${formInputs.cases} number of Cases`: "" }</h2>
-        <h2>{formInputs.newCases !==null? `Limit Search Starting at ${formInputs.newCases} number of New Cases`: "" }</h2>
-        <h2>{formInputs.death !==null? `Limit Search Starting at ${formInputs.death} number of Deaths`: "" }</h2>
-        <h2>{formInputs.transmissionType !== null ? `Search by Virus Transmission Type: ${transmissionMap[formInputs.transmissionType].name}`: ""} </h2>
-        <h2>{formInputs.region !== null ? `Search by Region: ${formInputs.region}`: ""} </h2>
-        <h2>{formInputs.reportDate !== null ? `Search by Report Date: ${formInputs.reportDate}`: ""} </h2>
+        </NotePad1></>): ""}
+   
            
-         <GlobalStats>
+         <FormWrap>
       
  
 
@@ -283,23 +305,29 @@ function ButtonAlert(e){
                 
 
          <CustomForm onSubmit={(e) => onSubmit1(e)}>
+
+           <h2>CUSTOMIZE DATA & GRAPH REPORT</h2>
  
+          
             <label>
             Limit Search to N Number of Confirmed Deaths (Number):
-        
-            <input type="text" name="death" value={formInputs.death} onChange={handleChange} />
             </label>
+      
+            <input type="text" name="death" value={formInputs.death} onChange={handleChange} />
+    
 
             <label>
             Limit Search to N Number of New Cases (Number):
+            </label>
           
             <input type="text" name="newCases" value={formInputs.newCases} onChange={handleChange} />
-            </label>
+        
 
            
 
             <label>
             Display on a specific method of virus transmission. (Number):
+            </label>
            <select name="transmissionType" value={formInputs.transmissionType} onChange={handleChange} >
            <option name="transmissionType" value=""></option>
            <option name="transmissionType" value="0">0</option>
@@ -312,13 +340,15 @@ function ButtonAlert(e){
     <option name= "transmissionType"  value="7" >7</option>
 
             </select>
-            <button onClick={e => ButtonAlert(e)}>Transmission Type Description</button>
+            <CustButton onClick={e => ButtonAlert(e)}>Display Transmission Types</CustButton>
           
             
-            </label>
+         
 
             <label>
             Enter a valid region:
+            </label>
+
            <select name="region" value={formInputs.region} onChange={handleChange} >
            <option name="region" value=""></option>
           <option  name="region" value="Western Pacific Region">Western Pacific Region</option>
@@ -329,41 +359,64 @@ function ButtonAlert(e){
     <option  name="region" value="African Region" >African Region</option>
    
             </select>
-            </label>
+     
 
             <label>
            Limit search to n number of total confirmed cases:
-          
+           </label>
             <input type="text" name="cases" value={formInputs.cases} onChange={handleChange} /> 
-             </label>
+      
 
             <label>
            Get data for a specific day (YYYY-MM-DD):
-        
+           </label>
             <input type="text" name="reportDate" value={formInputs.reportDate} onChange={handleChange} />
             
-            </label>
 
-        <input type="submit" value="Submit" />
+
+        <CustButton type="submit" value="Submit">Submit</CustButton> 
        
             </CustomForm>
 
-<GraphDiv>
+            {formInputs.displayNote?             
+(<><NotePad>
+  <h3>SELECTED OPTIONS: </h3>
+
+<h2>{formInputs.cases !==null? `Limit Search Starting at number of Cases: ${formInputs.cases}`: "" }</h2>
+        <h2>{formInputs.newCases !==null? `Limit Search Starting at number of New Cases: ${formInputs.newCases}`: "" }</h2>
+        <h2>{formInputs.death !==null? `Limit Search Starting at number of Deaths: ${formInputs.death}`: "" }</h2>
+        <h2>{formInputs.transmissionType !== null ? `Search by Virus Transmission Type: ${transmissionMap[formInputs.transmissionType].name}`: ""} </h2>
+        <h2>{formInputs.region !== null ? `Search by Region: ${formInputs.region}`: ""} </h2>
+        <h2>{formInputs.reportDate !== null ? `Search by Report Date: ${formInputs.reportDate}`: ""} </h2> 
+       
+
+</NotePad> </>) : (<><h2></h2></>) }
+
+
+</FormWrap>
+
+{/* {  !resStatus? (<> */}
+<GlobalStats>
+
+ 
             <CustomCases graphInfo={graphData} />
             
-            </GraphDiv>
+           
 
-<GraphDiv>
+ 
              
             <CustomNewCases graphInfo={graphData}/>
            
-            </GraphDiv>
-<GraphDiv>
+ 
             
             <CustomDeath graphInfo={graphData}/>
-            </GraphDiv>
+     
 
-            </GlobalStats>
+            </GlobalStats> 
+            
+            {/* </>) : ""} */}
+
+
             </CustomWrapper>
             </>
         )
@@ -373,19 +426,23 @@ function ButtonAlert(e){
 const WorldStatsBase= withRouter(WorldStats);
 export default WorldStatsBase;
 
+const CustButton = styled.button`
+width: 38%;
+
+`;
 
 const CustomWrapper = styled.div`
 width: 85%;
 height: 100%;
 padding: 1rem;
-background:#F6F4FC;
+background:white;
 font-family: 'Poppins', sans-serif;
 display: flex:
 flex-direction: column;
 align-items: center;
 justify-content: center;
 align-content: center;
-border: 1px solid purple;
+ 
 
 `;
 
@@ -393,7 +450,60 @@ const DashHeader = styled.div`
 display:flex;
 flex-direction: row;
 justify-content: space-between;
-border: 1px solid red;
+color: #5243C0; 
+h2{
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+`;
+
+const Title = styled.div`
+background-image: url(${CustomIcon});
+ background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+padding: 0 0 0 0;
+// display: flex;
+// flex-direction: column;
+// align-items: center;
+// justify-content: space around;
+ 
+width: 100%;
+height: 45vh;
+
+ h5{
+  color: white;
+    font-weight: normal;
+    font-size: 3rem;
+    margin-left: 30rem;
+    margin-top: 13rem;
+    margin-bottom: 0px;
+    span{
+    
+        font-weight: bold;
+    };
+};
+
+    h6{
+        color: white;
+        font-weight: normal;
+        font-size: 2.5rem;
+        margin-left: 40rem;
+        margin-top: 0px;
+        span{
+    
+            font-weight: bold;
+        };
+    };
+
+
+// border: 1px solid red;
+`;
+
+const FormWrap= styled.div`
+width: 100%;
+display: flex;
+flex-direction: row;
 `;
 
 const GlobalStats = styled.div`
@@ -408,7 +518,7 @@ margin-top: 30px;
 // margin: 30px 1.5rem 0 8.5rem;
 border-radius: 15px;
     color: #FE687D;
-border: 1.5px solid green;
+// border: 1.5px solid green;
 h1{
 
     font-weight: bold;
@@ -418,44 +528,95 @@ h1{
 `;
 
 //----divide map & form into 2 elements
+
 const CustomForm = styled.form`
-max-width: 40%;
+width: 50%;
+height: 50vh;
+margin: 0px 5rem 1rem 5rem;
+text-align: left;
+
 display: flex;
 flex-direction: column;
-justify-content: center;
-align-items: center;
-align-content: center;
-border: 1px solid blue;
-background: blue;
+justify-content: flex-start;
+
+ 
+// border: 1px solid blue;
+border-radius: 15px;
+background: white;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
  
 font-family:'Poppins', sans-serif;
 padding: .8rem;
-color:  #4D4CAC; 
-border-radius: 15px;
-background: white;
-// border: 1px solid  #636363;
-box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+color:  #5243C0;  
+
+h2{
+  font-weight: bold;
+}
+
+ input{
+   margin: .5rem;  
+  
+ }
+
+ label{
+   margin: .5rem;
+   font-weight: bold;
+ }
+
+ select{
+   margin: .5rem;
+ }
  
 
 `;
+const NotePad1 = styled.div`
+width: 95%;
+display: flex;
+flex-direction: row;
+justify-content: center;
+text-align: center;
+color:  #5243C0;  
+border-radius: 15px;
+background: white;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+margin: 5rem;
+h2{
+  font-size: 3rem;
+  font-weight: bold;
 
-const GraphDiv = styled.div`
-max-width: 100%;
+}
+`;
+const NotePad=styled.div`
+width: 40%;
+height: 50vh;
+margin: 0px 5rem 0xp 5rem;
+text-align: left;
+
 display: flex;
 flex-direction: column;
-justify-content: center;
-align-items: center;
-align-content: center;
+justify-content: flex-start;
+
  
-background: white;
- 
-font-family: 'Poppins', sans-serif;
-padding: .8rem;
-color:  #4D4CAC; 
+// border: 1px solid blue;
 border-radius: 15px;
+background: white;
 box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-// border: 1px solid  #636363;
+ 
+font-family:'Poppins', sans-serif;
+padding: .8rem;
+color:  #5243C0;  
+
+h3{
+  font-size: 1.5rem;
+  font-weight: normal
+}
+h2{
+  font-size: 1.2rem;
+  font-weight: bold
+}
+
 `;
+
 
 //-------------------------
 
@@ -472,7 +633,7 @@ justify-content: center;
 text-align:center;
 font-family: 'Poppins', sans-serif;
 padding: .8rem;
-color:  #4D4CAC; 
+color:  #5243C0;  
 border-radius: 15px;
 background: white;
 // border: 1px solid  #636363;
@@ -497,7 +658,7 @@ const MapDiv = styled.div`
 width: 100%
 font-family: 'Poppins', sans-serif;
 // padding: .8rem;
-color:  #4D4CAC; 
+color: #5243C0;  
 border-radius: 15px;
 background: white;
 // border: 1px solid  #636363;
@@ -538,7 +699,7 @@ align-items:center;
 text-align: center;
 font-family: 'Poppins', sans-serif;
 // padding: .8rem;
-color:  #4D4CAC; 
+color: #5243C0;  
 border-radius: 15px;
 background: white;
 
@@ -566,7 +727,7 @@ margin-top: 30px;
 width: 100%
 font-family:'Poppins', sans-serif;
 // padding: .8rem;
-color:  #4D4CAC; 
+color: #5243C0;  
 border-radius: 15px;
 background: white;
 
@@ -589,7 +750,7 @@ justify-content: space-between;
  
 font-family: 'Poppins', sans-serif;
 // padding: .8rem;
-color:  #4D4CAC; 
+color: #5243C0;  
 // border-radius: 15px;
 background: white;
 
@@ -634,3 +795,22 @@ h6{
 
 `; 
 
+const GraphDiv = styled.div`
+max-width: 100%;
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+align-content: center;
+ 
+background: white;
+ 
+font-family: 'Poppins', sans-serif;
+padding: .8rem;
+color:  #5243C0;  
+border-radius: 15px;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+margin: 1rem;
+// border: 1px solid  #636363;
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+`;

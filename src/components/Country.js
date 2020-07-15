@@ -595,7 +595,12 @@ class Country extends React.Component {
                   
                     <MapDiv>
                         <h6>Choose A Country On the Map to Overview</h6>
+                        {this.state.DisplayGraphs? (<><h6> <i  class="fa fa-long-arrow-down fa-2x " aria-hidden="true"
+                        style={{ color: " #5243C0" , margin: "5px 10px 2px 2px",}} 
+                        ></i> scroll to view results </h6> </>):( <h2></h2>)}
+
                         <ReactFC {...chartConfigs} {...this.state} onClick={this.dataplotclick}/>
+                     
                     </MapDiv>
 
 
@@ -715,11 +720,12 @@ PREDICTION PERCENTAGE */}
                                            ></i> ({this.state.Prediction.trendPercent}%) Decrease in Cases</h6>
                                         </ThirtyDayElementsInner>
                                        ):  (
-                                           <ThirtyDayElementsInner>      
+                                           <ThirtyDayElementsInner>    
+                                                       <h6>  
                                               <i class="fa fa-long-arrow-up fa-3x" aria-hidden="true"
-                                           style={{ color: "red",  margin: "10px 0 10px 0", border: "1px solid black" , padding:"5px,0"}} 
+                                          style={{ color: "red" , margin: "10px 10px  2px 2px", }} 
                                            ></i>
-                                       <h6>
+                               
                                             ({this.state.Prediction.trendPercent}%) Increase in Cases</h6>
                                        
                                        </ThirtyDayElementsInner>)}

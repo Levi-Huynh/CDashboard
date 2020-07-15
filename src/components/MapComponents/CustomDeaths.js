@@ -16,7 +16,7 @@ import update from 'immutability-helper';
           
             series:  [ {
               name: 'Deaths',
-              data: [1,2,3 ]
+              data: [ ]
             }
           ],
             options: {
@@ -24,8 +24,19 @@ import update from 'immutability-helper';
                 type: 'bar',
                 height: 350,
                 stacked: true,
-                
+                zoom: {
+                  enabled: true
+                }
               },
+              noData:{
+                text: "Customize Data & Graph Report",
+                style: {
+                  color: ' #5243C0; ',
+                  fontSize: '1rem',
+              
+                }
+              },
+              colors: '#FEDE91',
               plotOptions: {
                 bar: {
                   horizontal: true,
@@ -39,7 +50,7 @@ import update from 'immutability-helper';
                 text: ''
               },
               xaxis: {
-                categories: ["a", "b", "c"],
+                categories: [],
                 labels: {
                   formatter: function (val) {
                     return val 
@@ -50,12 +61,50 @@ import update from 'immutability-helper';
                 title: {
                   text: undefined
                 },
+                formatter: function(val) {
+                  val=val.toString()
+                  
+                if(val.length >6){
+                    let result = parseInt(val)
+                    var zero = 6;
+                    var rounded = Math.round(result/Math.pow(10, zero))
+                    return rounded.toString() + 'M'
+                }else if(val.length > 3 && val.length <= 6){
+                 let result = parseInt(val)
+                 var zero = 3;
+                 var rounded = Math.round(result/Math.pow(10, zero))
+                 return rounded.toString() + 'K'
+                } else if(val.length <= 3){
+                 let result = parseInt(val)
+                 var zero = 0;
+                 var rounded = Math.round(result/Math.pow(10, zero))
+                 return rounded.toString() 
+                }
+                 }
+               
+              
               },
               tooltip: {
                 y: {
-                  formatter: function (val) {
-                    return val 
-                  }
+                  formatter: function(val) {
+                    val=val.toString()
+                    
+                  if(val.length >6){
+                      let result = parseInt(val)
+                      var zero = 6;
+                      var rounded = Math.round(result/Math.pow(10, zero))
+                      return rounded.toString() + 'M'
+                  }else if(val.length > 3 && val.length <= 6){
+                   let result = parseInt(val)
+                   var zero = 3;
+                   var rounded = Math.round(result/Math.pow(10, zero))
+                   return rounded.toString() + 'K'
+                  } else if(val.length <= 3){
+                   let result = parseInt(val)
+                   var zero = 0;
+                   var rounded = Math.round(result/Math.pow(10, zero))
+                   return rounded.toString() 
+                  }}
                 }
               },
               fill: {
@@ -97,16 +146,48 @@ import update from 'immutability-helper';
         render() {
           console.log('GRAPHTEST CHART PROPS', this.props.graphInfo)
           return (
-            
-
-      <div id="chart">
-        <h1>DEATH CASES</h1>
+<>            
+{this.props.graphInfo.Cases.length > 0? (<>
+<GraphDiv>
+  <ChartWrap>
      
-  <Chart options={this.state.options} series={this.state.series} type="bar" height={700} width={1000} />
-</div>
-    
+        <h1>Death Totals</h1>
+     
+  <Chart options={this.state.options} series={this.state.series} type="bar"height={600} width={1800} />
+  </ChartWrap>
+  </GraphDiv>
+   </>
+  
+  ):""}
+
+    </>
           )
         }}
     
     
         export default CustomDeaths;
+
+
+  const ChartWrap=styled.div`
+  text-align: left;
+  `;
+
+  const GraphDiv = styled.div`
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+   
+  background: white;
+   
+  font-family: 'Poppins', sans-serif;
+  padding: .8rem;
+  color:  #5243C0;  
+  border-radius: 15px;
+  box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+  margin: 1rem;
+  // border: 1px solid  #636363;
+  box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+  `;

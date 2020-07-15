@@ -8,7 +8,6 @@ import { DASHBOARD } from "../routes/routes";
 
 import global from '../assets/global.png'
 import graphs from '../assets/graphs.png'
-import news from '../assets/news.jpg'
 import heart from '../assets/heart.png'
 import landing from '../assets/path5137.png'
 
@@ -95,6 +94,8 @@ height: 100vh;
 margin-bottom:0px;
 border: .3px solid white;
 `;
+
+
 
 const Wave = styled.div`
 border: 0.5px solid white;
