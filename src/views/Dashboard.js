@@ -132,7 +132,8 @@ const DashWrapper = styled.div`
 
 width: 15%;
 min-height: 100%;
- 
+min-height: 100vh;
+//  border: 1px solid red;
 padding: 1rem;
 border-radius: 15px;
 box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 

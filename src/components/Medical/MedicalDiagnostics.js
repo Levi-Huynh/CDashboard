@@ -6,6 +6,9 @@ import SymptomOutput from "./SymptomsOutput"
 import Test from "./TestOuput"
 import Symp from "./SymptomsOutput"
 
+//assets
+import medicalIcon from '../../assets/medCon.png'
+
 //input components
 import InputRange from "./InputRange"
 
@@ -22,6 +25,8 @@ import { updateLocale } from "moment";
 const MedicalDiagnostics1 = props => {
 
 
+    const [Time, setTime]= useState( new Date().toLocaleTimeString('en-US'))
+const [Date1, setDate]=useState( new Date().toDateString())
     // console.log("SYMPTOMSOUTPUT:", SymptomOutput)
 
 
@@ -80,6 +85,7 @@ const MedicalDiagnostics1 = props => {
     })
 
     
+    const [displaySymp, setDisplaySymp] = useState(false)
 
 
     function AcceptTerms(e){
@@ -417,7 +423,10 @@ updateFeature()
             ...axiosParam,
             [e.target.name]: val
         })
+
+        setDisplaySymp(true)
     
+
         //CLEAR SETRANGE???
         
     }
@@ -471,24 +480,63 @@ function toggleTermsModal(){
 
                 <DashHeader>
                     <h2>Dashboard</h2>
-
+                    <h2>{Date1}</h2>
                 </DashHeader>
                 <GlobalStats>
+                    <Title>
+                        <h5><span>Symptoms Pre Diagnostics Information</span></h5>
+                    <h6>{Time}</h6>
+                    </Title>
 
-                <h1>Medical Diagnostics</h1>
-                <button onClick={(e)=>toggleTermsModal(e)}>TERMS OF USE</button>
+              
+                <TermsButton onClick={(e)=>toggleTermsModal(e)}>View Terms of Use <i class="fa fa-user" aria-hidden="true" style={{margin: '0px 0rem 0px 1.5rem'}}></i></TermsButton>
            
-                    {termsAccept === false? <h6>PLEASE ACCEPT TERMS TO USE SYMPTOM CHECKER</h6>:
-                    <SessionFunctionality>
-                     <button onClick={(e)=>InitiateNewSession(e)}>INITIATE NEW SESSION</button>
-                    <button onClick={toggleModal}>ADD SYMPTOMS</button>
-                  
-                    <button onClick={(e)=>setPatientRec(prevState =>({...prevState, modal:!prevState.modal}))}>GET RECOMMENDATIONS FOR ADDITIONAL SYMPTOM QUESTIONS (PATIENT PROVIDED)</button>
-                    <button onClick={(e)=>setPhyscianRec(prevState =>({...prevState, modal:!prevState.modal}))}>GET RECOMMENDATIONS FOR ADDITIONAL SYMPTOM QUESTIONS (PHYSCIAN PROVIDED)</button>
-                    <button onClick={(e)=>setTestRec(prevState =>({...prevState, modal:!prevState.modal}))}>SUGGESTED TESTS BASED ON SYMPTOMS</button>
-                    <button onClick={(e)=>setAnalysis(prevState =>({...prevState, display:!prevState.display}))}>ANALYZE SYMPTOMS</button>
+                    {termsAccept === false? <h1>Please Accept Terms of Use to Access Symptoms Checker</h1>:
+                   <>
+                   <SympAndResults1>
+                   <SessionFunctionality>
+
+                        <SympAndResults1>
+                            <h4>INITIATE BRAND NEW SESSION</h4>
+                     <MainButton onClick={(e)=>InitiateNewSession(e)}> <i class="fa fa-mouse-pointer" aria-hidden="true" ></i></MainButton>
+                     </SympAndResults1>
+                   
+                     <SympAndResults1>
+                     <h4>ADD SYMPTOMS</h4>
+                    <MainButton onClick={toggleModal}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></MainButton>
+                    </SympAndResults1>
+
+                    <SympAndResults1>    
+                    <h4>SUGGESTION OF SYMPTOM QUESTIONS (PATIENT PROVIDED)</h4>                
+                    <MainButton onClick={(e)=>setPatientRec(prevState =>({...prevState, modal:!prevState.modal}))}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></MainButton>
+                    </SympAndResults1>
+                   
                     </SessionFunctionality>
+            
+
+
+          
+                <SessionFunctionality>
+
+                    <SympAndResults1> 
+                        <h4>SUGGESTION OF SYMPTOM QUESTIONS (PHYSCIAN PROVIDED)</h4>
+                    <MainButton onClick={(e)=>setPhyscianRec(prevState =>({...prevState, modal:!prevState.modal}))}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></MainButton>
+                    </SympAndResults1>
                     
+                    <SympAndResults1>
+                        <h4>SUGGESTED TESTS BASED ON SYMPTOMS</h4>
+                    <MainButton onClick={(e)=>setTestRec(prevState =>({...prevState, modal:!prevState.modal}))}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></MainButton>
+                    </SympAndResults1>
+                    
+
+                    <SympAndResults1>
+                        <h4>ANALYZE SYMPTOMS</h4>
+                    <MainButton onClick={(e)=>setAnalysis(prevState =>({...prevState, display:!prevState.display}))}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></MainButton>
+       </SympAndResults1>
+                   
+                    </SessionFunctionality>
+                    </SympAndResults1>
+                   </> 
                     }
 
                     {/* //list should be about 45% & stay to left of modal */}
@@ -496,14 +544,16 @@ function toggleTermsModal(){
                     <StyledTermsModal
                     isOpen={termsModal}>
                      <h1>Accept The Terms</h1>
-                     <h6>I have read, understood and I accept and agree to comply with the <a style={{display: "table-cell"}} href = "https://endlessmedical.com/TermsOfUse/" target = "_blank" 
-rel = "noopener noreferrer">Terms of Use.</a> </h6>
+                     <h4>I have read, understood and I accept and agree to comply with the <a style={{display: "table-cell"}} href = "https://endlessmedical.com/TermsOfUse/" target = "_blank" 
+rel = "noopener noreferrer">Terms of Use.</a> </h4>
                    
-             
-                   <button onClick={(e)=>AcceptTerms(e)}>Accept</button>
+             <SympAndResults>
+                   <TermsModalButton onClick={(e)=>AcceptTerms(e)}>Accept</TermsModalButton>
 
                           {/* should close terms modal keep state false for terms*/}
-                   <button onClick={(e)=>toggleTermsModal(e)}>Decline</button>
+                   <TermsModalButton onClick={(e)=>toggleTermsModal(e)}>Decline</TermsModalButton>
+
+                   </SympAndResults>
                    
                     </StyledTermsModal>
 
@@ -512,19 +562,19 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                     <StyledRecsModal isOpen={testRec.modal}>
                              
                     {/* RECOMMENDED TESTS  MODAL */}
-                        <button onClick={(e)=>setTestRec(prevState =>({...prevState, modal:!prevState.modal}))}>Close</button>
+                        <MainButton onClick={(e)=>setTestRec(prevState =>({...prevState, modal:!prevState.modal}))}>Close</MainButton>
                
                  {
                       testRec.data && testRec.data.length > 0? ( <>
-                       <h6> Recommended Tests to increase diagnosis accuracies:
-            (Recommended Tests with percentages less than 50% may not be likely recommended)
-                       </h6>
+                       <h4> Recommended Tests to increase diagnosis accuracies:
+            (Recommended Tests with percentages less than 50% may likely not be recommended)
+                       </h4>
                        
-                       {testRec.data.map(data=>{
+                       {testRec.data.slice(0,6).map(data=>{
                            return <><p>{Object.keys(data)[0]}:</p> <p>{Object.values(data)[0]}%</p>
                            </>
                        })}
-                     </>): <h5>No Suggested Tests Available</h5>
+                     </>): <h1>No Suggested Tests Available</h1>
                  }
 
                    
@@ -533,19 +583,19 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                     <StyledRecsModal isOpen={patientRec.modal}>
                              
                              {/* PATIENT TESTS  MODAL */}
-                                 <button onClick={(e)=>setPatientRec(prevState =>({...prevState, modal:!prevState.modal}))}>Close</button>
+                                 <MainButton onClick={(e)=>setPatientRec(prevState =>({...prevState, modal:!prevState.modal}))}>Close</MainButton>
                         
                           {
                                patientRec.data && patientRec.data.length > 0? ( <>
-                                <h6> Recommended Symptom questions (patient provided) to increase diagnosis accuracies:
+                                <h4> Recommended Symptom questions (patient provided) to increase diagnosis accuracies:
                      (Recommended Tests with percentages less than 50% likely not recommended)
-                                </h6>
+                                </h4>
                                 
                                 {patientRec.data.map(data=>{
                                     return <><p>{Object.keys(data)[0]}:</p> <p>{Object.values(data)[0]}%</p>
                                     </>
                                 })}
-                              </>): <h5>No Recommended Symptom Questions Available</h5>
+                              </>): <h1>No Recommended Symptom Questions Available</h1>
                           }
          
                             
@@ -555,19 +605,19 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                              <StyledRecsModal isOpen={physcianRec.modal}>
                              
                              {/* DR TESTS  MODAL */}
-                                 <button onClick={(e)=>setPhyscianRec(prevState =>({...prevState, modal:!prevState.modal}))}>Close</button>
+                                 <MainButton onClick={(e)=>setPhyscianRec(prevState =>({...prevState, modal:!prevState.modal}))}>Close</MainButton>
                         
                           {
                                physcianRec.data && physcianRec.data.length > 0? ( <>
-                                <h6> Recommended Symptom questions (physcian provided) to increase diagnosis accuracies:
+                                <h4> Recommended Symptom questions (physcian provided) to increase diagnosis accuracies:
                      (Recommended Tests with percentages less than 50% may likely not recommended)
-                                </h6>
+                                </h4>
                                 
                                 { physcianRec.data.map(data=>{
                                     return <><p>{Object.keys(data)[0]}:</p> <p>{Object.values(data)[0]}%</p>
                                     </>
                                 })}
-                              </>): <h5>No Recommended Symptom Questions Available</h5>
+                              </>): <h1>No Recommended Symptom Questions Available</h1>
                           }
          
                             
@@ -578,6 +628,8 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                     <SymptomListWrapper>
 {/* 
                     SET MAP TO SHOW THIS HEADER INSIDE OPTIONSLIST MAP? */}
+                    {displaySymp? <> 
+                    
                     <h3>Selected Symptoms</h3>
 
                         { 
@@ -596,9 +648,9 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                                 </>
                             }
                         })
-                        }
+                        } </>: <></>
 
-
+                    }
 
                     </SymptomListWrapper>
 
@@ -611,7 +663,7 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                         })}
 
 
-                    </SymptomListWrapper>:<SymptomListWrapper><h3>Possible Diagnosis</h3></SymptomListWrapper>}
+                    </SymptomListWrapper>:<SymptomListWrapper><h3></h3></SymptomListWrapper>}
 
                     </SympAndResults>
 
@@ -620,61 +672,62 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
                     <StyledModal
                         isOpen={modalIsOpen}
                     >
-
+                        <SympAndResults>
                         <h2>ADD SYMPTOMS</h2>
-                        <button onClick={toggleModal}>Close</button>
+                        <MainButton onClick={toggleModal}>Close <i class="fa fa-times" aria-hidden="true" style={{margin:'0px 0rem 0px .7rem'}}></i></MainButton>
+                        </SympAndResults>
 
                         {symptomChoosen === null ?
-
-                            (<SymptomForm onSubmit={(e) => onSubmit1(e)} >
-
+   (<SymptomForm onSubmit={(e) => onSubmit1(e)} >
 
 
 
-                                <input
-                                    onChange={handleChange}
-                                    placeholder="select symptom"
-                                    list="symptlist"
 
+   <SymptomInput
+       onChange={handleChange}
+       placeholder="select symptom"
+       list="symptlist"/>
 
-                                />
-                                <datalist id="symptlist">
-                                    {Symp.map((data, key) => {
-                                        return <option key={key} value={data.text} name={data.name} />
-                                    })}
+   <datalist id="symptlist">
+       {Symp.map((data, key) => {
+           return <option key={key} value={data.text} name={data.name} />
+       })}
 
                                 </datalist>
-                            </SymptomForm>) :
+   
+</SymptomForm>)
+                     
+                           :
                             (<>
                                 {/* {console.log("CHECK SYMPTOM STATE:", symptomChoosen)} */}
 
                                 {/* WORK ON SYMPTOM OPTIONS FOR DATALIST 
 -CLEARING AFTER CLOSE/SUBMIT SYMPTOM */}
 
-
-                                <h1>SYMPTOM OPTIONS FORM</h1>
+{/* 
+                                <h3>SYMPTOM OPTIONS FORM</h3> */}
                                 {!Symp[symptomMap[symptomChoosen]] ? <h1>Symptom Choosen still loading...</h1>
 
                                     : ("choices" in Symp[symptomMap[symptomChoosen]] ? <>
 
                     <SymptomOptionsForm onSubmit={(e) => onSubmitOption(e)}>
 
-                                        <h2>CHOOSE SYMPTOM OPTIONS FOR {Symp[symptomMap[symptomChoosen]].name} </h2>
+                                        <h4>CHOOSE SYMPTOM OPTIONS FOR {Symp[symptomMap[symptomChoosen]].name} </h4>
 
                                        
 
-                                        <select  onChange={(e)=>handleChangeOption(e)}  name={Symp[symptomMap[symptomChoosen]].name} value={axiosParam.symptomChoosen}>
+                                        <SympSelect  onChange={(e)=>handleChangeOption(e)}  name={Symp[symptomMap[symptomChoosen]].name} value={axiosParam.symptomChoosen}>
                                         <option value="" selected>select options</option>
                                             {Symp[symptomMap[symptomChoosen]].choices.map((data, key) => {
                                              
                                             return <option value={data.text} name={Symp[symptomMap[symptomChoosen]].name} key={key}>{data.text}</option>
-                                        })} </select> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button>
+                                        })} </SympSelect> <MainButton onSubmit={(e) => onSubmitOption(e)}>Add Symptom  </MainButton>
                                         </SymptomOptionsForm>
                                         </> : <>  
                                         <SymptomOptionsForm onSubmit={(e) => onSubmitOption(e)}>
-                                         <h2>CHOOSE SYMPTOM OPTIONS FOR {Symp[symptomMap[symptomChoosen]].name} </h2> <input onChange={(e)=>handleChangeOption(e)}  type="range"
+                                         <h2>CHOOSE SYMPTOM OPTIONS FOR {Symp[symptomMap[symptomChoosen]].name} </h2> <SymptomInput onChange={(e)=>handleChangeOption(e)}  type="range"
                                             name={Symp[symptomMap[symptomChoosen]].name} min={Symp[symptomMap[symptomChoosen]].min} max={Symp[symptomMap[symptomChoosen]].max} />
-                                            <input  id="textInput"  name={Symp[symptomMap[symptomChoosen]].name} type="number" onChange={(e)=>handleChangeOption(e)} value={rangeText!==0?rangeText:Symp[symptomMap[symptomChoosen]].default} /> <button onSubmit={(e) => onSubmitOption(e)}>Add Symptom</button>
+                                            <SymptomInput id="textInput"  name={Symp[symptomMap[symptomChoosen]].name} type="number" onChange={(e)=>handleChangeOption(e)} value={rangeText!==0?rangeText:Symp[symptomMap[symptomChoosen]].default} /> <MainButton onSubmit={(e) => onSubmitOption(e)}>Add Symptom</MainButton>
                                        
                                             </SymptomOptionsForm>
                                         </>)}
@@ -699,9 +752,65 @@ rel = "noopener noreferrer">Terms of Use.</a> </h6>
 const MedicalDiagnostics = withRouter(MedicalDiagnostics1);
 export default MedicalDiagnostics;
 
+const TermsButton = styled.button`
+text-decoration: none;
+align-items: center;
+text-decoration: none;
+font-family: 'Poppins', sans-serif;
+border: 1px solid #FFC4D6;
+color: white;
+border-radius:10px;
+background: #FFC4D6;
+padding: 0 10px 0 10px;
+border:1px solid  #FFC4D6;
+
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+
+font-size: 1.1rem;
+// border-radius: 10px;
+// border-left: 1px solid #FE687D;
+font-weight: bold;
+width: 30%;
+height: 50px;
+padding: 10px;
+ margin-bottom: 70px;
+ &:hover {
+   
+    color:#FFC4D6;
+    border: 1px solid #FFC4D6;
+  }
+`;
+
+const SympAndResults = styled.div` 
+width: 100%;
+display: flex;
+flex-direction: row; 
+ justify-content: space-around; 
+ color:#5243C0;
+ padding: 3rem;
+`;
+const SympAndResults1 = styled(SympAndResults)` 
+width: 100%;
+display: flex;
+flex-direction: row; 
+ justify-content: space-between; 
+ color:#5243C0;
+ text-align:left;
+ padding: 0 2rem 0 .7rem;
+//  border: 1px solid black;
+ margin-right: 2rem;
+`;
+
+
+
+const MainButton = styled(TermsButton)`
+width: 20%
+`;
+
 const SessionFunctionality = styled.div`
 display: flex;
 flex-direction: column; 
+
 `;
 
 const SymptomForm = styled.form`
@@ -710,6 +819,65 @@ height: 100%;
 display: flex;
 flex-direction: column;
 align-items: center; 
+color:#5243C0;
+`;
+
+const SymptomInput = styled.input`
+width: 60%;
+height: 10%;
+color:#5243C0;
+background: #FFF3F3;
+border-radius: 15px;
+border: 1px solid  #FFF3F3;
+margin-bottom: 50px;
+font-size: 1.5rem;
+::placeholder{
+    text-align center;
+    margin: 0px 2rem 0px 2rem;
+    font-size: 1.4rem;
+    color:#5243C0;
+}
+
+option{
+    width: 60%;
+    height: 10%;
+color:#5243C0;
+background: #FFF3F3;
+border-radius: 15px;
+border: 1px solid  #FFF3F3;
+font-size: 1.5rem;
+}
+
+`;
+
+
+
+const SympSelect = styled.select`
+width: 60%;
+height: 10%;
+color:#5243C0;
+background: #FFF3F3;
+border-radius: 15px;
+border: 1px solid  #FFF3F3;
+margin-bottom: 50px;
+font-size: 1.5rem;
+::placeholder{
+    text-align center;
+    margin: 0px 2rem 0px 2rem;
+    font-size: 1.4rem;
+    color:#5243C0;
+    max-width: 40%;
+}
+option{
+    width: 60%
+    height: 20%;
+color:#5243C0;
+background: #FFF3F3;
+border-radius: 15px;
+border: 1px solid  #FFF3F3;
+font-size: 1.5rem;
+ 
+}
 `;
 
 const SymptomOptionsForm = styled(SymptomForm)`
@@ -718,6 +886,7 @@ height: 100%;
 display: flex;
 flex-direction: column;
 align-items: center; 
+color:#5243C0;
 `;
 
 const StyledModal = Modal.styled`
@@ -725,11 +894,14 @@ const StyledModal = Modal.styled`
   height: 80%;
   display: flex;
   flex-direction: column;
-  margin-left: 50%;
+
   background-color: white;
   opacity: ${props => props.opacity};
   transition: opacity ease 500ms;
+
+  box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
 `;
+
 
 const StyledTermsModal = Modal.styled`
 width: 70%;
@@ -739,65 +911,165 @@ flex-direction: column;
 background-color: white;
 opacity: ${props => props.opacity};
 transition: opacity ease 500ms;
-
+justify-content: center;
+text-align: center;
+align-items: center;
+// margin: 30px 1.5rem 0 8.5rem;
+border-radius: 15px;
+    color:  #5243C0;
+    box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+ padding: 3rem;
+h1{
+    margin-top: 20px;
+    font-weight: bold;
+    font-family:'Poppins', sans-serif;
+}
+h4{
+    font-size: 1.3rem;
+    margin-bottom: 120px;
+}
 `;
 
+
 const StyledRecsModal = Modal.styled`
-width: 70%;
-height: 100%;
+width: 60%;
+min-height: 100%;
 display: flex;
 flex-direction: column;
 background-color: white;
 opacity: ${props => props.opacity};
 transition: opacity ease 500ms;
+justify-content: center;
+text-align: left;
+align-items: center;
+border-radius: 15px;
+    color:  #5243C0;
+    box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+ padding: 3rem;
+h1{
+  
+    font-weight: normal;
+    font-family:'Poppins', sans-serif;
+    margin-bottom: 10px;
+}
+p{
+    font-size: 1.4rem;
+    font-weight: normal;
+}
+h4{
+    font-size: 1.6rem;
+    margin-bottom: 120px;
+}
+`;
+
+
+const TermsModalButton = styled(TermsButton)`
+width: 20%
+margin: 160px 7rem 0px 7rem;
 
 `;
+
+
+
+
+
+
+
+
+
 
 const CustomWrapper = styled.div`
 width: 85%;
 height: 100%;
 padding: 1rem;
-background:#F6F4FC;
+background:white;
 font-family:'Poppins', sans-serif;
 display: flex:
 flex-direction: column;
 align-items: center;
 justify-content: center;
 align-content: center;
-border: 1px solid purple;
+margin-left: .8rem;
+// border: 1px solid blue;
 `;
 
 const DashHeader = styled.div`
 display:flex;
 flex-direction: row;
 justify-content: space-between;
-border: 1px solid red;
+color: #5243C0; 
+h2{
+    margin-left: 2rem;
+    margin-right: 2rem;
+
+}
+
+}
 `;
+
+const Title = styled.div`
+background-image: url(${medicalIcon});
+ background-size: cover;
+background-position: center;
+background-repeat: no-repeat;
+padding: 0 0 0 0;
+// display: flex;
+// flex-direction: column;
+// align-items: center;
+// justify-content: space around;
+ 
+width: 100%;
+height: 45vh;
+
+ h5{
+  color: white;
+    font-weight: normal;
+    font-size: 3rem;
+    margin-left: 30rem;
+    margin-top: 13rem;
+    margin-bottom: 0px;
+    span{
+    
+        font-weight: bold;
+    };
+};
+
+    h6{
+        color: white;
+        font-weight: normal;
+        font-size: 2.5rem;
+        margin-left: 40rem;
+        margin-top: 0px;
+        span{
+    
+            font-weight: bold;
+        };
+    };
+
+
+// border: 1px solid red;
+`;
+
 
 const GlobalStats = styled.div`
  
 width: 100%;
 display: flex;
 flex-direction: column; 
-// justify-content: center;
-// text-align: center;
+justify-content: center;
+text-align: center;
+align-items: center;
 margin-top: 30px;
 // margin: 30px 1.5rem 0 8.5rem;
 border-radius: 15px;
-    color: #FE687D;
-border: 1.5px solid green;
+    color:  #5243C0;
+// border: 1.5px solid green;
 h1{
     font-weight: bold;
     font-family:'Poppins', sans-serif;
 }
 `;
 
-const SympAndResults = styled.div` 
-width: 100%;
-display: flex;
-flex-direction: row; 
-justify-content: space-between;
-`;
 
 const SymptomListWrapper = styled.div`
 width: 40%;
@@ -805,4 +1077,3 @@ display: flex;
 flex-direction: column; 
 text-align: left
 `;
-

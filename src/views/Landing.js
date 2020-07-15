@@ -165,7 +165,7 @@ const GoButton = styled(Link)`
   border-radius: 0 10px 10px 0;
   background: #FFC4D6;
   border: 1px solid #FFC4D6;
-  border-left: 1px solid c;
+ 
   padding: 0 10px 0 10px;
   &:hover {
     background: white;
@@ -177,7 +177,7 @@ const GoButton = styled(Link)`
 const ExploreButton = styled(GoButton)`
   font-size: 1.1rem;
   border-radius: 10px;
-  border-left: 1px solid #FE687D;
+  // border-left: 1px solid #FE687D;
   font-weight: bold;
   width: 125px;
   padding: 10px;
