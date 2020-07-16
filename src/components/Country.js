@@ -9,7 +9,7 @@ import ReactApexChart from './MapComponents/Global30Day'
 
 import CountryIcon from '../assets/customIcon.png'
 
- 
+import worldwithcountries from  'fusioncharts/maps/fusioncharts.worldwithcountries';
 import axios from 'axios';
 
  
@@ -32,7 +32,7 @@ import Chart from 'react-apexcharts'
  
 
 // Adding the chart and theme as dependency to the core fusionchart
-ReactFC.fcRoot(FusionCharts, FusionMaps, World, FusionTheme);
+ReactFC.fcRoot(FusionCharts, FusionMaps, World, FusionTheme,WorldWithCountrie);
 
 
 const dataset = []
