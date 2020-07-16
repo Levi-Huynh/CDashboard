@@ -1,5 +1,5 @@
 [build]
-base = "CDASHBOARD/" 
+base = "/" 
 publish="/build"
 command = "yarn build"
 
