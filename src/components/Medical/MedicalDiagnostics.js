@@ -484,7 +484,7 @@ function toggleTermsModal(){
                 </DashHeader>
                 <GlobalStats>
                     <Title>
-                        <h5><span>Symptoms Pre Diagnostics Information</span></h5>
+                        <h5><span>Symptoms Checker</span></h5>
                     <h6>{Time}</h6>
                     </Title>
 

@@ -86,6 +86,11 @@ const graph_Initial_State={
        })
     }
 
+    function handleClear(e){
+      e.preventDefault()
+      setFormData({...Initial_State})
+    }
+
 
 const transmissionMap={
   0:{
@@ -329,7 +334,6 @@ function ButtonAlert(e){
             Display on a specific method of virus transmission. (Number):
             </label>
            <select name="transmissionType" value={formInputs.transmissionType} onChange={handleChange} >
-           <option name="transmissionType" value=""></option>
            <option name="transmissionType" value="0">0</option>
           <option name="transmissionType" value="1">1</option>
     <option name= "transmissionType" value="2" >2</option>
@@ -340,7 +344,7 @@ function ButtonAlert(e){
     <option name= "transmissionType"  value="7" >7</option>
 
             </select>
-            <CustButton onClick={e => ButtonAlert(e)}>Display Transmission Types</CustButton>
+            <InfoButton onClick={e => ButtonAlert(e)}>Display Transmission Types</InfoButton>
           
             
          
@@ -374,7 +378,7 @@ function ButtonAlert(e){
             
 
 
-        <CustButton type="submit" value="Submit">Submit</CustButton> 
+        <MainButton type="submit" value="Submit">Submit</MainButton> 
        
             </CustomForm>
 
@@ -425,6 +429,40 @@ function ButtonAlert(e){
 
 const WorldStatsBase= withRouter(WorldStats);
 export default WorldStatsBase;
+
+
+const MainButton = styled.button`
+text-decoration: none;
+align-items: center;
+text-decoration: none;
+font-family: 'Poppins', sans-serif;
+ 
+color: white;
+border-radius:10px;
+background: #FFC4D6;
+padding: 1rem;
+border:1px solid  #FFC4D6;
+
+box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
+
+font-size: 1.1rem;
+ 
+ 
+width: 20%;
+height: 50px;
+ 
+ margin: 1rem;
+ &:hover {
+   
+    color:#FFC4D6;
+    border: 1px solid #FFC4D6;
+  }
+`;
+
+const InfoButton =styled(MainButton)`
+width: 30%;
+height: 15%;
+`;
 
 const CustButton = styled.button`
 width: 38%;
@@ -531,7 +569,7 @@ h1{
 
 const CustomForm = styled.form`
 width: 50%;
-height: 50vh;
+height: 60%;
 margin: 0px 5rem 1rem 5rem;
 text-align: left;
 

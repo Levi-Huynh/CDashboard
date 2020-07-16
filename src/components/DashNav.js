@@ -5,6 +5,28 @@ import { withRouter, Link } from "react-router-dom";
 import Navigation from "../components/Navigation/index";
 import { Box, Button, Heading } from "grommet";
 
+import * as routes from "../routes/routes";
+import {LANDING} from "../routes/routes";
+
+const GoButton1 = styled(Link)`
+  display: flex
+  align-items: center;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  color: #5243C0;
+ 
+  border-radius: 0 10px 10px 0;
+  background: #FFC4D6;
+  border: 1px solid #FFC4D6;
+ 
+  padding: 0 10px 0 10px;
+  &:hover {
+    background: white;
+    color:#FFC4D6;
+  }
+`;
+
 const DashNav = props => {
 
 
@@ -19,12 +41,12 @@ const DashNav = props => {
               class="fas fa-heartbeat"
               style={{ color: "white", margin: "0 5px 0 20px" }}
             ></i>
-            <Button
-
-              label="iSymptom"
+            <GoButton1
+to={routes.LANDING}
+              label="covid19r"
               color="#5243C0"
               plain="true"
-            />
+            >covid19r</GoButton1>
           </Heading>
         </Box>
       </LogoContainer>

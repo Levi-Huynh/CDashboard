@@ -11,6 +11,10 @@ import Global from "../components/Global"
 import WorldStats from "../components/WorldStats"
 import MedicalDiagnostics from "../components/Medical/MedicalDiagnostics"
 
+
+import {LANDING} from "../routes/routes";
+
+
 const Dashboard = props => {
 
  const [dashOption, setDash] = useState([
@@ -55,29 +59,29 @@ const Dashboard = props => {
         <Box direction="row" gap="small">
           <Heading level="3" margin-bottom="5">
             <i
-              class="fas fa-heartbeat"
-              style={{ color: "#FFC4D6", margin: "0 5px 0 20px" }}
+              class="fas fa-heartbeat fa-3x"
+              style={{ color: "#FFC4D6", margin: "0 5px 0 4rem" }}
             ></i>
-            <Button
-
-label="iSymptom"
+            <GoButton1
+to={routes.LANDING}
+label="covid19r"
 color="#5243C0"
 plain="true"
-            />
+            >covid19r</GoButton1>
           </Heading>
         </Box>
       </LogoContainer>
       <NavTitle key={1}  onClick={()=>handleDash("MedicalDiagnostics")}>
-     AI Powered Pre-Diagnostics 
+      <i class="fa fa-stethoscope fa-2x" aria-hidden="true" style={{margin:'0 .7rem 0 0', color:'#FFC4D6'}}></i> AI Symptoms Checker
 </NavTitle>
       <NavTitle key={2} onClick={()=>handleDash("CountryStat")}>
-        Statistics By Country
+      <i class="fa fa-line-chart fa-2x" aria-hidden="true" style={{margin:'0 .7rem 0 0', color:'#FFC4D6'}}></i> AI Trends Predictions
 </NavTitle  >
       <NavTitle key={3} onClick={()=>handleDash("CustomizedStat")}>
-        Customized Statistics Search 
+      <i class="fa fa-bar-chart fa-2x" aria-hidden="true" style={{margin:'0 .7rem 0 0', color:'#FFC4D6'}}></i> Customized Reports
 </NavTitle >
 <NavTitle key={4} onClick={()=>handleDash("Global")}>
-        Global Overview
+<i class="fa fa-globe fa-2x" aria-hidden="true" style={{margin:'0 .7rem 0 0', color:'#FFC4D6'}}></i>  Global Overview
 </NavTitle  >
      
     
@@ -137,7 +141,8 @@ min-height: 100vh;
 padding: 1rem;
 border-radius: 15px;
 box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-background: white;
+background: #FFF1F1;
+border: 1px solid #FFF1F1;
 
 `;
 
@@ -154,6 +159,25 @@ const GoButton = styled.div`
   border-left: none;
   padding: 0 10px 0 10px;
 
+`;
+
+const GoButton1 = styled(Link)`
+  display: flex
+  align-items: center;
+  text-decoration: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 2rem;
+  color: #5243C0;
+ 
+  border-radius: 0 10px 10px 0;
+ 
+ 
+ 
+  padding: 0 10px 0 10px;
+  &:hover {
+    background: white;
+    color:#FFC4D6;
+  }
 `;
 
 

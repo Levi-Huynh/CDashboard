@@ -10,6 +10,7 @@ import global from '../assets/global.png'
 import graphs from '../assets/graphs.png'
 import heart from '../assets/heart.png'
 import landing from '../assets/path5137.png'
+import country from '../assets/countryStat.png'
 
 import feat1 from '../assets/landMain.png'
 
@@ -38,7 +39,7 @@ const Landing = props => {
     <Navigation />
     <LandingTitle>
       <h2>
-       Patienti <span>{currentActivity}</span>
+      covid19r <span style={{margin: '0 0 0 2rem'}}>{currentActivity}</span>
         </h2>
         </LandingTitle>
     
@@ -55,11 +56,11 @@ const Landing = props => {
   </Featurette1>
  
   <InfoBoxTop>
-          <h3>Patient Dashboard </h3>
-          <p>Access AI powered recommendations for the next best patient path.  Machine learning models build the recommendations based on patient provided inputs to increase accuracy of pre-diagnostic information, and
-            and recommendations.  View the latest global stats on the Covid19 pandemic. Customize case analyses by country.  
+          <h3>Dashboard </h3>
+          <p>Access AI powered recommendations for the next best patient path for a variety of medical issues.  Machine learning models build the recommendations based on patient provided inputs to increase accuracy and unbiasness of pre-diagnostics information, and
+             recommendations including Covid19.  View the latest global stats on the Covid19 pandemic. View AI predicted Covid19 trends and customize case reports by country.  
           </p>
-          <ExploreButton to={routes.DASHBOARD}  >Explore <i class="fa fa-mouse-pointer" aria-hidden="true" style={{margin:'0 0 0 .8rem'}}></i></ExploreButton>
+          <ExploreButton to={routes.DASHBOARD}  > <i class="fa fa-mouse-pointer " aria-hidden="true" style={{margin:'0 1rem 0 0'}}></i>Explore</ExploreButton>
         </InfoBoxTop>
 </FeaturetteWrapper>
 
@@ -67,18 +68,23 @@ const Landing = props => {
       
         <FeatureBox>
           <FeaturePic src={heart} />
-          <h3>AI Powered Informational Pre-Diagnostics</h3>
-          <p>Update features and symptom related information to get recommendations for the next best path towards wellness.</p>
+          <h3>AI Powered Symtoms Checker</h3>
+          <p>Update features and symptoms related information to get recommendations for the next best path towards wellness.</p>
         </FeatureBox>
         <FeatureBox>
           <FeaturePic src={global} />
-          <h3>Covid19 Global Pandemic</h3>
+          <h3>Live Covid19 Global Numbers</h3>
           <p>View live global stats of the current Covid19 pandemic</p>
         </FeatureBox>
         <FeatureBox>
+          <FeaturePic src={country} />
+          <h3>Covid19 Trends & Predictions </h3>
+          <p>View 30 day case trends and AI powered trend predictions by country</p>
+        </FeatureBox>
+        <FeatureBox>
           <FeaturePic src={graphs} />
-          <h3>Customize Covid19 Analyses</h3>
-          <p>Filter Covid19 stats by case types, transmission types, region, report dates to create customized analyses by country</p>
+          <h3>Customize Covid19 Reports</h3>
+          <p>Filter Covid19 stats by case types, transmission types, region, report dates & more to create customized reports</p>
         </FeatureBox>
       </FeaturesInfo>
     </LandingPageContainer>
@@ -101,9 +107,11 @@ const Wave = styled.div`
 border: 0.5px solid white;
 margin-top: 0px;
 background:  #FFC4D6;
+
 // display: block;
 svg{
   display: block;
+
 }
 `
 
@@ -179,9 +187,9 @@ const ExploreButton = styled(GoButton)`
   border-radius: 10px;
   // border-left: 1px solid #FE687D;
   font-weight: bold;
-  width: 30%;
+  width: 15%;
   padding: 15px;
-   
+  box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
   
 `;
 
