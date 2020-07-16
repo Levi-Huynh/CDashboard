@@ -18,7 +18,7 @@ const Landing = props => {
   const [currentActivity, setCurrentActivity] = useState("AI Powered Symptom Checker");
   const [number, setNumber] = useState(1);
 
-  const activity = ["AI Powered Symptom Checker", "Unbiased Symptom Analyses", "Physcian Evaluated Results", "Analyses Without Patient Private Data", "Suggestions on Patient Next Best Steps", "Categorized diagnoses","Track Global Covid19 Case Numbers", "Customize Covid19 Data By Country"];
+  const activity = ["AI Powered Symptom Checker", "Unbiased Symptom Analyses","Suggestions on Patient Next Best Steps","View Global Covid19 Case Statistics", "Customize Covid19 Reports", "AI Powered Trend Predictions"];
 
   function updateText() {
     setCurrentActivity(activity[number]);
@@ -39,7 +39,7 @@ const Landing = props => {
     <Navigation />
     <LandingTitle>
       <h2>
-      covid19r <span style={{margin: '0 0 0 2rem'}}>{currentActivity}</span>
+      covid19r <span style={{margin: '0 0 0 1rem'}}>{currentActivity}</span>
         </h2>
         </LandingTitle>
     
@@ -60,7 +60,7 @@ const Landing = props => {
           <p>Access AI powered recommendations for the next best patient path for a variety of medical issues.  Machine learning models build the recommendations based on patient provided inputs to increase accuracy and unbiasness of pre-diagnostics information, and
              recommendations including Covid19.  View the latest global stats on the Covid19 pandemic. View AI predicted Covid19 trends and customize case reports by country.  
           </p>
-          <ExploreButton to={routes.DASHBOARD}  > <i class="fa fa-mouse-pointer " aria-hidden="true" style={{margin:'0 1rem 0 0'}}></i>Explore</ExploreButton>
+          <ExploreButton to={routes.DASHBOARD}  > <i class="fa fa-mouse-pointer " aria-hidden="true" style={{margin:'0 .5rem 0 1rem', width:'5rem'}}></i>Explore</ExploreButton>
         </InfoBoxTop>
 </FeaturetteWrapper>
 
@@ -183,14 +183,18 @@ const GoButton = styled(Link)`
 
 
 const ExploreButton = styled(GoButton)`
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   border-radius: 10px;
   // border-left: 1px solid #FE687D;
   font-weight: bold;
-  width: 15%;
+  width: 20%;
+
   padding: 15px;
+  pading-right: 40px;
   box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
-  
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 `;
 
 const FeaturetteWrapper = styled.div`
