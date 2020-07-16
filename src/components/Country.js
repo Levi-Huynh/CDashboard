@@ -616,7 +616,7 @@ class Country extends React.Component {
 
                     <ThirtyDaySty>
                          
-                    <Chart options={this.state.options30} series={this.state.series30} type="line" height={400} width={1400} />
+                    <Chart options={this.state.options30} series={this.state.series30} type="line" height={400} width={1000} />
                     
                     {/* container with column for each change total */}
                     
