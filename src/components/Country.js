@@ -20,7 +20,7 @@ import Maps from 'fusioncharts/fusioncharts.maps';
 import WorldWithCountries from 'fusioncharts/maps/fusioncharts.worldwithcountries';
 import ReactFCWorldWithCountries  from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
-import World from 'fusioncharts/maps/fusioncharts.world';
+import * as World from 'fusioncharts/maps/fusioncharts.world';
 
 //import graphs country summary
 import Chart from 'react-apexcharts'
@@ -28,7 +28,7 @@ import Chart from 'react-apexcharts'
  
 
 // Adding the chart and theme as dependency to the core fusionchart
-ReactFCWorldWithCountries.fcRoot(FusionCharts, Maps, WorldWithCountries, FusionTheme);
+ReactFCWorldWithCountries.fcRoot(FusionCharts, Maps, WorldWithCountries, FusionTheme, World);
 
 const dataset = []
 
