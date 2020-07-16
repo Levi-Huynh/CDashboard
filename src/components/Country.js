@@ -21,7 +21,7 @@ import Maps from 'fusioncharts/fusioncharts.maps';
 import ReactFCWorldWithCountries  from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import * as World from 'fusioncharts/maps/fusioncharts.world';
-import * as WorldWithCountries from 'fusioncharts/maps/fusioncharts.worldwithcountries';
+import * as WorldWithCountries from 'fusionmaps/maps/fusioncharts.worldwithcountries';
 
 //import graphs country summary
 import Chart from 'react-apexcharts'
