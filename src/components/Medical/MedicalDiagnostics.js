@@ -512,7 +512,7 @@ function toggleTermsModal(){
                     </SympAndResults2>
 
                     <SympAndResults2>    
-                    <h4>SUGGESTION OF SYMPTOM QUESTIONS (PATIENT PROVIDED)</h4>                
+                    <h4>SYMPTOM QUESTIONS (PATIENT PROVIDED)</h4>                
                     <MainButton onClick={(e)=>setPatientRec(prevState =>({...prevState, modal:!prevState.modal}))}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></MainButton>
                     </SympAndResults2>
                    
@@ -524,7 +524,7 @@ function toggleTermsModal(){
                 <SessionFunctionality>
 
                     <SympAndResults1> 
-                        <h4>SUGGESTION OF SYMPTOM QUESTIONS (PHYSCIAN PROVIDED)</h4>
+                        <h4> SYMPTOM QUESTIONS (PHYSCIAN PROVIDED)</h4>
                     <MainButton onClick={(e)=>setPhyscianRec(prevState =>({...prevState, modal:!prevState.modal}))}><i class="fa fa-mouse-pointer" aria-hidden="true"></i></MainButton>
                     </SympAndResults1>
                     
@@ -779,11 +779,7 @@ width: 30%;
 height: 50px;
 padding: 10px;
  margin-bottom: 70px;
- &:hover {
-   
-    color:#FFC4D6;
-    border: 1px solid #FFC4D6;
-  }
+
 `;
 
 const SympAndResults = styled.div` 
@@ -804,6 +800,10 @@ flex-direction: row;
  padding: 0 4.5rem 0 .5rem;
 //   border: 1px solid black;
  margin-right: 2rem;
+ h2{
+     1.5rem;
+     font-weight: normal;
+ }
  
 `;
 
@@ -929,7 +929,7 @@ border-radius: 15px;
     box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
  padding: 3rem;
 h1{
-    margin-top: 60px;
+    margin-top: 100px;
     font-weight: bold;
     font-family:'Poppins', sans-serif;
 }
@@ -940,7 +940,7 @@ h4{
 `;
 const TermsModalButton = styled(TermsButton)`
 width: 20%
-margin: 110px 7rem 0px 7rem;
+margin: 85px 7rem 0px 7rem;
 
 `;
 
