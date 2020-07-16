@@ -59,7 +59,7 @@ const Dashboard = props => {
         <Box direction="row" gap="small">
           <Heading level="3" margin-bottom="5">
             <i
-              class="fas fa-heartbeat fa-3x"
+              class="fas fa-heartbeat fa-2x"
               style={{ color: "#FFC4D6", margin: "0 5px 0 4rem" }}
             ></i>
             <GoButton1
