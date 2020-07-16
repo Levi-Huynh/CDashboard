@@ -182,7 +182,7 @@ const GoButton1 = styled(Link)`
 
 
 const NavTitle = styled(GoButton)`
-font-size: 1.2rem;
+font-size: .9rem;
  border: none;
  background: none;
  color:#5243C0;

@@ -147,7 +147,7 @@ import update from 'immutability-helper';
      
         <h1>Death Totals</h1>
      
-  <Chart options={this.state.options} series={this.state.series} type="bar"height={600} width={1800} />
+  <Chart options={this.state.options} series={this.state.series} type="bar" height={470} width={1400} />
   </ChartWrap>
   </GraphDiv>
    </>

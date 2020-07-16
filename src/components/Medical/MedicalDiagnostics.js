@@ -170,7 +170,7 @@ const [Date1, setDate]=useState( new Date().toDateString())
 
   return axios({
             "method":"GET",
-            "url": "http://api.endlessmedical.com/v1/dx/InitSession",
+            "url": "https://api.endlessmedical.com/v1/dx/InitSession",
 
         })
         .then(res=>{
@@ -182,7 +182,7 @@ const [Date1, setDate]=useState( new Date().toDateString())
 
          return axios({
                 "method":"POST",
-                "url": "http://api.endlessmedical.com/v1/dx/AcceptTermsOfUse",
+                "url": "https://api.endlessmedical.com/v1/dx/AcceptTermsOfUse",
                 "params":{
                     "SessionID": ID,
                     "passphrase": "I have read, understood and I accept and agree to comply with the Terms of Use of EndlessMedicalAPI and Endless Medical services. The Terms of Use are available on endlessmedical.com"
@@ -218,7 +218,7 @@ const [Date1, setDate]=useState( new Date().toDateString())
   
         var res= await axios({
              "method": "GET",
-            "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedTests", 
+            "url": "https://api.endlessmedical.com/v1/dx/GetSuggestedTests", 
             "params":{
                 "sessionID":ID
             }
@@ -255,7 +255,7 @@ const [Date1, setDate]=useState( new Date().toDateString())
   
         var res= await axios({
              "method": "GET",
-             "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedFeatures_PatientProvided", 
+             "url": "https://api.endlessmedical.com/v1/dx/GetSuggestedFeatures_PatientProvided", 
             "params":{
                 "sessionID":ID
             }
@@ -292,7 +292,7 @@ const [Date1, setDate]=useState( new Date().toDateString())
   
         var res= await axios({
              "method": "GET",
-             "url": "http://api.endlessmedical.com/v1/dx/GetSuggestedFeatures_PhysicianProvided", 
+             "url": "https://api.endlessmedical.com/v1/dx/GetSuggestedFeatures_PhysicianProvided", 
             "params":{
                 "sessionID":ID
             }
@@ -348,7 +348,7 @@ const [Date1, setDate]=useState( new Date().toDateString())
 
             return axios({
                 "method":"POST",
-                "url": "http://api.endlessmedical.com/v1/dx/UpdateFeature",
+                "url": "https://api.endlessmedical.com/v1/dx/UpdateFeature",
                 "params": myParams
                  
             })
@@ -360,7 +360,12 @@ const [Date1, setDate]=useState( new Date().toDateString())
 
     }
 
-
+    useEffect(() => {
+        (async () => {
+          await updateFeature();
+        })();
+      }, [analysis.display]);
+ 
 
         //@@@---------------------------------SUBMIT ANALYZE AXIOS REQUEST 
   const analyzeSubmit=async() =>{
@@ -373,7 +378,7 @@ updateFeature()
              
             var res=await axios({
                 "method":"GET",
-                "url": "http://api.endlessmedical.com/v1/dx/Analyze",
+                "url": "https://api.endlessmedical.com/v1/dx/Analyze",
                 "params": {
                     "SessionID": ID
                 }

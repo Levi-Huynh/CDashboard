@@ -143,7 +143,7 @@ import update from 'immutability-helper';
           <h2>{this.props.graphInfo.reportDate !==null? `Report Date Selected: ${this.props.graphInfo.reportDate}`: ""}</h2>
   
   <h1>Case Totals</h1>
-  <Chart options={this.state.options} series={this.state.series} type="bar" height={600} width={1800} /> 
+  <Chart options={this.state.options} series={this.state.series} type="bar" height={470} width={1400} /> 
   </ChartWrap>
   </GraphDiv>
   </>):""}
