@@ -929,7 +929,7 @@ border-radius: 15px;
     box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 
  padding: 3rem;
 h1{
-    margin-top: 20px;
+    margin-top: 60px;
     font-weight: bold;
     font-family:'Poppins', sans-serif;
 }
@@ -938,6 +938,12 @@ h4{
     margin-bottom: 120px;
 }
 `;
+const TermsModalButton = styled(TermsButton)`
+width: 20%
+margin: 110px 7rem 0px 7rem;
+
+`;
+
 
 
 const StyledRecsModal = Modal.styled`
@@ -990,11 +996,6 @@ h4{
 `;
 
 
-const TermsModalButton = styled(TermsButton)`
-width: 20%
-margin: 160px 7rem 0px 7rem;
-
-`;
 
 
 
