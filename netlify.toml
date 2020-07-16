@@ -1,6 +1,6 @@
 [build]
-base = "CDASHBOARD/" 
-publish="CDASHBOARD/build"
+base = "/" 
+publish="/build"
 command = "yarn build"
 
 [[redirects]]
