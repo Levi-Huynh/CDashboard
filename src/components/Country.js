@@ -17,10 +17,11 @@ import FusionCharts from 'fusioncharts';
 import Maps from 'fusioncharts/fusioncharts.maps';
 
 //download all map from https://cdn.fusioncharts.com/downloads/addons/fusionmaps-xt-definition.zip
-import WorldWithCountries from 'fusioncharts/maps/fusioncharts.worldwithcountries';
+
 import ReactFCWorldWithCountries  from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
 import * as World from 'fusioncharts/maps/fusioncharts.world';
+import * as WorldWithCountries from 'fusioncharts/maps/fusioncharts.worldwithcountries.js';
 
 //import graphs country summary
 import Chart from 'react-apexcharts'
