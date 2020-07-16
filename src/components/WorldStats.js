@@ -290,7 +290,7 @@ function ButtonAlert(e){
             
                     <GlobalStats>
                     <Title >
-                        <h5><span>Customize Covid19 Data and Graphs</span></h5>
+                        <h5><span>Customize Covid19 Reports</span></h5>
         <h6>{Time}</h6> 
                     </Title>
 
@@ -514,7 +514,7 @@ height: 45vh;
     font-weight: normal;
     font-size: 3rem;
     margin-left: 30rem;
-    margin-top: 13rem;
+    margin-top: 7rem;
     margin-bottom: 0px;
     span{
     

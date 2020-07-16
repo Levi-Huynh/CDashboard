@@ -216,7 +216,7 @@ render() {
 
                 <GlobalStats>
                     <Title >
-                        <h5><span>Covid19 Global Overview</span></h5>
+                        <h5><span>Covid19 Global</span></h5>
                    <h6> {this.state.Time}</h6>
                     </Title>
 

@@ -553,7 +553,7 @@ class Country extends React.Component {
 
                 <GlobalStats>
                     <Title >
-                        <h5><span>Country Overview & AI Predictions</span></h5>
+                        <h5><span> AI Predictions By Country</span></h5>
                    <h6> {this.state.Time}</h6>
                     </Title>
 
@@ -846,7 +846,7 @@ height: 45vh;
     font-weight: normal;
     font-size: 3rem;
     margin-left: 30rem;
-    margin-top: 13rem;
+    margin-top: 7rem;
     margin-bottom: 0px;
     span{
     
