@@ -9,19 +9,21 @@ import ReactApexChart from './MapComponents/Global30Day'
 
 import CountryIcon from '../assets/customIcon.png'
 
-import  WorldWithCountries from  'fusioncharts/maps/fusioncharts.worldwithcountries';
+import WorldWithCountries from 'fusioncharts/maps/fusioncharts.worldwithcountries';
 import axios from 'axios';
 
  
 // Include the react-fusioncharts component
-import ReactFC from 'react-fusioncharts';
+import ReactFCWorldWithCountries from 'react-fusioncharts';
 
 // Include the fusioncharts library
 import FusionCharts from 'fusioncharts';
 
 //Import FusionMaps
 import FusionMaps from 'fusioncharts/maps/fusioncharts.worldwithcountries';
-import World from 'fusioncharts/fusioncharts.maps'
+import Maps from 'fusioncharts/fusioncharts.maps'
+import World from 'fusioncharts/maps/fusioncharts.world';
+
 
 // Include the theme as fusion
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
@@ -32,7 +34,7 @@ import Chart from 'react-apexcharts'
  
 
 // Adding the chart and theme as dependency to the core fusionchart
-ReactFC.fcRoot(FusionCharts, FusionMaps, World, FusionTheme,  WorldWithCountries);
+ReactFCWorldWithCountries.fcRoot(FusionCharts, FusionMaps, Maps, WorldWithCountries,FusionTheme,);
 
 
 const dataset = []
@@ -599,7 +601,7 @@ class Country extends React.Component {
                         style={{ color: " #5243C0" , margin: "5px 10px 2px 2px",}} 
                         ></i> scroll to view results </h6> </>):( <h2></h2>)}
 
-                        <ReactFC {...chartConfigs} {...this.state} onClick={this.dataplotclick}/>
+                        <ReactFCWorldWithCountries {...chartConfigs} {...this.state} onClick={this.dataplotclick}/>
                      
                     </MapDiv>
 
