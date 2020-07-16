@@ -13,21 +13,14 @@ import CountryIcon from '../assets/customIcon.png'
 import axios from 'axios';
 
  
-// Include the fusioncharts library
 import FusionCharts from 'fusioncharts';
-// Include the react-fusioncharts component
-import ReactFCWorldWithCountries from 'react-fusioncharts';
+import Maps from 'fusioncharts/fusioncharts.maps';
+
+//download all map from https://cdn.fusioncharts.com/downloads/addons/fusionmaps-xt-definition.zip
 import WorldWithCountries from 'fusioncharts/maps/fusioncharts.worldwithcountries';
-
-
-//Import FusionMaps
-import FusionMaps from 'fusioncharts/maps/fusioncharts.worldwithcountries';
-import Maps from 'fusioncharts/fusioncharts.maps'
-import World from 'fusioncharts/maps/fusioncharts.world';
-
-
-// Include the theme as fusion
+import ReactFCWorldWithCountries  from 'react-fusioncharts';
 import FusionTheme from 'fusioncharts/themes/fusioncharts.theme.fusion';
+import World from 'fusioncharts/maps/fusioncharts.world';
 
 //import graphs country summary
 import Chart from 'react-apexcharts'
@@ -35,7 +28,7 @@ import Chart from 'react-apexcharts'
  
 
 // Adding the chart and theme as dependency to the core fusionchart
-ReactFCWorldWithCountries.fcRoot(FusionCharts, FusionMaps, Maps, WorldWithCountries,FusionTheme,);
+ReactFCWorldWithCountries.fcRoot(FusionCharts, FusionMaps, Maps, WorldWithCountries,FusionTheme);
 
 
 const dataset = []
