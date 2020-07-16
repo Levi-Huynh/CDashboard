@@ -564,7 +564,7 @@ rel = "noopener noreferrer">Terms of Use.</a> </h4>
 
                
 
-                    <StyledRecsModal isOpen={testRec.modal}>
+                    <SuggestedTestModal isOpen={testRec.modal}>
                              
                     {/* RECOMMENDED TESTS  MODAL */}
                         <MainButton onClick={(e)=>setTestRec(prevState =>({...prevState, modal:!prevState.modal}))}>Close</MainButton>
@@ -575,7 +575,7 @@ rel = "noopener noreferrer">Terms of Use.</a> </h4>
             (Recommended Tests with percentages less than 50% may likely not be recommended)
                        </h4>
                        
-                       {testRec.data.slice(0,6).map(data=>{
+                       {testRec.data.slice(0,5).map(data=>{
                            return <><p>{Object.keys(data)[0]}:</p> <p>{Object.values(data)[0]}%</p>
                            </>
                        })}
@@ -583,7 +583,7 @@ rel = "noopener noreferrer">Terms of Use.</a> </h4>
                  }
 
                    
-                    </StyledRecsModal>
+                    </SuggestedTestModal>
 
                     <StyledRecsModal isOpen={patientRec.modal}>
                              
@@ -967,6 +967,24 @@ p{
 }
 h4{
     font-size: 1.6rem;
+    margin-bottom: 120px;
+}
+`;
+
+const SuggestedTestModal= styled(StyledRecsModal)`
+padding: 2.3rem;
+h1{
+  
+    font-weight: normal;
+    font-family:'Poppins', sans-serif;
+    margin-bottom: 10px;
+}
+p{
+    font-size: 1rem;
+    font-weight: normal;
+}
+h4{
+    font-size: 1.3rem;
     margin-bottom: 120px;
 }
 `;
