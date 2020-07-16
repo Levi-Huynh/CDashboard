@@ -28,8 +28,7 @@ import Chart from 'react-apexcharts'
  
 
 // Adding the chart and theme as dependency to the core fusionchart
-ReactFCWorldWithCountries.fcRoot(FusionCharts, FusionMaps, Maps, WorldWithCountries,FusionTheme);
-
+ReactFCWorldWithCountries.fcRoot(FusionCharts, Maps, WorldWithCountries, FusionTheme);
 
 const dataset = []
 
