@@ -215,19 +215,19 @@ const InfoBoxTop = styled.div`
   margin: 0 1%;
   color: #5243C0;
   text-align: left;
- padding: 4rem;
-  // border: 1px solid red;
+ padding: 1rem;
+  border: 1px solid blue;
   h3 {
-    font-size: 2.4rem;
+    font-size: 1.7rem;
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
-    margin-top: 120px;
+    margin-top: 0px;
     padding-left: .5rem;
    
      
   }
   p {
-    font-size: 1.4rem;
+    font-size: 1rem;
     font-family: 'Poppins', sans-serif;
    
     padding-left: .5rem;
@@ -241,7 +241,7 @@ const InfoBoxTop = styled.div`
 
 const Featurette1 = styled.div`
  
-// border: 1px solid red;
+border: 1px solid red;
 padding: 0 0 0 0;
 height: 70%;
 width: 65%;
@@ -305,10 +305,10 @@ const FeatureBox = styled(InfoBox)`
 
   // border: 1px solid #ECECEC;
   h3 {
-    font-size: 1.4rem;
+    font-size: 1.2rem;
   }
   p {
-    font-size: 1.3rem;
+    font-size: 1rem;
   }
 `;
 const FeaturePic = styled.img`
