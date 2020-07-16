@@ -18,7 +18,7 @@ const Landing = props => {
   const [currentActivity, setCurrentActivity] = useState("AI Powered Symptom Checker");
   const [number, setNumber] = useState(1);
 
-  const activity = ["AI Powered Symptom Checker", "Unbiased Symptom Analyses","Suggestions on Patient Next Best Steps","View Global Covid19 Case Statistics", "Customize Covid19 Reports", "AI Powered Trend Predictions"];
+  const activity = ["AI Powered Symptom Checker", "Unbiased Symptom Analyses","Pre-diagnostics Information","View Global Covid19 Case Statistics", "Customize Covid19 Reports", "AI Powered Trend Predictions"];
 
   function updateText() {
     setCurrentActivity(activity[number]);
