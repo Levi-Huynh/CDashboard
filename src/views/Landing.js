@@ -107,7 +107,7 @@ const Wave = styled.div`
 border: 0.5px solid white;
 margin-top: 0px;
 background:  #FFC4D6;
-
+ 
 // display: block;
 svg{
   display: block;
@@ -214,7 +214,7 @@ const InfoBoxTop = styled.div`
  padding: 4rem;
   // border: 1px solid red;
   h3 {
-    font-size: 32px;
+    font-size: 2.4rem;
     font-family: 'Poppins', sans-serif;
     font-weight: bold;
     margin-top: 120px;
@@ -223,7 +223,7 @@ const InfoBoxTop = styled.div`
      
   }
   p {
-    font-size: 18px;
+    font-size: 1.4rem;
     font-family: 'Poppins', sans-serif;
    
     padding-left: .5rem;
@@ -248,7 +248,7 @@ flex-direction: column;
 align-items:center;
 h6{
   margin-top: 40%;
-  font-size: 15px;
+  font-size: 1rem;
 }
 `;
 
@@ -263,6 +263,9 @@ const FeaturesInfo = styled.div`
   }
 `;
 
+
+
+
 const InfoBox = styled.div`
   width: 30%;
   
@@ -274,7 +277,7 @@ const InfoBox = styled.div`
     margin-top: 50px;
     margin-left: 15%;
     margin-right: 15%;
-    font-size: 32px;
+    font-size: 2.0rem;
     font-family:'Poppins', sans-serif;
     font-weight: bold;
   
@@ -282,7 +285,7 @@ const InfoBox = styled.div`
      
   }
   p {
-    font-size: 18px;
+    font-size: 1.3rem;
     font-family: 'Poppins', sans-serif;
     margin-left: 15%;
     margin-right: 15%;
@@ -298,10 +301,10 @@ const FeatureBox = styled(InfoBox)`
 
   // border: 1px solid #ECECEC;
   h3 {
-    font-size: 20px;
+    font-size: 1.4rem;
   }
   p {
-    font-size: 14px;
+    font-size: 1.3rem;
   }
 `;
 const FeaturePic = styled.img`
