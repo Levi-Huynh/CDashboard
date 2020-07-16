@@ -616,12 +616,13 @@ class Country extends React.Component {
 
                     <ThirtyDaySty>
                          
-                    <Chart options={this.state.options30} series={this.state.series30} type="line" height={400} width={1000} />
+                    <Chart options={this.state.options30} series={this.state.series30} type="line" height={400} width={1400} />
                     
                     {/* container with column for each change total */}
                     
-                    
-                    
+                    </ThirtyDaySty>
+   
+                    <ThirtyDaySty2>
                     
                     <Percents30Day>
                     <h6><span> CHANGE IN TOTALS</span></h6>
@@ -676,10 +677,10 @@ class Country extends React.Component {
                         )}
 
                     </Percents30Day>
+                    </ThirtyDaySty2>
                     
                     {/* row container end*/}
-                    </ThirtyDaySty>
-
+                 
                     </ThirtyDayWrapper>
 
 
@@ -884,8 +885,8 @@ margin: 1rem .8rem 0 .8rem;
 text-align:center;
 h6{
     margin-top: 70px;
-    font-size: 3rem;
-    font-weight: bold;
+    font-size: 2rem;
+    font-weight: normal;
 }
 `;
 
@@ -977,7 +978,7 @@ display: flex;
 flex-direction: row; 
 justify-content: space-between;
 font-family: 'Poppins', sans-serif;
-
+//border: 1px solid red;
 color: #5243C0; 
 border-radius: 15px;
 background: white;
@@ -986,11 +987,28 @@ background: white;
 // margin: 30px .8rem 0 .8rem; 
 text-align:center;
 h6{
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: normal;
 }
 `;
 
+
+
+const ThirtyDaySty2 = styled.div`
+width: 100%;
+display: flex;
+flex-direction: row; 
+justify-content: center;
+font-family: 'Poppins', sans-serif;
+//border: 1px solid green;
+color: #5243C0; 
+border-radius: 15px;
+background: white;
+h6{
+    font-size: 1.2rem;
+    font-weight: normal;
+}
+`;
 
 const ThirtyDayElements = styled.div`
 //title 2 total
@@ -1012,7 +1030,8 @@ width: 46%;
 display: flex;
 flex-direction: row;
 justify-content: space-around;
-
+margin: 0 1.5rem 0 1.5rem;
+//border: 1px solid black;
 h6{
     1rem;
     font-weight: normal;
@@ -1025,7 +1044,7 @@ width: 46%;
 display: flex;
 flex-direction: column;
 align-items: center;
-
+//border: 1px solid blue;
 h6{
     font-size: 1.5rem;
     font-weight:bold;
@@ -1038,8 +1057,13 @@ span{
 `; 
 
 
+
+
 const Percents30Day= styled(ThirtyDayPercents)`
 // border: 1px solid black;
+display: flex;
+flex-direction: row;
+justify-content: space-around;
 h6{
     margin-top: 5px;
     font-size: 1 rem;

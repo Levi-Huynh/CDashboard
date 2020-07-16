@@ -187,7 +187,7 @@ const ExploreButton = styled(GoButton)`
   border-radius: 10px;
   // border-left: 1px solid #FE687D;
   font-weight: bold;
-  width: 20%;
+  width: 10rem;
 
   padding: 15px;
   pading-right: 40px;
@@ -216,7 +216,7 @@ const InfoBoxTop = styled.div`
   color: #5243C0;
   text-align: left;
  padding: 1rem;
-  border: 1px solid blue;
+  // border: 1px solid blue;
   h3 {
     font-size: 1.7rem;
     font-family: 'Poppins', sans-serif;
@@ -241,7 +241,7 @@ const InfoBoxTop = styled.div`
 
 const Featurette1 = styled.div`
  
-border: 1px solid red;
+// border: 1px solid red;
 padding: 0 0 0 0;
 height: 70%;
 width: 65%;
@@ -262,6 +262,7 @@ const FeaturesInfo = styled.div`
   margin: 125px 2% 20px 2%;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 80px;
   @media(max-width: 500px){
     flex-direction: column;
   }
