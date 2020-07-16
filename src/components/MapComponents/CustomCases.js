@@ -157,6 +157,13 @@ import update from 'immutability-helper';
 
         const ChartWrap=styled.div`
         text-align: left;
+        padding: 1.4rem;
+        h2{
+          font-size: 1.3rem;
+          
+        }
+        
+    
         `;
 
         const GraphDiv = styled.div`
@@ -170,7 +177,7 @@ align-content: center;
 background: white;
  
 font-family: 'Poppins', sans-serif;
-padding: .8rem;
+
 color:  #5243C0;  
 border-radius: 15px;
 box-shadow: 0 3px 5px 3px  rgba(0, 0, 0, 0.16); 

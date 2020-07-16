@@ -121,7 +121,7 @@ class Recovered extends React.Component {
         
 
   <div id="chart">
-<Chart options={this.state.options} series={this.state.series} type="line" height={450} width={1300} />
+<Chart options={this.state.options} series={this.state.series} type="line" height={470} width={1000} />
 </div>
 
       )}}

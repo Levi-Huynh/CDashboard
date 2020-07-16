@@ -616,7 +616,7 @@ class Country extends React.Component {
 
                     <ThirtyDaySty>
                          
-                    <Chart options={this.state.options30} series={this.state.series30} type="line" height={600} width={1250} />
+                    <Chart options={this.state.options30} series={this.state.series30} type="line" height={400} width={1000} />
                     
                     {/* container with column for each change total */}
                     
@@ -998,7 +998,7 @@ const ThirtyDayElements = styled.div`
 width: 46%;
 padding: 1rem;
 h6{
-    font-size: 2.5rem;
+    font-size: 1.7rem;
     span{
         font-weight: normal;
     }
@@ -1013,7 +1013,9 @@ display: flex;
 flex-direction: row;
 justify-content: space-around;
 
-
+h6{
+    1.7rem;
+}
 `; 
 
 

@@ -102,7 +102,7 @@ console.log("CDU SERIES STATE:",  this.state.series, "CDU PREDICT PROPS:", this.
       
 
 <div id="chart">
-<Chart options={this.state.options} series={this.state.series} type="area" height={600} width={1250}  />
+<Chart options={this.state.options} series={this.state.series} type="area" height={400} width={1000}  />
 </div>
     )}}
 
