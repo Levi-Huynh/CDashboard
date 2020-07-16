@@ -628,14 +628,14 @@ class Country extends React.Component {
  {Math.sign(this.state.CountryTotals.newCasePercent) === -1? (
                                   <ThirtyDayElementsInner>        
                         <h6>
-                        <i  class="fa fa-long-arrow-down fa-3x" aria-hidden="true"
+                        <i  class="fa fa-long-arrow-down fa-2x" aria-hidden="true"
                         style={{ color: "red" , margin: "5px 10px 2px 2px",}} 
                         ></i>  ({this.state.CountryTotals.newCasePercent}%) Decrease in Cases</h6>
                      </ThirtyDayElementsInner>
                     ):  (
                         <ThirtyDayElementsInner> 
                               <h6>     
-                            <i class="fa fa-long-arrow-up fa-3x" aria-hidden="true"
+                            <i class="fa fa-long-arrow-up fa-2x" aria-hidden="true"
                         style={{ color: "red" , margin: "5px 10px 2px 2px",}} 
                         ></i>
                   ({this.state.CountryTotals.newCasePercent}%) Increase in Cases</h6>
@@ -646,14 +646,14 @@ class Country extends React.Component {
 
 <ThirtyDayElementsInner>     
                         <h6>
-                        <i  class="fa fa-long-arrow-down fa-3x" aria-hidden="true"
+                        <i  class="fa fa-long-arrow-down fa-2x" aria-hidden="true"
                         style={{ color: "red" , margin: "5px 10px 2px 2px",}} 
                         ></i> ({this.state.CountryTotals.newRecoveredPercent}%) Decrease in Recovered</h6>
                         </ThirtyDayElementsInner>
                     ):(
                         <ThirtyDayElementsInner>     
                     <h6>
-                    <i class="fa fa-long-arrow-up fa-3x" aria-hidden="true"
+                    <i class="fa fa-long-arrow-up fa-2x" aria-hidden="true"
                         style={{ color: "red", margin: "5px 10px  2px 2px", }} 
                         ></i> ({this.state.CountryTotals.newRecoveredPercent}%) Increase in Recovered</h6>
                             </ThirtyDayElementsInner>
@@ -662,14 +662,14 @@ class Country extends React.Component {
 {Math.sign(this.state.CountryTotals.newDeathsPercent) === -1? (
     <ThirtyDayElementsInner>     
                         <h6>
-                        <i  class="fa fa-long-arrow-down fa-3x" aria-hidden="true"
+                        <i  class="fa fa-long-arrow-down fa-2x" aria-hidden="true"
                         style={{ color: "red" , margin: "5px 10px  2px 2px",}} 
                         ></i> ({this.state.CountryTotals.newDeathsPercent}%) Decrease in Deaths</h6>
                       </ThirtyDayElementsInner>
                     ):(
                         <ThirtyDayElementsInner>     
                     <h6>
-                    <i class="fa fa-long-arrow-up fa-3x" aria-hidden="true"
+                    <i class="fa fa-long-arrow-up fa-2x" aria-hidden="true"
                         style={{ color: "red" , margin: "5px 10px 2px 2px",}} 
                         ></i> ({this.state.CountryTotals.newDeathsPercent}%) Increase in Deaths</h6>
                          </ThirtyDayElementsInner>
@@ -711,14 +711,14 @@ PREDICTION PERCENTAGE */}
                     {Math.sign(this.state.Prediction.trendPercent) === -1? (
                                                      <ThirtyDayElementsInner>        
                                            <h6>
-                                           <i  class="fa fa-long-arrow-down fa-3x" aria-hidden="true"
+                                           <i  class="fa fa-long-arrow-down fa-2x" aria-hidden="true"
                                            style={{ color: "red" , margin: "10px 10px  2px 2px", }} 
                                            ></i> ({this.state.Prediction.trendPercent}%) Decrease in Cases</h6>
                                         </ThirtyDayElementsInner>
                                        ):  (
                                            <ThirtyDayElementsInner>    
                                                        <h6>  
-                                              <i class="fa fa-long-arrow-up fa-3x" aria-hidden="true"
+                                              <i class="fa fa-long-arrow-up fa-2x" aria-hidden="true"
                                           style={{ color: "red" , margin: "10px 10px  2px 2px", }} 
                                            ></i>
                                
@@ -1014,7 +1014,8 @@ flex-direction: row;
 justify-content: space-around;
 
 h6{
-    1.7rem;
+    1rem;
+    font-weight: normal;
 }
 `; 
 
@@ -1041,5 +1042,6 @@ const Percents30Day= styled(ThirtyDayPercents)`
 // border: 1px solid black;
 h6{
     margin-top: 5px;
+    font-size: 1 rem;
 }
 `;

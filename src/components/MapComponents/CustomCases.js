@@ -143,7 +143,7 @@ import update from 'immutability-helper';
           <h2>{this.props.graphInfo.reportDate !==null? `Report Date Selected: ${this.props.graphInfo.reportDate}`: ""}</h2>
   
   <h1>Case Totals</h1>
-  <Chart options={this.state.options} series={this.state.series} type="bar" height={470} width={1400} /> 
+  <Chart options={this.state.options} series={this.state.series} type="bar" height={470} width={1000} /> 
   </ChartWrap>
   </GraphDiv>
   </>):""}
@@ -159,10 +159,10 @@ import update from 'immutability-helper';
         text-align: left;
         padding: 1.4rem;
         h2{
-          font-size: 1.3rem;
-          
+          font-size: 1.rem;
+          font-weight: normal;
         }
-        
+
     
         `;
 
@@ -173,7 +173,7 @@ flex-direction: column;
 justify-content: center;
 align-items: center;
 align-content: center;
- 
+ padding: 1rem;
 background: white;
  
 font-family: 'Poppins', sans-serif;
