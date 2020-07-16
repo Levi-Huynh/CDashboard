@@ -9,15 +9,16 @@ import ReactApexChart from './MapComponents/Global30Day'
 
 import CountryIcon from '../assets/customIcon.png'
 
-import WorldWithCountries from 'fusioncharts/maps/fusioncharts.worldwithcountries';
+
 import axios from 'axios';
 
  
-// Include the react-fusioncharts component
-import ReactFCWorldWithCountries from 'react-fusioncharts';
-
 // Include the fusioncharts library
 import FusionCharts from 'fusioncharts';
+// Include the react-fusioncharts component
+import ReactFCWorldWithCountries from 'react-fusioncharts';
+import WorldWithCountries from 'fusioncharts/maps/fusioncharts.worldwithcountries';
+
 
 //Import FusionMaps
 import FusionMaps from 'fusioncharts/maps/fusioncharts.worldwithcountries';
@@ -60,7 +61,7 @@ const colorrange = {
 
 // STEP 3 - Creating the JSON object to store the chart configurations
 const chartConfigs = {
-    type: 'map/worldwithcountries', // The chart type
+    type: 'worldwithcountries', // The chart type
 
     width: '100%', // Width of the chart
     height: '700', // Height of the chart
