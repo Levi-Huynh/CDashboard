@@ -19,8 +19,8 @@ const Dashboard = props => {
 
  const [dashOption, setDash] = useState([
 
-    {name: "CountryStat", active: true},
-    {name: "Global", active:false},
+    {name: "CountryStat", active: false},
+    {name: "Global", active:true},
     {name: "CustomizedStat", active:false},
     {name: "MedicalDiagnostics", active: false }
   ])
